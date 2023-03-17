@@ -1,4 +1,4 @@
-package com.biggestbird;
+package main.java;
 
 /**
  * Hello world!
