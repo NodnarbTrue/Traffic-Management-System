@@ -1,28 +1,38 @@
 package trafficmgmt;
+import trafficmgmt.Intersection.direction;
 
 public class trafficlight {
-    private String direction; 
+    private direction direction; 
     private String currentLightState; 
     private int rateOfCars;
 
-    private int greenLightLength; 
-    private int yellowLightLength = 3; 
+    private Integer greenLightLength; 
+    private Integer yellowLightLength; 
     
     private boolean leftTurnLight; 
     private String currentLeftTurnLightState;
-    private int leftTurnLightLength;
+    private Integer leftTurnLightLength;
 
-    // Class constructor without left turn
-    public trafficlight(String direction, int greenLightLength, int yellowLightLength) {
+    // Class constructor without yellow light and left turn
+    public trafficlight(direction direction, Integer greenLightLength) {
         this.direction = direction; 
         this.greenLightLength = greenLightLength; 
-        this.yellowLightLength = yellowLightLength; 
+        this.yellowLightLength = 3; 
         this.leftTurnLight = false; 
         this.leftTurnLightLength = 0;
    }
+   
+    // Class constructor without yellow light length
+    public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength) {
+        this.direction = direction; 
+        this.greenLightLength = greenLightLength; 
+        this.yellowLightLength = 3; 
+        this.leftTurnLight = true; 
+        this.leftTurnLightLength = leftTurnLightLength;
+   }
 
-   // Class constructor with left turn
-    public trafficlight(String direction, int greenLightLength, int yellowLightLength, int leftTurnLightLength) {
+   // Class constructor with left turn and yellow light length
+    public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength, Integer yellowLightLength) {
          this.direction = direction; 
          this.greenLightLength = greenLightLength; 
          this.yellowLightLength = yellowLightLength; 
