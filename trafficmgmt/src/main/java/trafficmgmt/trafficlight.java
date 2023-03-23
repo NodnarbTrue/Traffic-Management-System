@@ -59,4 +59,15 @@ public class trafficlight {
     public void turnLeftGreen() { 
         this.currentLeftTurnLightState = "green";
     }
+
+    public void changeLightLength(String light, int newLength) { 
+        switch (light){
+            case "green":
+                this.greenLightLength = newLength;
+                break;
+            case "left Turn":
+                this.leftTurnLightLength = newLength;
+                break;
+        }
+    }
 }

@@ -3,12 +3,13 @@ import java.util.ArrayList;
 
 public class threewayIntersection extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
+    protected ArrayList<trafficlight> directionTwoLights;
 
-    public threewayIntersection(int directionOneLightLength, String intersectionRoadOneName) {
+    public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
 
-        trafficlight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, null);
-        trafficlight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_ONE, null);
+        trafficlight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
+        trafficlight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
@@ -53,10 +54,13 @@ public class threewayIntersection extends Intersection{
         return 1;
     }
     public void changeTrafficLightTiming(direction direction, int newLength) { 
- 
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){}
+            for (trafficlight i : directionOneTrafficLights) {
+            i.changeLightLength("green", newLength);
+        }
     }
 
-    public void changeLeftTurnTiming(direction dirction, int newLength) { 
+    public void changeLeftTurnTiming(direction direction, int newLength) { 
 
     }
 
