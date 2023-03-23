@@ -65,7 +65,7 @@ public class trafficlight {
             case "green":
                 this.greenLightLength = newLength;
                 break;
-            case "left Turn":
+            case "left turn":
                 this.leftTurnLightLength = newLength;
                 break;
         }
