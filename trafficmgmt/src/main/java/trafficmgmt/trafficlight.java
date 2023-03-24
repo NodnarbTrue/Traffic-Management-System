@@ -60,7 +60,7 @@ public class trafficlight {
         this.currentLeftTurnLightState = "green";
     }
 
-    public void changeLightLength(String light, int newLength) { 
+    public void setLightLength(String light, int newLength) { 
         switch (light){
             case "green":
                 this.greenLightLength = newLength;
@@ -68,6 +68,18 @@ public class trafficlight {
             case "left turn":
                 this.leftTurnLightLength = newLength;
                 break;
+            //Can add default to throw error
+        }
+    }
+
+    public int getLightTiming(String light){
+        switch (light){
+            case "green":
+                return greenLightLength;
+            case "left turn":
+                return leftTurnLightLength;
+            default:
+                return -1; //Can change to throw error
         }
     }
 }

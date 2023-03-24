@@ -3,20 +3,34 @@ import java.util.ArrayList;
 
 public class threewayIntersection extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
-    protected ArrayList<trafficlight> directionTwoLights;
+    private trafficlight directionTwoLight;
 
-    public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName) {
+    public threewayIntersection(ArrayList<direction> directions, int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
+        //Plan is to add the lights based on what directions are in the list
+        trafficlight firstDirectionTrafficlightOne, firstDirectionTrafficlightTwo = null;
+        if (directions.contains(direction.NORTH) && directions.contains(direction.SOUTH)){
+            firstDirectionTrafficlightOne = new  trafficlight(direction.NORTH, directionOneLightLength);
+            firstDirectionTrafficlightTwo = new  trafficlight(direction.SOUTH, directionOneLightLength);
+            if (directions.contains(direction.WEST))
+                directionTwoLight = new trafficlight(direction.WEST, directionTwoLightLength);
+            else
+            directionTwoLight = new trafficlight(direction.EAST, directionTwoLightLength);
+        }
+        else{
+            firstDirectionTrafficlightOne = new  trafficlight(direction.WEST, directionOneLightLength);
+            firstDirectionTrafficlightTwo = new  trafficlight(direction.EAST, directionOneLightLength);
+            if (directions.contains(direction.NORTH))
+                directionTwoLight = new trafficlight(direction.NORTH, directionTwoLightLength);
+            else
+            directionTwoLight = new trafficlight(direction.SOUTH, directionTwoLightLength);
+        }
 
-        trafficlight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
-        trafficlight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
-        crosswalk firstDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_ONE);
-        crosswalk firstDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_ONE);
-        directionOneCrosswalks.add(firstDirectionCrosswalkOne);
-        directionOneCrosswalks.add(firstDirectionCrosswalkTwo);
+        crosswalk directionOneCrosswalk = new crosswalk(direction.DIRECTION_ONE);
+        directionOneCrosswalks.add(directionOneCrosswalk);
         
         crosswalk secondDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_TWO);
         crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
@@ -54,33 +68,57 @@ public class threewayIntersection extends Intersection{
         return 1;
     }
     public void changeTrafficLightTiming(direction direction, int newLength) { 
-        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){}
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){
             for (trafficlight i : directionOneTrafficLights) {
-            i.changeLightLength("green", newLength);
+            i.setLightLength("green", newLength);
+            }
         }
+        else
+            directionTwoLight.setLightLength("green", newLength);
     }
 
     public void changeLeftTurnTiming(direction direction, int newLength) { 
-
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){
+            for (trafficlight i : directionOneTrafficLights) {
+            i.setLightLength("left turn", newLength);
+            }
+        }
+        else
+            directionTwoLight.setLightLength("left turn", newLength);
     }
 
     public void changeCrossWalkTiming(direction direction, int newLength) { 
-
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_TWO){
+            for (crosswalk i : directionTwoCrosswalks) {
+            i.setCrossWalkTiming(newLength);
+            }
+        }
+        else
+            directionOneCrosswalks.get(0).setCrossWalkTiming(newLength);
     }
 
     public int getTrafficLightTiming(direction direction) { 
         
-        return 1;
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE)
+            return directionOneTrafficLights.get(0).getLightTiming("green");
+        else
+            return directionTwoLight.getLightTiming("green");
     }
 
     public int getLeftTurnTiming(direction direction) { 
 
-        return 1;
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE)
+            return directionOneTrafficLights.get(0).getLightTiming("left turn");
+        else
+            return directionTwoLight.getLightTiming("left turn");
     }
 
     public int getCrossWalkTiming(direction direction) { 
 
-        return 1;
+        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE)
+            return directionOneCrosswalks.get(0).getCrossWalkTiming();
+        else
+            return directionTwoCrosswalks.get(0).getCrossWalkTiming();
     }
 
     public void shortenCurrentTrafficLightDuration(int timeToShortenBy) { 
@@ -98,9 +136,6 @@ public class threewayIntersection extends Intersection{
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) { 
 
     }
-
-
-
 
 
 
