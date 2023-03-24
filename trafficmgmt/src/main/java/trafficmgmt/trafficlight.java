@@ -1,17 +1,27 @@
 package trafficmgmt;
-import trafficmgmt.Intersection.direction;
+import trafficmgmt.utility.direction;
+import trafficmgmt.utility.lightState;
 
 public class trafficlight {
     private direction direction; 
-    private String currentLightState; 
+    private lightState currentLightState; 
     private int rateOfCars;
 
     private Integer greenLightLength; 
     private Integer yellowLightLength; 
     
     private boolean leftTurnLight; 
-    private String currentLeftTurnLightState;
+    private lightState currentLeftTurnLightState;
     private Integer leftTurnLightLength;
+
+    // Class constructor with only direction
+    public trafficlight(direction direction) {
+        this.direction = direction; 
+        this.greenLightLength = null; 
+        this.yellowLightLength = 3; 
+        this.leftTurnLight = false; 
+        this.leftTurnLightLength = 0;
+   }
 
     // Class constructor without yellow light and left turn
     public trafficlight(direction direction, Integer greenLightLength) {
@@ -41,11 +51,11 @@ public class trafficlight {
     }
 
     public void turnGreen() { 
-        this.currentLightState = "green";
+        this.currentLightState = lightState.GREEN;
     }
 
     public void turnRed() {
-        this.currentLightState = "red";
+        this.currentLightState = lightState.RED;
     }
 
     public boolean checkIfLeftTurn() { 
@@ -53,30 +63,35 @@ public class trafficlight {
     }
 
     public void turnLeftRed() { 
-        this.currentLeftTurnLightState = "red";
+        this.currentLeftTurnLightState = lightState.RED;
     }
 
     public void turnLeftGreen() { 
-        this.currentLeftTurnLightState = "green";
+        this.currentLeftTurnLightState = lightState.GREEN;
     }
 
-    public void setLightLength(String light, int newLength) { 
-        switch (light){
-            case "green":
+    public void setLightLength(lightState lightColour, int newLength) { 
+        switch (lightColour){
+            case GREEN:
                 this.greenLightLength = newLength;
                 break;
-            case "left turn":
+            case YELLOW:
+                this.yellowLightLength = newLength;
+                break;
+            case LEFT_TURN:
                 this.leftTurnLightLength = newLength;
                 break;
+            default:
+                    break; 
             //Can add default to throw error
         }
     }
 
-    public int getLightTiming(String light){
-        switch (light){
-            case "green":
+    public int getLightTiming(lightState lightColour){
+        switch (lightColour){
+            case GREEN:
                 return greenLightLength;
-            case "left turn":
+            case LEFT_TURN:
                 return leftTurnLightLength;
             default:
                 return -1; //Can change to throw error
