@@ -5,6 +5,8 @@ public class fourwayIntersection extends Intersection{
 
     // VARIABLES
 
+    protected String intersectionRoadTwoName; 
+
     protected int currentLeftLightTimer; // Seconds left until the current green left light turns red (this variable counts down)
 
     protected int directionTwoLightLength; // Length in seconds that the directionTwo timer starts at once it turns green
@@ -19,7 +21,10 @@ public class fourwayIntersection extends Intersection{
 
     public fourwayIntersection(int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName, String intersectionRoadTwoName) {
         super(directionOneLightLength, intersectionRoadOneName);
+        this.directionTwoLightLength = directionTwoLightLength;
+        this.intersectionRoadTwoName = intersectionRoadTwoName;
 
+        // ??????????????????????????????????????
         trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
