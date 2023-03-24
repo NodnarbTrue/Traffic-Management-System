@@ -17,3 +17,4 @@ buildNumber.properties
 .classpath
 *.class
 *.DS_Store
+localTester.java

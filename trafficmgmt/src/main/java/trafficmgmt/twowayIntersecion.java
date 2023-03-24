@@ -6,9 +6,14 @@ import trafficmgmt.utility.crosswalkState;
 
 public class twowayIntersecion extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
+    // The length of a countdown for when the two way intersection gets a train or padestrian input
+    int inputCountDownLength; 
 
-    public twowayIntersecion(int directionOneLightLength, String intersectionRoadOneName) {
-        super(directionOneLightLength, intersectionRoadOneName);
+
+    // Constructor
+    public twowayIntersecion(String intersectionRoadOneName, int inputCountDownLength) {
+        super(intersectionRoadOneName);
+        this.inputCountDownLength = inputCountDownLength;
 
         trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE);
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE);
@@ -30,7 +35,7 @@ public class twowayIntersecion extends Intersection{
      * starting the intersection by setting the current direction lights and crosswalk
      */
     public int startIntersection() { 
-        this.currentGreenLightDirection = direction.DIRECTION_ONE;
+        this.currentDirection = direction.DIRECTION_ONE;
         
         for (trafficlight i : directionOneTrafficLights) {
             i.turnGreen();
@@ -64,16 +69,64 @@ public class twowayIntersecion extends Intersection{
     }
 
 
+    public void shortenCurrentTrafficLightDuration(int timeToShortenBy) { 
+
+    }
+
+    public void shortenCurrentCrossWalkDuration(int timeToShortenBy) { 
+
+    }
+
+    public int getTimeToCountDownFrom() { 
+        return this.inputCountDownLength;
+    }
+
+    private void countDown() { 
+        timer inputCountDown = new timer(this);
+        inputCountDown.start();
+    }
+
+    public void pedestrianInput(direction requestedCrossingDirection) { 
+        switch (requestedCrossingDirection) {
+            case DIRECTION_ONE:
+                if (currentDirection != direction.DIRECTION_ONE) {
+                    countDown();
+                }
+                break;
+            case DIRECTION_TWO:
+                if (currentDirection == direction.DIRECTION_ONE) { 
+
+                }
+                break;
+            default:
+                break;
+        } 
+
+    }
+
+    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) { 
+
+    }
+
+
+
+
+
+    /* BEING REMOVED START */
     public void changeTrafficLightTiming(direction direction, int newLength) { 
         for (trafficlight i : directionOneTrafficLights) {
-            //i.setLightLength(, newLength);
+            i.setLightLength(lightState.GREEN, newLength);
         }
     }
 
     public void changeLeftTurnTiming(direction dirction, int newLength) { 
-
+        for (trafficlight i : directionOneTrafficLights) {
+            i.setLightLength(lightState.GREEN, newLength);
+        }
     }
+    /* BEING REMOVED END */
 
+    
     public void changeCrossWalkTiming(direction direction, int newLength) { 
 
     }
@@ -93,33 +146,18 @@ public class twowayIntersecion extends Intersection{
         return 1;
     }
 
-    public void shortenCurrentTrafficLightDuration(int timeToShortenBy) { 
-
-    }
-
-    public void shortenCurrentCrossWalkDuration(int timeToShortenBy) { 
-
-    }
-
-    public void pedestrianInput(direction requestedCrossingDirection) { 
-
-    }
-
-    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) { 
-
-    }
 
 
 
 
 
 
-    public int inputOptimization() { 
+    public int inputOptimization(Integer[][] input) { 
 
         return 1;
     }
 
-    public String viewOptimization() { 
+    public String viewOptimizationRecommendation() { 
 
         return "success";
     }

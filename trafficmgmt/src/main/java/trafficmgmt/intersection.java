@@ -10,7 +10,7 @@ abstract class Intersection {
     protected int intersectionID = generateID();
     protected String intersectionRoadOneName;
 
-    protected direction currentGreenLightDirection; // The direction that the intersection is currently green for
+    protected direction currentDirection; // The direction that the intersection traffic is currently flowing through
     protected int currentGreenLightTimer; // Seconds left until the current green light turns red (this variable counts
                                           // down)
     protected int currentCrosswalkLightTimer; // Seconds left until the current green light turns red (based on green
@@ -25,6 +25,10 @@ abstract class Intersection {
 
     // CONSTRUCTOR
 
+    public Intersection(String intersectionRoadOneName) {
+        this.intersectionRoadOneName = intersectionRoadOneName;
+    }
+
     public Intersection(int directionOneLightLength, String intersectionRoadOneName) {
         this.directionOneLightLength = directionOneLightLength;
         this.intersectionRoadOneName = intersectionRoadOneName;
@@ -38,7 +42,6 @@ abstract class Intersection {
     }
 
     public abstract int startIntersection(); // Start the intersection (start counting down current green light)
-
     public abstract int stopIntersection(); // Stop the countdown of intersection lights, leave at current state
 
     // Optimization functions
@@ -48,15 +51,18 @@ abstract class Intersection {
 
     public abstract int applyOptimization();
 
+    public abstract int getTimeToCountDownFrom();
+
+
+
     // Timing getters and setters
-    public abstract void changeTrafficLightTiming(direction direction, int newLength); // Change light length of chosen
-                                                                                       // direction
+    /* IMPLEMENT THESE IN 3 WAY AND 4 WAY
+    public abstract void changeTrafficLightTiming(direction direction, int newLength);
+    public abstract void changeLeftTurnTiming(direction dirction, int newLength); 
+    public abstract void changeCrossWalkTiming(direction direction, int newLength);
+    */
 
-    public abstract void changeLeftTurnTiming(direction dirction, int newLength); // Change left turn length of chosen
-                                                                                  // direction
 
-    public abstract void changeCrossWalkTiming(direction direction, int newLength); // Change crosswalk length of chosen
-                                                                                    // direction
 
     // Can't be implemented here since you need to check the other direction
     // whose hashmap is specified in the appropriate subclasses
@@ -67,14 +73,12 @@ abstract class Intersection {
     public abstract int getCrossWalkTiming(direction direction);
 
     // Input related functions
-    public abstract void shortenCurrentTrafficLightDuration(int timeToShortenBy); // Reduce current green light timer by
-                                                                                  // a value
 
-    public abstract void shortenCurrentCrossWalkDuration(int timeToShortenBy); // Reduce current crosswalk light timer
-                                                                               // by a value
+    /* IMPLEMENT THESE IN 3 WAY AND 4 WAY
+    public abstract void shortenCurrentTrafficLightDuration(int timeToShortenBy);
+    public abstract void shortenCurrentCrossWalkDuration(int timeToShortenBy); 
+    */
 
-    public abstract void pedestrianInput(direction requestedCrossingDirection); // Pedestrian interaction
-
-    public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight); // Car
-                                                                                                            // interaction
+    public abstract void pedestrianInput(direction requestedCrossingDirection);
+    public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight);
 }
