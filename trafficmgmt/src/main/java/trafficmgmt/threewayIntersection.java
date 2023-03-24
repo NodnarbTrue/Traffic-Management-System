@@ -7,9 +7,7 @@ public class threewayIntersection extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
     private trafficlight directionTwoLight;
 
-    public abstract void changeTrafficLightTiming(direction direction, lightState light, int newLength);
-
-    public threewayIntersection(ArrayList<direction> directions, int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {
+    public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
         //Assumes firstDirectionTrafficlight is the road that can turn left
         trafficLight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength, leftTurnLength);
@@ -58,10 +56,11 @@ public class threewayIntersection extends Intersection{
 
         return 1;
     }
-    public void changeTrafficLightTiming(direction direction, int newLength) { 
+    public void changeTrafficLightTiming(direction direction, lightState light, int newLength) { 
         if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){
             for (trafficlight i : directionOneTrafficLights) {
-            i.setLightLength("green", newLength);
+                if (light == lightState.LEFT
+                i.setLightLength(lightState, newLength);
             }
         }
         else
