@@ -5,26 +5,13 @@ public class threewayIntersection extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
     private trafficlight directionTwoLight;
 
-    public threewayIntersection(ArrayList<direction> directions, int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName) {
+    public threewayIntersection(ArrayList<direction> directions, int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
-        //Plan is to add the lights based on what directions are in the list
-        trafficlight firstDirectionTrafficlightOne, firstDirectionTrafficlightTwo = null;
-        if (directions.contains(direction.NORTH) && directions.contains(direction.SOUTH)){
-            firstDirectionTrafficlightOne = new  trafficlight(direction.NORTH, directionOneLightLength);
-            firstDirectionTrafficlightTwo = new  trafficlight(direction.SOUTH, directionOneLightLength);
-            if (directions.contains(direction.WEST))
-                directionTwoLight = new trafficlight(direction.WEST, directionTwoLightLength);
-            else
-            directionTwoLight = new trafficlight(direction.EAST, directionTwoLightLength);
-        }
-        else{
-            firstDirectionTrafficlightOne = new  trafficlight(direction.WEST, directionOneLightLength);
-            firstDirectionTrafficlightTwo = new  trafficlight(direction.EAST, directionOneLightLength);
-            if (directions.contains(direction.NORTH))
-                directionTwoLight = new trafficlight(direction.NORTH, directionTwoLightLength);
-            else
-            directionTwoLight = new trafficlight(direction.SOUTH, directionTwoLightLength);
-        }
+        //Assumes firstDirectionTrafficlight is the road that can turn left
+        trafficLight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, directionOneLightLength, leftTurnLength);
+        trafficLight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_TWO, directionOneLightLength);
+        
+        directionTwoLight = new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength);
 
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
@@ -79,9 +66,7 @@ public class threewayIntersection extends Intersection{
 
     public void changeLeftTurnTiming(direction direction, int newLength) { 
         if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){
-            for (trafficlight i : directionOneTrafficLights) {
-            i.setLightLength("left turn", newLength);
-            }
+            directionTwoTrafficLights.get(0).setLightLength("left turn", newLength)
         }
         else
             directionTwoLight.setLightLength("left turn", newLength);
@@ -122,11 +107,13 @@ public class threewayIntersection extends Intersection{
     }
 
     public void shortenCurrentTrafficLightDuration(int timeToShortenBy) { 
-
+        if ((this.currentGreenLightTimer - timeToShortenBy) > minimumLightLength)
+            this.currentGreenLightTimer -= timeToShortenBy;
     }
 
     public void shortenCurrentCrossWalkDuration(int timeToShortenBy) { 
-
+        if ((this.currentCrosswalkLightTimer - timeToShortenBy) > minimumLightLength)
+                this.currentCrosswalkLightTimer -= timeToShortenBy;
     }
 
     public void pedestrianInput(direction requestedCrossingDirection) { 
