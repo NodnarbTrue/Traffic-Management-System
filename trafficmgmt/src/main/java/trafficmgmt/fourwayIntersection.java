@@ -2,8 +2,20 @@ package trafficmgmt;
 import java.util.ArrayList;
 
 public class fourwayIntersection extends Intersection{ 
+
+    // VARIABLES
+
+    protected int currentLeftLightTimer; // Seconds left until the current green left light turns red (this variable counts down)
+
+    protected int directionTwoLightLength; // Length in seconds that the directionTwo timer starts at once it turns green
+    protected int directionOneLeftLightLength; // Length in seconds that the directionOne left light timer starts at once it turns green
+    protected int directionTwoLeftLightLength; // Length in seconds that the directionTwo left light timer starts at once it turns green
+
+    protected ArrayList<trafficlight> directionTwoTrafficLights;
     protected ArrayList<crosswalk> directionTwoCrosswalks;
-    protected ArrayList<trafficlight> directionTwoLights;
+  
+
+    // CONSTRUCTOR
 
     public fourwayIntersection(int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName, String intersectionRoadTwoName) {
         super(directionOneLightLength, intersectionRoadOneName);
@@ -23,6 +35,9 @@ public class fourwayIntersection extends Intersection{
         directionOneCrosswalks.add(secondDirectionCrosswalkOne);
         directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
     }
+
+
+    // METHODS
 
     public int startIntersection() { 
         this.currentGreenLightDirection = direction.DIRECTION_ONE;
