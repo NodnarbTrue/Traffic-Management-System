@@ -111,7 +111,7 @@ public class threewayIntersection extends Intersection{
 
     public String viewOptimization() { 
 
-        return "sucess";
+        return "success";
     }
 
     public int applyOptimization() {
