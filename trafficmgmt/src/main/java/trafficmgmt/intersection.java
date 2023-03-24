@@ -43,8 +43,6 @@ abstract class Intersection {
     public abstract int applyOptimization();
 
     // Timing getters and setters
-    public abstract void changeTrafficLightTiming(direction direction, int newLength); // Change light length of chosen direction
-    public abstract void changeLeftTurnTiming(direction dirction, int newLength); // Change left turn length of chosen direction
     public abstract void changeCrossWalkTiming(direction direction, int newLength); // Change crosswalk length of chosen direction
 
     // Can't be implemented here since you need to check the other direction 

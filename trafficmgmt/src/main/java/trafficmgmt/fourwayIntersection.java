@@ -16,6 +16,7 @@ public class fourwayIntersection extends Intersection{
     protected ArrayList<trafficlight> directionTwoTrafficLights;
     protected ArrayList<crosswalk> directionTwoCrosswalks;
   
+    public abstract void changeTrafficLightTiming(direction direction, lightState light, int newLength);
 
     // CONSTRUCTOR
 

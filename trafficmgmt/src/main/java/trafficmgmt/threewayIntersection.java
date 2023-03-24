@@ -1,9 +1,13 @@
 package trafficmgmt;
 import java.util.ArrayList;
+import trafficmgmt.utility.direction;
+import trafficmgmt.utility.lightState;
 
 public class threewayIntersection extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
     private trafficlight directionTwoLight;
+
+    public abstract void changeTrafficLightTiming(direction direction, lightState light, int newLength);
 
     public threewayIntersection(ArrayList<direction> directions, int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
@@ -61,7 +65,7 @@ public class threewayIntersection extends Intersection{
             }
         }
         else
-            directionTwoLight.setLightLength("green", newLength);
+            directionTwoLight.setLightLength(, newLength);
     }
 
     public void changeLeftTurnTiming(direction direction, int newLength) { 
