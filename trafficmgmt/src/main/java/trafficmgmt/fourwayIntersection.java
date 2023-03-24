@@ -54,10 +54,7 @@ public class fourwayIntersection extends Intersection{
         return 1;
     }
     public void changeTrafficLightTiming(direction direction, int newLength) { 
-        if (direction == trafficmgmt.Intersection.direction.DIRECTION_ONE){}
-            for (trafficlight i : directionOneTrafficLights) {
-            i.changeLightLength("green", newLength);
-        }
+
     }
 
     public void changeLeftTurnTiming(direction direction, int newLength) { 
