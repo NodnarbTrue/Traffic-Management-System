@@ -3,7 +3,7 @@ import trafficmgmt.utility.direction;
 import trafficmgmt.utility.lightState;
 
 public class trafficlight {
-    private direction direction; 
+    private direction trafficlightDirection; 
     private lightState currentLightState; 
     private int rateOfCars;
 
@@ -15,8 +15,8 @@ public class trafficlight {
     private Integer leftTurnLightLength;
 
     // Class constructor with only direction
-    public trafficlight(direction direction) {
-        this.direction = direction; 
+    public trafficlight(direction directionOne) {
+        this.trafficlightDirection = directionOne; 
         this.greenLightLength = null; 
         this.yellowLightLength = 3; 
         this.leftTurnLight = false; 
@@ -25,7 +25,7 @@ public class trafficlight {
 
     // Class constructor without yellow light and left turn
     public trafficlight(direction direction, Integer greenLightLength) {
-        this.direction = direction; 
+        this.trafficlightDirection = direction; 
         this.greenLightLength = greenLightLength; 
         this.yellowLightLength = 3; 
         this.leftTurnLight = false; 
@@ -34,7 +34,7 @@ public class trafficlight {
    
     // Class constructor without yellow light length
     public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength) {
-        this.direction = direction; 
+        this.trafficlightDirection = direction; 
         this.greenLightLength = greenLightLength; 
         this.yellowLightLength = 3; 
         this.leftTurnLight = true; 
@@ -43,7 +43,7 @@ public class trafficlight {
 
    // Class constructor with left turn and yellow light length
     public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength, Integer yellowLightLength) {
-         this.direction = direction; 
+         this.trafficlightDirection = direction; 
          this.greenLightLength = greenLightLength; 
          this.yellowLightLength = yellowLightLength; 
          this.leftTurnLight = true; 

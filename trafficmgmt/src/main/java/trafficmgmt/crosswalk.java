@@ -4,16 +4,16 @@ import trafficmgmt.utility.lightState;
 import trafficmgmt.utility.crosswalkState;
 
 public class crosswalk {
-    private direction direction; 
+    private direction crosswalkDirection; 
     private crosswalkState crosswalkState;
     private int crosswalkCountDownNumber;
 
-    public crosswalk(direction direction) { 
-        this.direction = direction;
+    public crosswalk(direction directionOne) { 
+        this.crosswalkDirection = directionOne;
     }
 
     public crosswalk(direction direction, int countDownFrom) { 
-        this.direction = direction;
+        this.crosswalkDirection = direction;
         this.crosswalkCountDownNumber = countDownFrom;
     }
 

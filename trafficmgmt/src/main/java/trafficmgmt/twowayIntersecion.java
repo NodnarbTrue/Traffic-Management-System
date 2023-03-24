@@ -10,8 +10,8 @@ public class twowayIntersecion extends Intersection{
     public twowayIntersecion(int directionOneLightLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
 
-        trafficlight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE);
-        trafficlight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_ONE);
+        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE);
+        trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE);
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
