@@ -1,6 +1,7 @@
 package trafficmgmt;
 
 import java.util.ArrayList;
+import trafficmgmt.utility.direction;
 
 abstract class Intersection {
 
@@ -8,10 +9,6 @@ abstract class Intersection {
     static final Boolean OVERWRITE_EXISTING_OPTIMIZATION = true;
     protected int intersectionID = generateID();
     protected String intersectionRoadOneName;
-
-    public enum direction {
-        NORTH, EAST, SOUTH, WEST, DIRECTION_ONE, DIRECTION_TWO
-    }
 
     protected direction currentGreenLightDirection; // The direction that the intersection is currently green for
     protected int currentGreenLightTimer; // Seconds left until the current green light turns red (this variable counts

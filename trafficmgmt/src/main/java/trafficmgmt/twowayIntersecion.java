@@ -1,5 +1,8 @@
 package trafficmgmt;
 import java.util.ArrayList;
+import trafficmgmt.utility.direction;
+import trafficmgmt.utility.lightState;
+import trafficmgmt.utility.crosswalkState;
 
 public class twowayIntersecion extends Intersection{
     protected ArrayList<crosswalk> directionTwoCrosswalks;
@@ -7,8 +10,8 @@ public class twowayIntersecion extends Intersection{
     public twowayIntersecion(int directionOneLightLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
 
-        trafficlight firstDirectionTrafficlightOne = new  trafficlight(direction.DIRECTION_ONE, null);
-        trafficlight firstDirectionTrafficlightTwo = new  trafficlight(direction.DIRECTION_ONE, null);
+        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE);
+        trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE);
         directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
@@ -23,6 +26,9 @@ public class twowayIntersecion extends Intersection{
         directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
     }
 
+    /**
+     * starting the intersection by setting the current direction lights and crosswalk
+     */
     public int startIntersection() { 
         this.currentGreenLightDirection = direction.DIRECTION_ONE;
         
@@ -58,9 +64,10 @@ public class twowayIntersecion extends Intersection{
     }
 
 
-
     public void changeTrafficLightTiming(direction direction, int newLength) { 
- 
+        for (trafficlight i : directionOneTrafficLights) {
+            //i.setLightLength(, newLength);
+        }
     }
 
     public void changeLeftTurnTiming(direction dirction, int newLength) { 
