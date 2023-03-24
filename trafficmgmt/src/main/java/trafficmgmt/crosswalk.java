@@ -26,4 +26,12 @@ public class crosswalk {
     public void countDown() { 
         this.crosswalkCountDownNumber--;
     }
+
+    public void setCrossWalkTiming(int newLength){
+        this.crosswalkCountDownNumber = newLength;
+    }
+
+    public int getCrossWalkTiming(){
+        return crosswalkCountDownNumber;
+    }
 }
