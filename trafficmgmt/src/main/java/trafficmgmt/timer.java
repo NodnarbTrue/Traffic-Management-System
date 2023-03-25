@@ -99,7 +99,7 @@ public class timer extends Thread {
         else if (this.yellowLightLength == this.currentTimeInCountDown) { 
             this.intersection.setAllCurrentDirectionTrafficLights(lightState.YELLOW);
             if (this.currentTimeInCountDown < this.crosswalkCoutdownLength) { 
-                this.intersection.decrementCurrentDirectionCrossWalkTimer();
+                this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
             }
         }
 
@@ -107,12 +107,12 @@ public class timer extends Thread {
         else if ((this.currentTimeInCountDown < this.crosswalkCoutdownLength) &&
                 (this.currentTimeInCountDown > 0)) {
             this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
-            this.intersection.decrementCurrentDirectionCrossWalkTimer();
+            this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
         }
 
         // the direction is done it's countdown
         else if (this.currentTimeInCountDown == 0) { 
-            this.intersection.decrementCurrentDirectionCrossWalkTimer();
+            this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
             this.intersection.setAllCurrentDirectionTrafficLights(lightState.RED);
             this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.STOP);
         }
@@ -132,6 +132,7 @@ public class timer extends Thread {
     public void run() { 
         for (int i = this.timeToCountDownFrom; i >= 0; i--) {
             this.currentTimeInCountDown = i;
+            this.intersection.curerntDirectionTiming = i;
             this.changeSystemStatesBasedOnTimer();
 
             try { 

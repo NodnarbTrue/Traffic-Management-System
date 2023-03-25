@@ -12,6 +12,7 @@ public class twowayIntersecion extends Intersection{
     // intersection gets a train or padestrian input
     int inputCountDownLength; 
     int crosswalkFullLength;
+    boolean trainWait;
 
     /**
      * Constructor method of the two way intersection class
@@ -21,7 +22,6 @@ public class twowayIntersecion extends Intersection{
     public twowayIntersecion(String intersectionRoadOneName, int inputCountDownLength) {
         super(intersectionRoadOneName);
         this.inputCountDownLength = inputCountDownLength;
-        this.intersectionTimer = new timer(this);
 
         trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE);
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE);
@@ -35,11 +35,12 @@ public class twowayIntersecion extends Intersection{
         
         crosswalk secondDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_TWO);
         crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
-        directionOneCrosswalks.add(secondDirectionCrosswalkOne);
-        directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
+        directionTwoCrosswalks.add(secondDirectionCrosswalkOne);
+        directionTwoCrosswalks.add(secondDirectionCrosswalkTwo);
 
         // The defulat length of the direction with just crosswalks 
         this.crosswalkFullLength = 50;
+        this.trainWait = false;
     }
 
     public twowayIntersecion(String intersectionRoadOneName, int inputCountDownLength, int crosswalkFullLength) {
@@ -125,7 +126,7 @@ public class twowayIntersecion extends Intersection{
                 break;
         } 
 
-        return null;
+        return 1;
     }
 
     /**
@@ -196,14 +197,14 @@ public class twowayIntersecion extends Intersection{
      * Method for decrementing the timer number inside each crosswalk in 
      * the current direction
      */
-    public void decrementCurrentDirectionCrossWalkTimer() { 
+    public void setCurrentDirectionCrossWalkTimer(int currentTimer) { 
         if (currentDirection == direction.DIRECTION_ONE) { 
             for (crosswalk i : directionOneCrosswalks) { 
-                i.decrementTimer();
+                i.setCurrentCrossWalkTiming(currentTimer);
             }
         } else if (currentDirection == direction.DIRECTION_TWO) { 
             for (crosswalk i : directionTwoCrosswalks) {
-                i.decrementTimer();
+                i.setCurrentCrossWalkTiming(currentTimer);
             }
         }
     }
@@ -217,9 +218,13 @@ public class twowayIntersecion extends Intersection{
             this.currentDirection = direction.DIRECTION_TWO;
             // the timer counted down and switched the directions
             // so need to count down for the other direction's crosswalk
-            this.intersectionTimer.start();
+            if (this.trainWait == false) { 
+                this.intersectionTimer = new timer(this);
+                this.intersectionTimer.start();
+            }
         } else if (this.currentDirection == direction.DIRECTION_TWO) { 
-            this.currentDirection = direction.DIRECTION_ONE;
+            //this.currentDirection = direction.DIRECTION_ONE;
+            this.startIntersection();
         }
     }
 
@@ -246,6 +251,7 @@ public class twowayIntersecion extends Intersection{
             
             case DIRECTION_TWO:
                 if (currentDirection == direction.DIRECTION_ONE) { 
+                    this.intersectionTimer = new timer(this);
                     this.intersectionTimer.start();
                 }
                 break;
@@ -256,8 +262,15 @@ public class twowayIntersecion extends Intersection{
 
     }
 
-    public void trainInput() { 
-        
+    public void trainIncomingSignal() { 
+        this.trainWait = true;
+        this.intersectionTimer = new timer(this);
+        this.intersectionTimer.start();
+    }
+
+    public void trainClearSignal() {
+        this.trainWait = false;
+        this.startIntersection();
     }
 
     /**
@@ -326,7 +339,27 @@ public class twowayIntersecion extends Intersection{
 
 
 
+    // Debugging Method
+    public void printAllStates() { 
+        String output = new String("");
+        
+        output += "Direction One Light States: \n";
+        for (trafficlight i : directionOneTrafficLights) {
+            output += i.getCurrentLightState() + "\t";
+        }
 
+        output += "\nDirection One Crosswalk States: \n";
+        for (crosswalk i : directionOneCrosswalks) { 
+            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+        }
+        
+        output += "\n Direction Two Crosswalk States: \n";
+        for (crosswalk i : directionTwoCrosswalks) {
+            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+        }
+
+        System.out.println(output);
+    }
 
 
 

@@ -13,6 +13,9 @@ abstract class Intersection {
 
     // The direction that the intersection traffic is currently flowing through
     protected direction currentDirection; 
+
+    // The current time in the timer. For debugging perposes
+    public int curerntDirectionTiming;
     
     // Seconds left until the current green light turns red 
     protected int currentGreenLightTimer;
@@ -26,19 +29,27 @@ abstract class Intersection {
     protected ArrayList<trafficlight> directionOneTrafficLights;
     protected ArrayList<crosswalk> directionOneCrosswalks;
     protected ArrayList<crosswalk> directionTwoCrosswalks;
-
-
+    
+    
     // CONSTRUCTORS
     public Intersection(String intersectionRoadOneName) {
         this.intersectionID = generateID();
         this.intersectionRoadOneName = intersectionRoadOneName;
         this.directionOneLightLength = 100; //Defult value
+        this.curerntDirectionTiming = 100;
+        this.directionOneTrafficLights = new ArrayList<trafficlight>();
+        this.directionOneCrosswalks = new ArrayList<crosswalk>();
+        this.directionTwoCrosswalks = new ArrayList<crosswalk>();
     }
 
     public Intersection(int directionOneLightLength, String intersectionRoadOneName) {
         this.intersectionID = generateID();
         this.directionOneLightLength = directionOneLightLength;
         this.intersectionRoadOneName = intersectionRoadOneName;
+        this.curerntDirectionTiming = directionOneLightLength;
+        this.directionOneTrafficLights = new ArrayList<trafficlight>();
+        this.directionOneCrosswalks = new ArrayList<crosswalk>();
+        this.directionTwoCrosswalks = new ArrayList<crosswalk>();
     }
 
 
@@ -58,7 +69,7 @@ abstract class Intersection {
     public abstract Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn);
     public abstract void setAllCurrentDirectionTrafficLights(lightState newState);
     public abstract void setAllCurrentDirectionCrosswalk(crosswalkState newState);
-    public abstract void decrementCurrentDirectionCrossWalkTimer();
+    public abstract void setCurrentDirectionCrossWalkTimer(int currentTimer);
     public abstract void switchDirection();
 
 

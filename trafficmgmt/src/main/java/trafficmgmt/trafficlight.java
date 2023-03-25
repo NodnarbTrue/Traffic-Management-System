@@ -96,6 +96,10 @@ public class trafficlight {
         }
     }
 
+    public lightState getCurrentLightState() { 
+        return this.currentLightState;
+    }
+
     public boolean getLeftTurnExsistance() { 
         return this.leftTurnLight;
     }
