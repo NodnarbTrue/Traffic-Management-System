@@ -5,16 +5,15 @@ import trafficmgmt.utility.lightState;
 public class trafficlight {
     private direction trafficlightDirection; 
     private lightState currentLightState; 
-    private int rateOfCars;
-
+    
     private Integer greenLightLength; 
     private Integer yellowLightLength; 
-    
     private boolean leftTurnLight; 
-    private lightState currentLeftTurnLightState;
     private Integer leftTurnLightLength;
+    
+    private int rateOfCars;
 
-    // Class constructor with only direction
+    // CONSTRUCTORS
     public trafficlight(direction directionOne) {
         this.trafficlightDirection = directionOne; 
         this.greenLightLength = null; 
@@ -23,7 +22,6 @@ public class trafficlight {
         this.leftTurnLightLength = 0;
    }
 
-    // Class constructor without yellow light and left turn
     public trafficlight(direction direction, Integer greenLightLength) {
         this.trafficlightDirection = direction; 
         this.greenLightLength = greenLightLength; 
@@ -32,7 +30,6 @@ public class trafficlight {
         this.leftTurnLightLength = 0;
    }
    
-    // Class constructor without yellow light length
     public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength) {
         this.trafficlightDirection = direction; 
         this.greenLightLength = greenLightLength; 
@@ -41,15 +38,17 @@ public class trafficlight {
         this.leftTurnLightLength = leftTurnLightLength;
    }
 
-   // Class constructor with left turn and yellow light length
     public trafficlight(direction direction, Integer greenLightLength, Integer leftTurnLightLength, Integer yellowLightLength) {
-         this.trafficlightDirection = direction; 
-         this.greenLightLength = greenLightLength; 
-         this.yellowLightLength = yellowLightLength; 
-         this.leftTurnLight = true; 
-         this.leftTurnLightLength = leftTurnLightLength;
+        this.trafficlightDirection = direction; 
+        this.greenLightLength = greenLightLength; 
+        this.yellowLightLength = yellowLightLength; 
+        this.leftTurnLight = true; 
+        this.leftTurnLightLength = leftTurnLightLength;
     }
 
+
+    
+    // Methods for changing the trafficlight to a state directly
     public void turnGreen() { 
         this.currentLightState = lightState.GREEN;
     }
@@ -62,14 +61,13 @@ public class trafficlight {
         return this.leftTurnLight;
     }
 
-    public void turnLeftRed() { 
-        this.currentLeftTurnLightState = lightState.RED;
+    public void setLightState(lightState newLightState) { 
+        this.currentLightState = newLightState;
     }
 
-    public void turnLeftGreen() { 
-        this.currentLeftTurnLightState = lightState.GREEN;
-    }
 
+
+    // Methods for System adminstrator updating
     public void setLightLength(lightState lightColour, int newLength) { 
         switch (lightColour){
             case GREEN:
@@ -96,5 +94,9 @@ public class trafficlight {
             default:
                 return -1; //Can change to throw error
         }
+    }
+
+    public boolean getLeftTurnExsistance() { 
+        return this.leftTurnLight;
     }
 }

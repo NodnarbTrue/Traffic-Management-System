@@ -5,7 +5,6 @@ import trafficmgmt.utility.direction;
 import trafficmgmt.utility.lightState;
 
 public class threewayIntersection extends Intersection {
-    protected ArrayList<crosswalk> directionTwoCrosswalks;
     private trafficlight directionTwoLight;
 
     public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {

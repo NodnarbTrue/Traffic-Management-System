@@ -1,7 +1,7 @@
 package trafficmgmt;
 
 import java.util.ArrayList;
-import trafficmgmt.utility.direction;
+import trafficmgmt.utility.*;
 
 abstract class Intersection {
 
@@ -9,12 +9,14 @@ abstract class Intersection {
     static final Boolean OVERWRITE_EXISTING_OPTIMIZATION = true;
     protected int intersectionID = generateID();
     protected String intersectionRoadOneName;
+    timer intersectionTimer;
 
     protected direction currentDirection; // The direction that the intersection traffic is currently flowing through
     protected int currentGreenLightTimer; // Seconds left until the current green light turns red (this variable counts
                                           // down)
-    protected int currentCrosswalkLightTimer; // Seconds left until the current green light turns red (based on green
-                                              // light timer)
+    
+    // Seconds left until the current green light turns red (based on green light timer)
+    protected int currentCrosswalkLightTimer; 
 
     protected int directionOneLightLength; // Length in seconds that the directionOne timer starts at once it turns
                                            // green
@@ -22,6 +24,7 @@ abstract class Intersection {
 
     protected ArrayList<trafficlight> directionOneTrafficLights; //
     protected ArrayList<crosswalk> directionOneCrosswalks; //
+    protected ArrayList<crosswalk> directionTwoCrosswalks;
 
     // CONSTRUCTOR
 
@@ -62,6 +65,13 @@ abstract class Intersection {
     public abstract void changeCrossWalkTiming(direction direction, int newLength);
     */
 
+    // new methods timer class 
+    public abstract boolean getCurrentDirectionLeftTurnExsistance();
+    public abstract Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn);
+    public abstract void setAllCurrentDirectionTrafficLights(lightState newState);
+    public abstract void setAllCurrentDirectionCrosswalk(crosswalkState newState);
+    public abstract void decrementCurrentDirectionCrossWalkTimer();
+    public abstract void switchDirection();
 
 
     // Can't be implemented here since you need to check the other direction
@@ -74,11 +84,8 @@ abstract class Intersection {
 
     // Input related functions
 
-    /* IMPLEMENT THESE IN 3 WAY AND 4 WAY
-    public abstract void shortenCurrentTrafficLightDuration(int timeToShortenBy);
-    public abstract void shortenCurrentCrossWalkDuration(int timeToShortenBy); 
-    */
-
+    public abstract void shortenDirectionDuration(int timeToShortenBy);
+    
     public abstract void pedestrianInput(direction requestedCrossingDirection);
     public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight);
 }

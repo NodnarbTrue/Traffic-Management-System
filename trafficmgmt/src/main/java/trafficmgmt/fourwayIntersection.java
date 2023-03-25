@@ -22,7 +22,6 @@ public class fourwayIntersection extends Intersection {
                                                // once it turns green
 
     protected ArrayList<trafficlight> directionTwoTrafficLights;
-    protected ArrayList<crosswalk> directionTwoCrosswalks;
 
     // CONSTRUCTOR
 
@@ -52,7 +51,7 @@ public class fourwayIntersection extends Intersection {
     // METHODS
 
     public int startIntersection() {
-        this.currentGreenLightDirection = direction.DIRECTION_ONE;
+        this.currentDirection = direction.DIRECTION_ONE;
 
         for (trafficlight i : directionOneTrafficLights) {
             i.turnGreen();
@@ -176,6 +175,10 @@ public class fourwayIntersection extends Intersection {
     public int applyOptimization() {
 
         return 1;
+    }
+
+    public int getTimeToCountDownFrom() {
+        return currentGreenLightTimer;
     }
 
 }

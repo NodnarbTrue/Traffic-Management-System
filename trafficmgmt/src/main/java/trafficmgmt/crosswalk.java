@@ -7,48 +7,63 @@ public class crosswalk {
     private direction crosswalkDirection; 
     private crosswalkState crosswalkState;
     private int crosswalkCountDownNumber;
+    private int currentcrosswalkCountDownNumber;
 
+    // CONSTRUCTORS
     public crosswalk(direction directionOne) { 
         this.crosswalkDirection = directionOne;
+        this.crosswalkCountDownNumber = 30;
+        this.currentcrosswalkCountDownNumber = 30;
+        this.crosswalkState = crosswalkState.STOP;
     }
 
     public crosswalk(direction direction, int countDownFrom) { 
         this.crosswalkDirection = direction;
         this.crosswalkCountDownNumber = countDownFrom;
+        this.currentcrosswalkCountDownNumber = countDownFrom;
+        this.crosswalkState = crosswalkState.STOP;
     }
+    
 
 
+    // Methods for changing the crosswalks to a state directly
+    public void walkSignal() { 
+        this.crosswalkState = crosswalkState.WALK;
+        this.currentcrosswalkCountDownNumber = this.crosswalkCountDownNumber;
+    }
 
     public void stopSignal() { 
         this.crosswalkState = crosswalkState.STOP;
+        this.currentcrosswalkCountDownNumber = this.crosswalkCountDownNumber;
     }
 
-    public void walkSignal() { 
-        this.crosswalkState = crosswalkState.WALK;
-    }
-
-
-    // Used when the constructor includeded countDownFrom
-    public void countDownInit() { 
+    public void countDownSignal() { 
         this.crosswalkState = crosswalkState.COUNTDOWN;
-    }
-
-    // Used when the constructor didn't include countDownFrom
-    public void countDownInit(int countDownFrom) { 
-        this.crosswalkState = crosswalkState.COUNTDOWN;
-        this.crosswalkCountDownNumber = countDownFrom;
-    }
-
-    public void countDown() { 
-        this.crosswalkCountDownNumber--;
     }
 
     
+
+    // Methods used by the intersections as per the timer class
+    public void setCrossWalkState(crosswalkState newState) { 
+        this.crosswalkState = newState;
+    }
+
+    public void decrementTimer() { 
+        this.currentcrosswalkCountDownNumber--;
+    }
+
+
+    
+    // Methods for System adminstrator updating
     public void setCrossWalkTiming(int newLength){
         this.crosswalkCountDownNumber = newLength;
     }
 
     public int getCrossWalkTiming(){
-        return crosswalkCountDownNumber;
+        return this.crosswalkCountDownNumber;
+    }
+
+    public int getCurrentCrossWalkTiming() { 
+        return this.currentcrosswalkCountDownNumber;
     }
 }
