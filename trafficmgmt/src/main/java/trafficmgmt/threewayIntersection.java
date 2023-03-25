@@ -8,12 +8,10 @@ public class threewayIntersection extends Intersection {
     protected ArrayList<crosswalk> directionTwoCrosswalks;
     private trafficlight directionTwoLight;
 
-    public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, int leftTurnLength,
-            String intersectionRoadOneName) {
+    public threewayIntersection(int directionOneLightLength, int directionTwoLightLength, int leftTurnLength, String intersectionRoadOneName) {
         super(directionOneLightLength, intersectionRoadOneName);
         // Assumes firstDirectionTrafficlight is the road that can turn left
-        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength,
-                leftTurnLength);
+        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, leftTurnLength);
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_TWO, directionOneLightLength);
 
         directionTwoLight = new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength);
@@ -31,7 +29,16 @@ public class threewayIntersection extends Intersection {
     }
 
     public int startIntersection() {
-        this.currentGreenLightDirection = direction.DIRECTION_ONE;
+        //Temporary still need to add turn lights, other direction starting and polish the countdown
+        this.currentDirection = direction.DIRECTION_ONE;
+        this.currentGreenLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
+        this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
+        timer countdown = new timer(this);
+
+        directionTwoLight.turnRed();
+        for (crosswalk i : directionTwoCrosswalks) {
+            i.stopSignal();
+        }
 
         for (trafficlight i : directionOneTrafficLights) {
             i.turnGreen();
@@ -39,9 +46,15 @@ public class threewayIntersection extends Intersection {
         for (crosswalk i : directionOneCrosswalks) {
             i.walkSignal();
         }
-        for (crosswalk i : directionTwoCrosswalks) {
-            i.stopSignal();
+
+        while (countdown.getcurrentTimeInCountDown() >= 0){
+            countdown.run();
+            shortenCurrentTrafficLightDuration(currentCrosswalkLightTimer);
+            if (countdown.getcurrentTimeInCountDown() < 20) //Or whatever number we decide on
+                System.out.println(getCrossWalkTiming(direction.DIRECTION_ONE)); //Change to however we display the countdown
+                
         }
+
         return 1;
     };
 
@@ -50,6 +63,7 @@ public class threewayIntersection extends Intersection {
         for (trafficlight i : directionOneTrafficLights) {
             i.turnRed();
         }
+        directionTwoLight.turnRed();
         for (crosswalk i : directionOneCrosswalks) {
             i.stopSignal();
         }
@@ -60,23 +74,20 @@ public class threewayIntersection extends Intersection {
         return 1;
     }
 
-    public void changeTrafficLightTiming(direction dir, lightState light, int newLength) {
+    public void changeTrafficLightTiming(direction dir, int newLength) {
         if (dir == direction.DIRECTION_ONE) {
             for (trafficlight i : directionOneTrafficLights) {
-                if (light == lightState.LEFT_TURN) {
-                    // do something
-                }
-
-                i.setLightLength(light, newLength);
+                i.setLightLength(lightState.GREEN, newLength);
             }
-        } else
-            directionTwoLight.setLightLength(light, newLength);
+        } 
+        else
+            directionTwoLight.setLightLength(lightState.GREEN, newLength);
     }
 
     public void changeLeftTurnTiming(direction dir, int newLength) {
-        if (dir == direction.DIRECTION_ONE) {
+        if (dir == direction.DIRECTION_ONE) 
             directionTwoLight.setLightLength(lightState.LEFT_TURN, newLength);
-        } else
+        else
             directionTwoLight.setLightLength(lightState.LEFT_TURN, newLength);
     }
 
@@ -146,7 +157,7 @@ public class threewayIntersection extends Intersection {
         return 1;
     }
 
-    public void changeTrafficLightTiming(direction dir, int time) {
-
-    };
+    public int getTimeToCountDownFrom() {
+        return currentGreenLightTimer;
+    }
 }
