@@ -32,7 +32,7 @@ public class threewayIntersection extends Intersection {
         //Temporary still need to add turn lights, other direction starting and polish the countdown
         this.currentDirection = direction.DIRECTION_ONE;
         this.currentGreenLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
-        this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
+    this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
         timer countdown = new timer(this);
 
         directionTwoLight.turnRed();
@@ -47,10 +47,11 @@ public class threewayIntersection extends Intersection {
             i.walkSignal();
         }
 
-        while (countdown.getcurrentTimeInCountDown() >= 0){
+        while (currentGreenLightTimer >= 0){
             countdown.run();
-            shortenCurrentTrafficLightDuration(currentCrosswalkLightTimer);
-            if (countdown.getcurrentTimeInCountDown() < 20) //Or whatever number we decide on
+            currentGreenLightTimer = countdown.currentTimeInCountDown;
+            this.currentCrosswalkLightTimer = currentGreenLightTimer;
+            if (currentGreenLightTimer < 20) //Or whatever number we decide on
                 System.out.println(getCrossWalkTiming(direction.DIRECTION_ONE)); //Change to however we display the countdown
                 
         }
@@ -135,11 +136,24 @@ public class threewayIntersection extends Intersection {
     }
 
     public void pedestrianInput(direction requestedCrossingDirection) {
-
+        if (requestedCrossingDirection != currentDirection){
+            if ((currentGreenLightTimer - 10) < minimumLightLength){
+                currentGreenLightTimer = minimumLightLength;
+            }
+            else
+                currentGreenLightTimer -= 10;
+        }
     }
 
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-
+        //Unsure what to do if a car wants to make a right turn on red
+        if (crossingDirection != currentDirection){
+            if ((currentGreenLightTimer - 2) < minimumLightLength){
+                currentGreenLightTimer = minimumLightLength;
+            }
+            else
+                currentGreenLightTimer -= 2;
+        }
     }
 
     public int inputOptimization(Integer[][] input) {
