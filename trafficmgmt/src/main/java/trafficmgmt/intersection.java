@@ -1,71 +1,59 @@
 package trafficmgmt;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import trafficmgmt.utility.*;
 
 abstract class Intersection {
-
-    // VARIABLES
     static final Boolean OVERWRITE_EXISTING_OPTIMIZATION = true;
-    protected int intersectionID = generateID();
-    protected String intersectionRoadOneName;
-    timer intersectionTimer;
 
-    protected direction currentDirection; // The direction that the intersection traffic is currently flowing through
-    protected int currentGreenLightTimer; // Seconds left until the current green light turns red (this variable counts
-                                          // down)
+    protected String intersectionID;
+    protected String intersectionRoadOneName;
+    protected timer intersectionTimer;
+
+    // The direction that the intersection traffic is currently flowing through
+    protected direction currentDirection; 
     
-    // Seconds left until the current green light turns red (based on green light timer)
+    // Seconds left until the current green light turns red 
+    protected int currentGreenLightTimer;
+
+    // Seconds left until the current green light turns red
     protected int currentCrosswalkLightTimer; 
 
-    protected int directionOneLightLength; // Length in seconds that the directionOne timer starts at once it turns
-                                           // green
-    protected int minimumLightLength; // Value that when the current timer reaches, it cannot be shortened further
+    // Length in seconds that the directionOne timer starts at
+    protected int directionOneLightLength; 
 
-    protected ArrayList<trafficlight> directionOneTrafficLights; //
-    protected ArrayList<crosswalk> directionOneCrosswalks; //
+    protected ArrayList<trafficlight> directionOneTrafficLights;
+    protected ArrayList<crosswalk> directionOneCrosswalks;
     protected ArrayList<crosswalk> directionTwoCrosswalks;
 
-    // CONSTRUCTOR
 
+    // CONSTRUCTORS
     public Intersection(String intersectionRoadOneName) {
+        this.intersectionID = generateID();
         this.intersectionRoadOneName = intersectionRoadOneName;
+        this.directionOneLightLength = 100; //Defult value
     }
 
     public Intersection(int directionOneLightLength, String intersectionRoadOneName) {
+        this.intersectionID = generateID();
         this.directionOneLightLength = directionOneLightLength;
         this.intersectionRoadOneName = intersectionRoadOneName;
     }
 
-    // METHODS
 
-    private int generateID() {
-        // create a random Id generator and return an int
-        return 1;
+    // Method for generating a random ID
+    private String generateID() {
+        return UUID.randomUUID().toString();
     }
 
-    public abstract int startIntersection(); // Start the intersection (start counting down current green light)
-    public abstract int stopIntersection(); // Stop the countdown of intersection lights, leave at current state
-
-    // Optimization functions
-    public abstract int inputOptimization(Integer[][] input);
-
-    public abstract String viewOptimizationRecommendation();
-
-    public abstract int applyOptimization();
-
-    public abstract int getTimeToCountDownFrom();
+    // Start the intersection (start counting down current full direction length)
+    public abstract int startIntersection(); 
+    // Stop the countdown of intersection lights, leave at current state
+    public abstract int stopIntersection(); 
 
 
-
-    // Timing getters and setters
-    /* IMPLEMENT THESE IN 3 WAY AND 4 WAY
-    public abstract void changeTrafficLightTiming(direction direction, int newLength);
-    public abstract void changeLeftTurnTiming(direction dirction, int newLength); 
-    public abstract void changeCrossWalkTiming(direction direction, int newLength);
-    */
-
-    // new methods timer class 
+    // Methods required for the intersection to be used by the timer class
     public abstract boolean getCurrentDirectionLeftTurnExsistance();
     public abstract Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn);
     public abstract void setAllCurrentDirectionTrafficLights(lightState newState);
@@ -74,18 +62,21 @@ abstract class Intersection {
     public abstract void switchDirection();
 
 
-    // Can't be implemented here since you need to check the other direction
-    // whose hashmap is specified in the appropriate subclasses
-    public abstract int getTrafficLightTiming(direction direction);
+    // Get and set methods common to all types of intersections
+    // Note that ones for traffic lights and left turns are needed for 3 and 4 way intersections
+    public abstract int getCrossWalkTiming(direction dir);
+    public abstract void changeCrossWalkTiming(direction dir, int newLength);
 
-    public abstract int getLeftTurnTiming(direction direction);
-
-    public abstract int getCrossWalkTiming(direction direction);
 
     // Input related functions
-
-    public abstract void shortenDirectionDuration(int timeToShortenBy);
-    
     public abstract void pedestrianInput(direction requestedCrossingDirection);
     public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight);
+    public abstract void shortenDirectionDuration(int timeToShortenBy);
+
+
+    // Optimization functions
+    public abstract int inputOptimization(Integer[][] input);
+    public abstract String viewOptimizationRecommendation();
+    public abstract int applyOptimization();
+    public abstract int getTimeToCountDownFrom();
 }

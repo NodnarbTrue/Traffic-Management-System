@@ -11,7 +11,7 @@ public class twowayIntersecion extends Intersection{
     // The length of a countdown for when the two way  
     // intersection gets a train or padestrian input
     int inputCountDownLength; 
-
+    int crosswalkFullLength;
 
     /**
      * Constructor method of the two way intersection class
@@ -37,6 +37,14 @@ public class twowayIntersecion extends Intersection{
         crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
         directionOneCrosswalks.add(secondDirectionCrosswalkOne);
         directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
+
+        // The defulat length of the direction with just crosswalks 
+        this.crosswalkFullLength = 50;
+    }
+
+    public twowayIntersecion(String intersectionRoadOneName, int inputCountDownLength, int crosswalkFullLength) {
+        this(intersectionRoadOneName, inputCountDownLength);
+        this.crosswalkFullLength = crosswalkFullLength;
     }
 
 
@@ -125,7 +133,14 @@ public class twowayIntersecion extends Intersection{
      * count down from.
      */
     public int getTimeToCountDownFrom() { 
-        return this.inputCountDownLength;
+        if (this.currentDirection == direction.DIRECTION_ONE) { 
+            return this.inputCountDownLength;
+        } else if (this.currentDirection == direction.DIRECTION_TWO) { 
+            return this.crosswalkFullLength;
+        } else { 
+            // SYS ADMIN ERROR
+            return this.inputCountDownLength;
+        }
     }
 
     /**
@@ -200,6 +215,9 @@ public class twowayIntersecion extends Intersection{
     public void switchDirection() { 
         if (this.currentDirection == direction.DIRECTION_ONE) { 
             this.currentDirection = direction.DIRECTION_TWO;
+            // the timer counted down and switched the directions
+            // so need to count down for the other direction's crosswalk
+            this.intersectionTimer.start();
         } else if (this.currentDirection == direction.DIRECTION_TWO) { 
             this.currentDirection = direction.DIRECTION_ONE;
         }
@@ -212,14 +230,17 @@ public class twowayIntersecion extends Intersection{
     // The following methods are for inputs incoming to this subclass
 
     /**
-     * 
+     * Method that starts the countdown for crossing against traffic.
+     * Nothing occures if pedestrian wants to cross in the direction
+     * of traffic because it will eventually happen.
      */
     public void pedestrianInput(direction requestedCrossingDirection) { 
         switch (requestedCrossingDirection) {
 
             case DIRECTION_ONE:
                 if (currentDirection != direction.DIRECTION_ONE) {
-                    this.intersectionTimer.start();
+                    // Do nothing since if it's the second direction then 
+                    // it's already counting down
                 }
                 break;
             
@@ -235,15 +256,30 @@ public class twowayIntersecion extends Intersection{
 
     }
 
-    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) { 
-
+    public void trainInput() { 
+        
     }
 
+    /**
+     * Method that shortens the timer running for the pedestrians if the current direction 
+     * is the direction in which pedestrians are crossing
+     */
+    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) { 
+        if ((((startDirection == direction.DIRECTION_ONE) && (crossingDirection == direction.DIRECTION_TWO)) || 
+            ((startDirection == direction.NORTH) && (crossingDirection == direction.SOUTH)) || 
+            ((startDirection == direction.SOUTH) && (crossingDirection == direction.NORTH)) || 
+            ((startDirection == direction.EAST) && (crossingDirection == direction.WEST)) || 
+            ((startDirection == direction.WEST) && (crossingDirection == direction.EAST))) &&
+            this.currentDirection == direction.DIRECTION_TWO) { 
+                // attepts to shorten the timer by 5 seconds
+                shortenDirectionDuration(5);
+        }
+    }
 
-
-
-
-
+    /**
+     * Method that attmepts to shorten the currently running timer
+     * @param timeToShortenBy: an integer that is passed to timer
+     */
     public void shortenDirectionDuration(int timeToShortenBy) { 
         this.intersectionTimer.shortenCountDownTimer(timeToShortenBy);
     }
@@ -252,33 +288,50 @@ public class twowayIntersecion extends Intersection{
 
 
 
+    // The following methods are for allowing sys admin to get and set crosswalk timing
 
-
-
-    public void changeCrossWalkTiming(direction direction, int newLength) { 
-
+    /**
+     * Method to change the time the coutdown number display starts from
+     * @param direction: direction to change value for
+     * @param newLength: the length to update the value
+     */
+    public void changeCrossWalkTiming(direction dir, int newLength) { 
+        if (dir == direction.DIRECTION_ONE) { 
+            for (crosswalk i : directionOneCrosswalks) { 
+                i.setCrossWalkTiming(newLength);
+            }    
+        } else if (dir == direction.DIRECTION_TWO) { 
+            for (crosswalk i : directionTwoCrosswalks) {
+                i.setCrossWalkTiming(newLength);
+            } 
+        }
     }
 
-    public int getTrafficLightTiming(direction direction) { 
-        
-        return 1;
+    /**
+     * Method return the time the coutdown number display starts from
+     * @param direction: direction to get the value from
+     */
+    public int getCrossWalkTiming(direction dir) { 
+        if (dir == direction.DIRECTION_ONE) { 
+            return directionOneCrosswalks.get(0).getCrossWalkTiming();
+        } else if (dir == direction.DIRECTION_TWO) { 
+            return directionTwoCrosswalks.get(0).getCrossWalkTiming();
+        } else { 
+            // SYS ADMIN ERROR
+            return 0;
+        }
     }
 
-    public int getLeftTurnTiming(direction direction) { 
-
-        return 1;
-    }
-
-    public int getCrossWalkTiming(direction direction) { 
-
-        return 1;
-    }
 
 
 
 
 
 
+
+
+
+    // The following methods are for optimization
 
     public int inputOptimization(Integer[][] input) { 
 
@@ -294,4 +347,7 @@ public class twowayIntersecion extends Intersection{
 
         return 1;
     }
+
+
+    
 }

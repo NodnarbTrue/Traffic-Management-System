@@ -105,7 +105,8 @@ public class timer extends Thread {
 
         // between the crosswalk count down and end of light length
         else if ((this.currentTimeInCountDown < this.crosswalkCoutdownLength) &&
-                (this.currentTimeInCountDown > 0)) { 
+                (this.currentTimeInCountDown > 0)) {
+            this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
             this.intersection.decrementCurrentDirectionCrossWalkTimer();
         }
 
