@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class SwingUI extends JFrame implements ActionListener{
+public class SwingUI extends JFrame{
     static JButton loginButton;  // Global variable for the loginButton
     static JLabel idLabel;    // Global variable for the label
 
@@ -32,7 +32,6 @@ public class SwingUI extends JFrame implements ActionListener{
         // ImageIcon icon = new ImageIcon("place_holder_icon.png");
         // frame.setIconImage(icon.getImage());
         // frame.getContentPane().setBackground(new Color(0,0,0));
-
 
         frame.setVisible(true);
         }
@@ -55,16 +54,30 @@ public class SwingUI extends JFrame implements ActionListener{
             JTextField passwordText = new JTextField(20);
             passwordText.setBounds(300, 350, 165, 25);
             panel.add(passwordText);
-    
+
+            JLabel loginConfirmation = new JLabel("");
+            loginConfirmation.setBounds(300, 500, 300, 25);
+            panel.add(loginConfirmation);
+
             loginButton = new JButton("Admin Login");
             loginButton.setBounds(300, 400, 160, 40);
             panel.add(loginButton);
+
+            loginButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String ID = IDText.getText();
+                    String password = passwordText.getText();
+
+                    if(ID.equals("admin.1") && password.equals("123456")) {
+                        loginConfirmation.setText("Login Successful");
+                    } else if(ID.equals("admin.1") && password.equals("123456")) {
+                        loginConfirmation.setText("Login Successful");
+                    } 
+                    else {
+                        loginConfirmation.setText("Password or ID is incorrect");
+                    }
+                }
+            });
         }
 
-        public void actionPerformed(ActionEvent e) {
-            // place holder method for the admin login loginButton
-            if (e.getSource() == loginButton) {
-                System.out.println("Admin Login");
-            }
-        }
 }
