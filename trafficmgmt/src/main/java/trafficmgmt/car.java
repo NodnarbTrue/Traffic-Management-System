@@ -23,11 +23,11 @@ public class car {
     }
 
     // Methods
-    public int addCarWeightSignal(String direction) {
+    public void addCarWeightSignal(String directionGoing) {
 
     }
 
-    public int removeCarWeightSignal(String direction) {
+    public void removeCarWeightSignal(String direction) {
 
     }
 }

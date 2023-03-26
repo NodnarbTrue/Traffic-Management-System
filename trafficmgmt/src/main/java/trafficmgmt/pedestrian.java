@@ -23,7 +23,7 @@ public class pedestrian {
     }
 
     // Methods
-    public int clickCrosswalkButton(String directionGoing) {
-
+    public void clickCrosswalkButton(String directionGoing) {
+        intersection.switchDirection();
     }
 }

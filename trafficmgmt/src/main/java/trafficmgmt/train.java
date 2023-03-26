@@ -19,11 +19,11 @@ public class train {
     }
 
     // Methods
-    public int sendTraingSignal() {
+    public void sendTraingSignal() {
 
     }
 
-    public int clearTrainSignal() {
+    public void clearTrainSignal() {
 
     }
 }

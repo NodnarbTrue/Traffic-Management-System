@@ -19,11 +19,11 @@ public class sysadmin {
     }
 
     // Methods
-    public int inputData(int data) {
+    public void inputData(int data) {
 
     }
 
     public int applyOptimization() {
-
+        intersection.applyOptimization();
     }
 }
