@@ -24,14 +24,13 @@ public class threewayIntersection extends Intersection {
 
     public threewayIntersection(
     int directionOneLightLength, int directionTwoLightLength, 
-    int directionOneLeftLightLength, String intersectionRoadOneName, 
-    int directionTwoLeftLightLength, String intersectionRoadTwoName) {
+    int directionOneLeftLightLength, String intersectionRoadOneName, String intersectionRoadTwoName) {
 
         super(directionOneLightLength, intersectionRoadOneName);
+        this.directionTwoTrafficLights = new ArrayList<trafficlight>();
         this.directionTwoLightLength = directionTwoLightLength;
         this.intersectionRoadTwoName = intersectionRoadTwoName;
         this.directionOneLeftLightLength = directionOneLeftLightLength;
-        this.directionTwoLeftLightLength = directionTwoLightLength;
 
         //Assumes that intersection always starts with Direction_One being green
         this.currentDirection = direction.DIRECTION_ONE;
@@ -51,12 +50,11 @@ public class threewayIntersection extends Intersection {
 
         crosswalk secondDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_TWO);
         crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
-        directionOneCrosswalks.add(secondDirectionCrosswalkOne);
-        directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
+        directionTwoCrosswalks.add(secondDirectionCrosswalkOne);
+        directionTwoCrosswalks.add(secondDirectionCrosswalkTwo);
     }
 
     public int startIntersection() {
-        //Temporary still need to add turn lights, other direction starting and polish the countdown
         if (currentDirection == direction.DIRECTION_ONE){
             for (trafficlight i : directionTwoTrafficLights) {
                 i.turnRed();
@@ -295,6 +293,32 @@ public class threewayIntersection extends Intersection {
             // SYS ADMIN ERROR
             return 0;
         }
+    }
+    // Debugging Method
+    public void printAllStates() { 
+        String output = new String("");
+        
+        output += "Direction One Light States: \n";
+        for (trafficlight i : directionOneTrafficLights) {
+            output += i.getCurrentLightState() + "\t";
+        }
+
+        output += "\nDirection Two Light States: \n";
+        for (trafficlight i : directionTwoTrafficLights) {
+            output += i.getCurrentLightState() + "\t";
+        }
+
+        output += "\nDirection One Crosswalk States: \n";
+        for (crosswalk i : directionOneCrosswalks) { 
+            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+        }
+        
+        output += "\n Direction Two Crosswalk States: \n";
+        for (crosswalk i : directionTwoCrosswalks) {
+            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+        }
+
+        System.out.println(output);
     }
 
     //INPUTS
