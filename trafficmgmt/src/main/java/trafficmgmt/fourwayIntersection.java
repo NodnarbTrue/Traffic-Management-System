@@ -2,50 +2,71 @@ package trafficmgmt;
 
 import java.util.ArrayList;
 import trafficmgmt.utility.direction;
-
+import trafficmgmt.utility.lightState;
+import trafficmgmt.utility.crosswalkState;
+import trafficmgmt.utility.timerlengthinformation;
 import trafficmgmt.exceptions.OverwriteException;
 
 public class fourwayIntersection extends Intersection {
 
     // VARIABLES
 
+    // Name of second road
     protected String intersectionRoadTwoName;
 
-    protected int currentLeftLightTimer; // Seconds left until the current green left light turns red (this variable
-                                         // counts down)
+    // Seconds left until the current green left light turns red (this variable counts down)
+    protected int currentLeftLightTimer; 
 
-    protected int directionTwoLightLength; // Length in seconds that the directionTwo timer starts at once it turns
-                                           // green
-    protected int directionOneLeftLightLength; // Length in seconds that the directionOne left light timer starts at
-                                               // once it turns green
-    protected int directionTwoLeftLightLength; // Length in seconds that the directionTwo left light timer starts at
-                                               // once it turns green
+    // Length in seconds that the directionTwo timer starts at once it turns green
+    protected int directionTwoLightLength; 
+    protected int directionOneLeftLightLength; 
+    protected int directionTwoLeftLightLength; 
 
+    // List of trafficlight objects
     protected ArrayList<trafficlight> directionTwoTrafficLights;
 
-    // CONSTRUCTOR
+    
+    /**
+     * Constructor method of the four way intersection class
+     * @param directionOneLightLength: Length of directionOne's green light
+     * @param directionTwoLightLength: Length of directionTwo's green light
+     * @param directionOneLeftLightLength: Length of directionOne's left green light
+     * @param directionTwoLeftLightLength: Length of directionTwo's left green light
+     * @param intersectionRoadOneName: Name of directionOne's road
+     * @param intersectionRoadTwoName: Name of directionTwo's road
+     */
+    public fourwayIntersection(
+    int directionOneLightLength, int directionTwoLightLength, 
+    int directionOneLeftLightLength, int directionTwoLeftLightLength,
+    String intersectionRoadOneName, String intersectionRoadTwoName) {
 
-    public fourwayIntersection(int directionOneLightLength, int directionTwoLightLength, String intersectionRoadOneName,
-            String intersectionRoadTwoName) {
         super(directionOneLightLength, intersectionRoadOneName);
         this.directionTwoLightLength = directionTwoLightLength;
         this.intersectionRoadTwoName = intersectionRoadTwoName;
+        this.directionOneLeftLightLength = directionOneLeftLightLength;
+        this.directionTwoLeftLightLength = directionTwoLeftLightLength;
 
-        // ??????????????????????????????????????
-        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
-        trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
-        directionOneTrafficLights.add(firstDirectionTrafficlightOne);
-        directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
+        // Loop twice since there are 2 trafficlight and crosswalk objects for each direction
+        for (int i = 1; i <= 2; i++) {
 
-        crosswalk firstDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_ONE);
-        crosswalk firstDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_ONE);
-        directionOneCrosswalks.add(firstDirectionCrosswalkOne);
-        directionOneCrosswalks.add(firstDirectionCrosswalkTwo);
+            // directionOne has 2 trafficlight objects, if left light length is 0, no left turn signal
+            if (directionOneLeftLightLength == 0) {
+                directionOneTrafficLights.add(new trafficlight(direction.DIRECTION_ONE, directionOneLightLength)); }
+            else {
+                directionOneTrafficLights.add(new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLeftLightLength)); }
 
-        crosswalk secondDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_TWO);
-        crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
-        directionOneCrosswalks.add(secondDirectionCrosswalkOne);
-        directionOneCrosswalks.add(secondDirectionCrosswalkTwo);
+            // directionTwo has 2 trafficlight objects, if left light length is 0, no left turn signal
+            if (directionTwoLeftLightLength == 0) {
+                directionTwoTrafficLights.add(new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength)); }
+            else {
+                directionTwoTrafficLights.add(new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength, directionTwoLeftLightLength)); }
+
+            // directionOne has 2 crosswalk objects
+            directionOneCrosswalks.add(new crosswalk(direction.DIRECTION_ONE));
+
+            // directionTwo has 2 crosswalk objects
+            directionTwoCrosswalks.add(new crosswalk(direction.DIRECTION_TWO));
+        }   
     }
 
     // METHODS
