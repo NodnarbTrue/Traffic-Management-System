@@ -18,3 +18,6 @@ buildNumber.properties
 *.class
 *.DS_Store
 localTester.java
+
+# VS Code
+.vscode/
