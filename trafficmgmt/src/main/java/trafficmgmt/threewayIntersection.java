@@ -56,7 +56,7 @@ public class threewayIntersection extends Intersection {
         //Temporary still need to add turn lights, other direction starting and polish the countdown
         this.currentDirection = direction.DIRECTION_ONE;
         this.currentGreenLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
-    this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
+        this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
         timer countdown = new timer(this);
 
         for (trafficlight i : directionTwoTrafficLights) {
@@ -107,12 +107,12 @@ public class threewayIntersection extends Intersection {
     }
 
     //Methods used for information gathering by the timer class
-    public boolean getCurrentDirectionLeftTurnExsistance(){
+    public boolean getCurrentDirectionLeftTurnExistance(){
         if (this.currentDirection == direction.DIRECTION_ONE){
-            return directionOneTrafficLights.get(0).getLeftTurnExsistance();
+            return directionOneTrafficLights.get(0).getLeftTurnExistance();
         }
         else{
-            return directionTwoTrafficLights.get(0).getLeftTurnExsistance();
+            return directionTwoTrafficLights.get(0).getLeftTurnExistance();
         }
     }
 
@@ -120,10 +120,10 @@ public class threewayIntersection extends Intersection {
         switch (infoToReturn) {
 
             case LEFT_TURN_LENGTH:
-                if (this.currentDirection == direction.DIRECTION_ONE && this.getCurrentDirectionLeftTurnExsistance()) { 
+                if (this.currentDirection == direction.DIRECTION_ONE && this.getCurrentDirectionLeftTurnExistance()) { 
                     return this.directionOneLeftLightLength;
                 }
-                else if (this.currentDirection == direction.DIRECTION_TWO && this.getCurrentDirectionLeftTurnExsistance()){
+                else if (this.currentDirection == direction.DIRECTION_TWO && this.getCurrentDirectionLeftTurnExistance()){
                     return this.directionTwoLeftLightLength;
                 }
 

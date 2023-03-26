@@ -15,10 +15,10 @@ public class timer extends Thread {
     direction currentDirection;
 
     int timeToCountDownFrom;
-    boolean leftTurnExsists; 
+    boolean leftTurnExists; 
     int leftTurnGreenLength;
     int yellowLightLength;
-    int crosswalkCoutdownLength;
+    int crosswalkCountdownLength;
 
     boolean shortenTimer;
     int proposedTimeToShortenBy;
@@ -53,14 +53,14 @@ public class timer extends Thread {
          */
 
         this.timeToCountDownFrom = intersection.getTimeToCountDownFrom();
-        this.leftTurnExsists = intersection.getCurrentDirectionLeftTurnExsistance();
-        if (this.leftTurnExsists == true) { 
+        this.leftTurnExists = intersection.getCurrentDirectionLeftTurnExistance();
+        if (this.leftTurnExists == true) { 
             this.leftTurnGreenLength = intersection.getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH);
         } else { 
             this.leftTurnGreenLength = 0;
         }
         this.yellowLightLength = intersection.getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH);
-        this.crosswalkCoutdownLength = intersection.getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH);
+        this.crosswalkCountdownLength = intersection.getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH);
     }
 
 
@@ -73,7 +73,7 @@ public class timer extends Thread {
     private void changeSystemStatesBasedOnTimer() { 
         // left turn at the start of green light
         if (this.timeToCountDownFrom == this.currentTimeInCountDown){
-            if (this.leftTurnExsists == true) {
+            if (this.leftTurnExists == true) {
                 this.intersection.setAllCurrentDirectionTrafficLights(lightState.LEFT_TURN);
                 this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.STOP);
             } else {
@@ -84,27 +84,27 @@ public class timer extends Thread {
 
         // left turn green period ends
         else if ((this.timeToCountDownFrom - this.leftTurnGreenLength) == this.currentTimeInCountDown) {
-            if (this.leftTurnExsists == true) { 
+            if (this.leftTurnExists == true) { 
                 this.intersection.setAllCurrentDirectionTrafficLights(lightState.GREEN);
                 this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.WALK);
             }
         }
 
         // crosswalk starts to count down
-        else if (this.crosswalkCoutdownLength == this.currentTimeInCountDown) {
+        else if (this.crosswalkCountdownLength == this.currentTimeInCountDown) {
             this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
         }
 
         // yellow lights start
         else if (this.yellowLightLength == this.currentTimeInCountDown) { 
             this.intersection.setAllCurrentDirectionTrafficLights(lightState.YELLOW);
-            if (this.currentTimeInCountDown < this.crosswalkCoutdownLength) { 
+            if (this.currentTimeInCountDown < this.crosswalkCountdownLength) { 
                 this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
             }
         }
 
         // between the crosswalk count down and end of light length
-        else if ((this.currentTimeInCountDown < this.crosswalkCoutdownLength) &&
+        else if ((this.currentTimeInCountDown < this.crosswalkCountdownLength) &&
                 (this.currentTimeInCountDown > 0)) {
             this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
             this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
@@ -144,7 +144,7 @@ public class timer extends Thread {
                      */
                     this.shortenTimer = false;
                     int tempi = i - this.proposedTimeToShortenBy;
-                    if ((tempi >= this.crosswalkCoutdownLength) && (tempi > this.yellowLightLength)) { 
+                    if ((tempi >= this.crosswalkCountdownLength) && (tempi > this.yellowLightLength)) { 
                         i = tempi;
                         this.currentTimeInCountDown = i;
                         this.changeSystemStatesBasedOnTimer();

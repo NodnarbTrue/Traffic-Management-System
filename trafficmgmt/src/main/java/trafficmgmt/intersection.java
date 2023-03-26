@@ -65,7 +65,7 @@ abstract class Intersection {
 
 
     // Methods required for the intersection to be used by the timer class
-    public abstract boolean getCurrentDirectionLeftTurnExsistance();
+    public abstract boolean getCurrentDirectionLeftTurnExistance();
     public abstract Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn);
     public abstract void setAllCurrentDirectionTrafficLights(lightState newState);
     public abstract void setAllCurrentDirectionCrosswalk(crosswalkState newState);

@@ -149,9 +149,9 @@ public class twowayIntersecion extends Intersection{
      * This method should always return false for the two way intersection class, therefore 
      * the if statment is not nessisary. But it is required for the three and four way intersections.
      */
-    public boolean getCurrentDirectionLeftTurnExsistance() { 
+    public boolean getCurrentDirectionLeftTurnExistance() { 
         if (this.currentDirection == direction.DIRECTION_ONE) { 
-            return directionOneTrafficLights.get(0).getLeftTurnExsistance();
+            return directionOneTrafficLights.get(0).getLeftTurnExistance();
         }
         
         return false;
