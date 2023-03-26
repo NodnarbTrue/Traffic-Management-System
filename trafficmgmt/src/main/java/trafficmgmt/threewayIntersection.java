@@ -113,15 +113,6 @@ public class threewayIntersection extends Intersection {
     }
 
     //Methods used for information gathering by the timer class
-    public boolean getCurrentDirectionLeftTurnExistance(){
-        if (this.currentDirection == direction.DIRECTION_ONE){
-            return directionOneTrafficLights.get(0).getLeftTurnExistance();
-        }
-        else{
-            return directionTwoTrafficLights.get(0).getLeftTurnExistance();
-        }
-    }
-
     public Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn) { 
         switch (infoToReturn) {
 
@@ -157,6 +148,15 @@ public class threewayIntersection extends Intersection {
         return this.getTrafficLightTiming(currentDirection);
     }
 
+    public boolean getCurrentDirectionLeftTurnExistance(){
+        if (this.currentDirection == direction.DIRECTION_ONE){
+            return directionOneTrafficLights.get(0).getLeftTurnExistance();
+        }
+        else{
+            return directionTwoTrafficLights.get(0).getLeftTurnExistance();
+        }
+    }
+
     // The following methods are used for state updating/setting by the timer class
 
     /**
@@ -168,8 +168,14 @@ public class threewayIntersection extends Intersection {
             for (trafficlight i : directionOneTrafficLights) {
                 i.setLightState(newState);
             }
+            for (trafficlight i : directionTwoTrafficLights) {
+                i.setLightState(lightState.RED);
+            }
+            
         } else if (currentDirection == direction.DIRECTION_TWO) { 
-            directionTwoTrafficLights.get(0).setLightState(newState);
+            for (trafficlight i : directionTwoTrafficLights) {
+                i.setLightState(newState);
+            }
         }
     }
 
@@ -224,26 +230,24 @@ public class threewayIntersection extends Intersection {
         }
     }
 
-    //Functions for accessing/modifying lights and crosswalks
-    public void changeTrafficLightTiming(direction dir, int newLength) {
-        if (dir == direction.DIRECTION_ONE) {
-            for (trafficlight i : directionOneTrafficLights) {
-                i.setLightLength(lightState.GREEN, newLength);
-            }
-        } 
-        else if (dir == direction.DIRECTION_TWO){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.GREEN, newLength);
+    //INPUTS
+    public void pedestrianInput(direction requestedCrossingDirection) {
+        if (requestedCrossingDirection != currentDirection){
+            this.shortenDirectionDuration(5);
         }
     }
 
-    public void changeLeftTurnTiming(direction dir, int newLength) {
-        if (dir == direction.DIRECTION_ONE){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
-        }
-        else if (dir == direction.DIRECTION_TWO){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
+    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
+        if (crossingDirection != currentDirection){
+            this.shortenDirectionDuration(5);
         }
     }
+
+    public void shortenDirectionDuration(int timeToShortenBy) {
+        this.intersectionTimer.shortenCountDownTimer(timeToShortenBy);
+    }
+
+    //Functions for accessing/modifying lights and crosswalks
 
     public void changeCrossWalkTiming(direction dir, int newLength) {
         if (dir == direction.DIRECTION_TWO) {
@@ -256,6 +260,30 @@ public class threewayIntersection extends Intersection {
         }
     }
 
+    public int getCrossWalkTiming(direction dir) {
+        if (dir == direction.DIRECTION_ONE){
+            return directionOneCrosswalks.get(0).getCrossWalkTiming();
+        }
+        else if (dir == direction.DIRECTION_TWO){
+            return directionTwoCrosswalks.get(0).getCrossWalkTiming();
+        }
+        else{
+            // SYS ADMIN ERROR
+            return 0;
+        }
+    }
+
+    public void changeTrafficLightTiming(direction dir, int newLength) {
+        if (dir == direction.DIRECTION_ONE) {
+            for (trafficlight i : directionOneTrafficLights) {
+                i.setLightLength(lightState.GREEN, newLength);
+            }
+        } 
+        else if (dir == direction.DIRECTION_TWO){
+            directionTwoTrafficLights.get(0).setLightLength(lightState.GREEN, newLength);
+        }
+    }
+    
     public int getTrafficLightTiming(direction dir) {
         if (dir == direction.DIRECTION_ONE){
             return directionOneTrafficLights.get(0).getLightTiming(lightState.GREEN);
@@ -266,6 +294,15 @@ public class threewayIntersection extends Intersection {
         else{
             // SYS ADMIN ERROR
             return 0;
+        }
+    }
+
+    public void changeLeftTurnTiming(direction dir, int newLength) {
+        if (dir == direction.DIRECTION_ONE){
+            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
+        }
+        else if (dir == direction.DIRECTION_TWO){
+            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
         }
     }
 
@@ -282,18 +319,6 @@ public class threewayIntersection extends Intersection {
         }
     }
 
-    public int getCrossWalkTiming(direction dir) {
-        if (dir == direction.DIRECTION_ONE){
-            return directionOneCrosswalks.get(0).getCrossWalkTiming();
-        }
-        else if (dir == direction.DIRECTION_TWO){
-            return directionTwoCrosswalks.get(0).getCrossWalkTiming();
-        }
-        else{
-            // SYS ADMIN ERROR
-            return 0;
-        }
-    }
     // Debugging Method
     public void printAllStates() { 
         String output = new String("");
@@ -319,23 +344,6 @@ public class threewayIntersection extends Intersection {
         }
 
         System.out.println(output);
-    }
-
-    //INPUTS
-    public void pedestrianInput(direction requestedCrossingDirection) {
-        if (requestedCrossingDirection != currentDirection){
-            this.shortenDirectionDuration(10);
-        }
-    }
-
-    public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-        if (crossingDirection != currentDirection){
-            this.shortenDirectionDuration(2);
-        }
-    }
-
-    public void shortenDirectionDuration(int timeToShortenBy) {
-        this.intersectionTimer.shortenCountDownTimer(timeToShortenBy);
     }
 
     //OPTIMIZATION
