@@ -45,15 +45,15 @@ public class sysadmin {
 
         }
         if (intersectionType == TWO_WAY) {
-            TwoWayIntersection intersection = new TwoWayIntersection(roadName, 30);
+            twowayIntersection intersection = new twowayIntersection(roadName, 30);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         } else if (intersectionType == THREE_WAY) {
-            ThreeWayIntersection intersection = new ThreeWayIntersection(roadName, 30);
+            threewayIntersection intersection = new threewayIntersection(roadName, 30);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         } else {
-            FourWayIntersection intersection = new FourWayIntersection(roadName, 30);
+            fourwayIntersection intersection = new fourwayIntersection(roadName, 30);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         }
