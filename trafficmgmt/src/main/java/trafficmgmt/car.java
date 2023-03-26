@@ -13,21 +13,23 @@ public class car {
     // Variables
     protected int ID;
     protected String position;
-    protected String directionGoing;
+    protected direction directionGoing;
 
     // Constructor
-    public car(int ID, String position, String directionGoing) {
+    public car(int ID, String position, direction directionGoing) {
+        this.assignedIntersection = assignedIntersection;
         this.ID = ID;
         this.position = position;
         this.directionGoing = directionGoing;
     }
 
     // Methods
-    public void addCarWeightSignal(String directionGoing) {
-
+    public void addCarWeightSignal(direction direction, direction crossingDirection, int weight) {
+        intersection.carWeightInput(direction, crossingDirection, weight);
     }
 
-    public void removeCarWeightSignal(String direction) {
+    // might not be needed
+    public void removeCarWeightSignal(direction direction) {
 
     }
 }
