@@ -31,7 +31,10 @@ public class threewayIntersection extends Intersection {
         this.directionTwoLightLength = directionTwoLightLength;
         this.intersectionRoadTwoName = intersectionRoadTwoName;
         this.directionOneLeftLightLength = directionOneLeftLightLength;
-        this.directionTwoLeftLightLength = directionTwoLeftLightLength;
+        this.directionTwoLeftLightLength = directionTwoLightLength;
+
+        //Assumes that intersection always starts with Direction_One being green
+        this.currentDirection = direction.DIRECTION_ONE;
 
         // Assumes firstDirectionTrafficlight is the road that can turn left
         trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLightLength);
@@ -54,34 +57,37 @@ public class threewayIntersection extends Intersection {
 
     public int startIntersection() {
         //Temporary still need to add turn lights, other direction starting and polish the countdown
-        this.currentDirection = direction.DIRECTION_ONE;
-        this.currentGreenLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
-        this.currentCrosswalkLightTimer = getTrafficLightTiming(direction.DIRECTION_ONE);
-        timer countdown = new timer(this);
-
-        for (trafficlight i : directionTwoTrafficLights) {
-            i.turnRed();
+        if (currentDirection == direction.DIRECTION_ONE){
+            for (trafficlight i : directionTwoTrafficLights) {
+                i.turnRed();
+            }
+            for (crosswalk i : directionTwoCrosswalks) {
+                i.stopSignal();
+            }
+            for (trafficlight i : directionOneTrafficLights) {
+                i.turnGreen();
+            }
+            for (crosswalk i : directionOneCrosswalks) {
+                i.walkSignal();
+            }
+        }
+        else{
+            for (trafficlight i : directionOneTrafficLights) {
+                i.turnRed();
+            }
+            for (crosswalk i : directionOneCrosswalks) {
+                i.stopSignal();
+            }
+            for (trafficlight i : directionTwoTrafficLights) {
+                i.turnGreen();
+            }
+            for (crosswalk i : directionTwoCrosswalks) {
+                i.walkSignal();
+            }
         }
 
-        for (crosswalk i : directionTwoCrosswalks) {
-            i.stopSignal();
-        }
-
-        for (trafficlight i : directionOneTrafficLights) {
-            i.turnGreen();
-        }
-        for (crosswalk i : directionOneCrosswalks) {
-            i.walkSignal();
-        }
-
-        while (currentGreenLightTimer >= 0){
-            countdown.run();
-            currentGreenLightTimer = countdown.currentTimeInCountDown;
-            this.currentCrosswalkLightTimer = currentGreenLightTimer;
-            if (currentGreenLightTimer < 20) //Or whatever number we decide on
-                System.out.println(getCrossWalkTiming(direction.DIRECTION_ONE)); //Change to however we display the countdown
-                
-        }
+        this.intersectionTimer = new timer(this);
+        this.intersectionTimer.run();
 
         return 1;
     };
@@ -103,6 +109,8 @@ public class threewayIntersection extends Intersection {
             i.stopSignal();
         }
 
+        this.intersectionTimer.stop();
+
         return 1;
     }
 
@@ -119,31 +127,23 @@ public class threewayIntersection extends Intersection {
     public Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn) { 
         switch (infoToReturn) {
 
+            case Direction_LENGTH:
+                return this.getTrafficLightTiming(currentDirection);
+
             case LEFT_TURN_LENGTH:
-                if (this.currentDirection == direction.DIRECTION_ONE && this.getCurrentDirectionLeftTurnExistance()) { 
-                    return this.directionOneLeftLightLength;
-                }
-                else if (this.currentDirection == direction.DIRECTION_TWO && this.getCurrentDirectionLeftTurnExistance()){
-                    return this.directionTwoLeftLightLength;
-                }
+                return this.getLeftTurnTiming(currentDirection);
 
             case YELLOW_LIGHT_LENGTH:
                 if (this.currentDirection == direction.DIRECTION_ONE) { 
-                    return this.directionOneLightLength;
+                    return this.directionOneTrafficLights.get(0).getLightTiming(lightState.YELLOW);
                 }
                 else if (this.currentDirection == direction.DIRECTION_TWO) {
-                    return this.directionTwoLightLength;
+                    return this.directionTwoTrafficLights.get(0).getLightTiming(lightState.YELLOW);
                 }
                 break;
             
             case CROSSWALK_COUTDOWN_LENGTH:
-                if (this.currentDirection == direction.DIRECTION_ONE) { 
-                    return directionOneCrosswalks.get(0).getCrossWalkTiming();
-                } 
-                else if (this.currentDirection == direction.DIRECTION_TWO) { 
-                    return directionTwoCrosswalks.get(0).getCrossWalkTiming();
-                }
-                break;
+                this.getCrossWalkTiming(currentDirection);
             
             default:
                 break;

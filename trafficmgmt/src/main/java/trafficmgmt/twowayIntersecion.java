@@ -110,7 +110,7 @@ public class twowayIntersecion extends Intersection{
 
             case YELLOW_LIGHT_LENGTH:
                 if (this.currentDirection == direction.DIRECTION_ONE) { 
-                    return this.directionOneLightLength;
+                    return this.directionOneTrafficLights.get(0).getLightTiming(lightState.YELLOW);
                 }
                 break;
             
