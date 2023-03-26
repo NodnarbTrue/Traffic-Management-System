@@ -91,6 +91,8 @@ public class trafficlight {
                 return greenLightLength;
             case LEFT_TURN:
                 return leftTurnLightLength;
+            case YELLOW:
+                return yellowLightLength;
             default:
                 return -1; //Can change to throw error
         }
