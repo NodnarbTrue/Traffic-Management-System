@@ -152,7 +152,7 @@ public class SwingUI extends JFrame{
                     cl.show(panelContainer, panelName);
                 }
             });
-        }
+        
 
 
 
