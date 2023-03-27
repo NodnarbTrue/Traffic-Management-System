@@ -7,8 +7,11 @@ public class testing {
         //twowayIntersecion twowayTest = new twowayIntersecion("glue street", 10);
         //twowayPedestrianTest2(twowayTest);
 
-        threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
-        threewayPedestrianTest2(threewayTest);
+        //threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
+        //threewayPedestrianTest1(threewayTest);
+
+        fourwayIntersection fourwayTest = new fourwayIntersection(40, 40, 5, 0, "glue street", "paper street");
+        fourwayCarTest1(fourwayTest);
     }
 
     // Pedestrian causes traffic light to count down then the other direction's
@@ -107,4 +110,37 @@ public class testing {
         } 
     }
 
+    
+    public static void fourwayBasicTest1(fourwayIntersection fourwayTest) throws InterruptedException { 
+        fourwayTest.startIntersection();
+        while (true) { 
+            Thread.sleep(1000);
+            System.out.print("\033[H\033[2J");  
+            System.out.println(fourwayTest.curerntDirectionTiming);
+            fourwayTest.printAllStates();
+        } 
+    }
+
+    public static void fourwayPedestrianTest1(fourwayIntersection fourwayTest) throws InterruptedException { 
+        fourwayTest.startIntersection();
+        fourwayTest.pedestrianInput(direction.DIRECTION_ONE);
+        while (true) { 
+            Thread.sleep(1000);
+            System.out.print("\033[H\033[2J");  
+            System.out.println(fourwayTest.curerntDirectionTiming);
+            fourwayTest.printAllStates();
+        } 
+    }
+
+
+    public static void fourwayCarTest1(fourwayIntersection fourwayTest) throws InterruptedException { 
+        fourwayTest.startIntersection();
+        fourwayTest.carWeightInput(direction.DIRECTION_ONE, direction.DIRECTION_TWO, 50);
+        while (true) { 
+            Thread.sleep(1000);
+            System.out.print("\033[H\033[2J");  
+            System.out.println(fourwayTest.curerntDirectionTiming);
+            fourwayTest.printAllStates();
+        } 
+    }
 }

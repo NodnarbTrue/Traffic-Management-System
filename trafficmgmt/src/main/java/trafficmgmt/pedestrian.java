@@ -15,6 +15,7 @@ public class pedestrian {
     protected int ID;
     protected direction directionGoing;
     protected String position;
+    protected Intersection assignedIntersection;
 
     // Constructor
     public pedestrian(int ID, direction directionGoing, String position) {
@@ -24,7 +25,7 @@ public class pedestrian {
     }
 
     // Methods
-    public void clickCrosswalkButton(fourwayIntersection intersection, direction directionGoing) {
-        intersection.pedestrianInput(directionGoing);
+    public void clickCrosswalkButton(Intersection assignedIntersection, direction directionGoing) {
+        assignedIntersection.pedestrianInput(directionGoing);
     }
 }

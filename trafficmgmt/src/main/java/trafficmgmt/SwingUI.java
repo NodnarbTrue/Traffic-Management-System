@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+
+import trafficmgmt.utility.direction;
 import javax.swing.SwingConstants;
 import javax.swing.text.StyleConstants.FontConstants;
 
@@ -35,6 +39,7 @@ public class SwingUI extends JFrame {
     private static Color SUCCESS_COLOUR = new Color(144, 238, 144);
     private static String EDITOR_RANGE_TEXT = "0";
     static intersectionType typ = intersectionType.FOUR_WAY;
+    static threewayIntersection threewayDefault = new threewayIntersection(15, 10, 10, "North/south", "East/west");
 
     public static void main(String[] args) {
 
@@ -46,7 +51,9 @@ public class SwingUI extends JFrame {
         JPanel manualChangePanel = new JPanel();
         JPanel optimizeTimingPanel = new JPanel();
         JPanel panelContainer = new JPanel();
+        JPanel liveViewPanel = new JPanel();
         CardLayout cl = new CardLayout();
+        threewayDefault.startIntersection();
 
         frameSetup(frame); // setting up the size, close operation, etc... of the frame
 
@@ -58,6 +65,7 @@ public class SwingUI extends JFrame {
         panelContainer.add(viewTimingPanel, "viewTiming");
         panelContainer.add(manualChangePanel, "manualChange");
         panelContainer.add(optimizeTimingPanel, "optimizeTiming");
+        panelContainer.add(liveViewPanel, "liveView");
         cl.show(panelContainer, "login");
         frame.add(panelContainer);
 
@@ -67,6 +75,7 @@ public class SwingUI extends JFrame {
         viewTimingPanelComponents(viewTimingPanel, cl, panelContainer);
         manualChangePanelComponents(manualChangePanel, cl, panelContainer);
         optimizeTimingPanelComponents(optimizeTimingPanel, cl, panelContainer);
+        liveViewPanelComponents(liveViewPanel, cl, panelContainer);
         // below are the Icon of the UI, tbd
         // ImageIcon icon = new ImageIcon("place_holder_icon.png");
 
@@ -123,6 +132,9 @@ public class SwingUI extends JFrame {
 
     private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
         panel.setLayout(null);
+        JButton liveViewButton = new JButton("Live View");
+        liveViewButton.setBounds(250, 80, 250, 80);
+        panel.add(liveViewButton);
 
         JButton trafficTimingButton = new JButton("View Traffic timings");
         trafficTimingButton.setBounds(250, 200, 250, 80);
@@ -135,6 +147,12 @@ public class SwingUI extends JFrame {
         JButton createNewButton = new JButton("Optimize Traffic timings");
         createNewButton.setBounds(250, 440, 250, 80);
         panel.add(createNewButton);
+
+        liveViewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cl.show(panelContainer, "liveView");
+            }
+        });
 
         trafficTimingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -165,6 +183,37 @@ public class SwingUI extends JFrame {
                 cl.show(panelContainer, panelName);
             }
         });
+    }
+
+    private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+        panel.setLayout(null);
+
+        JLabel timeLabel = new JLabel("Live View");
+        timeLabel.setBounds(300, 100, 200, 25);
+        panel.add(timeLabel);
+
+        JLabel lightLabel = new JLabel("Light State");
+        lightLabel.setBounds(300, 200, 300, 200);
+        panel.add(lightLabel);
+
+        addBackButton(panel, panelContainer, cl, "admin");
+
+        Timer timer = new Timer(700, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int curTrafficLight = threewayDefault.curerntDirectionTiming;
+                trafficlight curTrafficD1 = threewayDefault.directionOneTrafficLights.get(0);
+                String curLightState = "";
+                curLightState += curTrafficD1.getCurrentLightState();
+                String roadName = threewayDefault.intersectionRoadOneName;
+                String lightStateString = String.format("Current %S timer: %d", roadName, curTrafficLight);
+                curLightState = String.format("Current %S \nState:%S", roadName, curLightState);
+                timeLabel.setText(lightStateString);
+                lightLabel.setText(curLightState);
+            }
+        });
+
+        timer.start();
+
     }
 
     private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
