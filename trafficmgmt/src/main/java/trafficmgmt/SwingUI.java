@@ -190,8 +190,11 @@ public class SwingUI extends JFrame {
     }
 
     private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+        //threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
+        //threewayTest.startIntersection();
+        
         panel.setLayout(null);
-
+        
         JLabel timeLabel = new JLabel("Live View");
         timeLabel.setBounds(300, 100, 200, 25);
         panel.add(timeLabel);
@@ -202,8 +205,9 @@ public class SwingUI extends JFrame {
 
         addBackButton(panel, panelContainer, cl, "admin");
 
-        Timer timer = new Timer(700, new ActionListener() {
+        ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                updateTimingPanelComponents();
                 int curTrafficLight = Admin.getIntersection().curerntDirectionTiming;
                 trafficlight curTrafficD1 = Admin.getIntersection().directionOneTrafficLights.get(0);
                 String curLightState = "";
@@ -213,9 +217,13 @@ public class SwingUI extends JFrame {
                 curLightState = String.format("Current %S \nState:%S", roadName, curLightState);
                 timeLabel.setText(lightStateString);
                 lightLabel.setText(curLightState);
+                
             }
-        });
+            
+        };
 
+        Timer timer = new Timer(700, taskPerformer);
+        timer.setRepeats(true);
         timer.start();
 
     }

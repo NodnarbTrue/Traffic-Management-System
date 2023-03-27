@@ -331,6 +331,35 @@ public class threewayIntersection extends Intersection {
         }
     }
 
+
+    // Debugging Method
+    public void printAllStates() { 
+        String output = new String("");
+        
+        output += "Direction One Light States: \n";
+        for (trafficlight i : directionOneTrafficLights) {
+            output += i.getCurrentLightState() + "\t";
+        }
+
+        output += "\nDirection Two Light States: \n";
+        for (trafficlight i : directionTwoTrafficLights) {
+            output += i.getCurrentLightState() + "\t";
+        }
+
+        output += "\nDirection One Crosswalk States: \n";
+        for (crosswalk i : directionOneCrosswalks) { 
+            output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
+        }
+        
+        output += "\n Direction Two Crosswalk States: \n";
+        for (crosswalk i : directionTwoCrosswalks) {
+            output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
+        }
+
+        System.out.println(output);
+    }
+
+
     /**
      * This function accepts 4 integers and return the optimal number of components
      * for
