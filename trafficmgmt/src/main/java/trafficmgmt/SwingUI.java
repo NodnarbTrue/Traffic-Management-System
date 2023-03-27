@@ -13,9 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 public class SwingUI extends JFrame{
-
+    static threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
+    static Boolean ifStillLiveView = true;
+    static int time = 0;
     public static void main(String[] args) {
 
         // below is the initialization of frame ,panels, etc... of the UI
@@ -28,7 +31,6 @@ public class SwingUI extends JFrame{
         JPanel liveViewPanel = new JPanel();
         JPanel panelContainer = new JPanel();
         CardLayout cl = new CardLayout();
-        threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
         threewayDefault.startIntersection();
 
         frameSetup(frame);   //setting up the size, close operation, etc... of the frame
@@ -183,6 +185,31 @@ public class SwingUI extends JFrame{
 
 
 
+        private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel liveViewLabel = new JLabel("Live View");
+            liveViewLabel.setBounds(300, 100, 200, 25);
+            panel.add(liveViewLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+            
+            Timer timer = new Timer(700, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    time += 1;
+                    String lightStateString = String.format("current light state: %d", time);
+                    liveViewLabel.setText(lightStateString);
+                }
+            });
+            
+            timer.start();
+            
+            
+        }
+
+
+
+
         private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
@@ -195,6 +222,10 @@ public class SwingUI extends JFrame{
             addBackButton(panel, panelContainer, cl, "admin");
         }
 
+
+
+
+
         private static void manualChangePanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
@@ -205,22 +236,16 @@ public class SwingUI extends JFrame{
             addBackButton(panel, panelContainer, cl, "admin");
         }
 
+
+
+
+
         private static void optimizeTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
             JLabel optimizeTimingLabel = new JLabel("Optimize Traffic Timings");
             optimizeTimingLabel.setBounds(300, 100, 200, 25);
             panel.add(optimizeTimingLabel);
-
-            addBackButton(panel, panelContainer, cl, "admin");
-        }
-
-        private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
-            panel.setLayout(null);
-
-            JLabel liveViewLabel = new JLabel("Live View");
-            liveViewLabel.setBounds(300, 100, 200, 25);
-            panel.add(liveViewLabel);
 
             addBackButton(panel, panelContainer, cl, "admin");
         }
