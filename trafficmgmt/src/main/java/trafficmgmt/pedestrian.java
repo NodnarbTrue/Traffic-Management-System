@@ -24,7 +24,7 @@ public class pedestrian {
     }
 
     // Methods
-    public void clickCrosswalkButton(intersection intersection, direction directionGoing) {
+    public void clickCrosswalkButton(fourwayIntersection intersection, direction directionGoing) {
         intersection.pedestrianInput(directionGoing);
     }
 }
