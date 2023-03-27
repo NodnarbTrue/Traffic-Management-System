@@ -25,8 +25,11 @@ public class SwingUI extends JFrame{
         JPanel viewTimingPanel = new JPanel();
         JPanel manualChangePanel = new JPanel();
         JPanel optimizeTimingPanel = new JPanel();
+        JPanel liveViewPanel = new JPanel();
         JPanel panelContainer = new JPanel();
         CardLayout cl = new CardLayout();
+        threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
+        threewayDefault.startIntersection();
 
         frameSetup(frame);   //setting up the size, close operation, etc... of the frame
 
@@ -38,6 +41,7 @@ public class SwingUI extends JFrame{
         panelContainer.add(viewTimingPanel, "viewTiming");
         panelContainer.add(manualChangePanel, "manualChange");
         panelContainer.add(optimizeTimingPanel, "optimizeTiming");
+        panelContainer.add(liveViewPanel, "liveView");
         cl.show(panelContainer, "login");
         frame.add(panelContainer);
 
@@ -47,6 +51,7 @@ public class SwingUI extends JFrame{
         viewTimingPanelComponents(viewTimingPanel, cl, panelContainer);
         manualChangePanelComponents(manualChangePanel, cl, panelContainer);
         optimizeTimingPanelComponents(optimizeTimingPanel, cl, panelContainer);
+        liveViewPanelComponents(liveViewPanel, cl, panelContainer);
         // below are the Icon of the UI, tbd
         // ImageIcon icon = new ImageIcon("place_holder_icon.png");
 
@@ -175,6 +180,8 @@ public class SwingUI extends JFrame{
             viewTimingLabel.setBounds(300, 100, 200, 25);
             panel.add(viewTimingLabel);
 
+
+
             addBackButton(panel, panelContainer, cl, "admin");
         }
 
@@ -194,6 +201,16 @@ public class SwingUI extends JFrame{
             JLabel optimizeTimingLabel = new JLabel("Optimize Traffic Timings");
             optimizeTimingLabel.setBounds(300, 100, 200, 25);
             panel.add(optimizeTimingLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
+
+        private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel liveViewLabel = new JLabel("Live View");
+            liveViewLabel.setBounds(300, 100, 200, 25);
+            panel.add(liveViewLabel);
 
             addBackButton(panel, panelContainer, cl, "admin");
         }
