@@ -28,10 +28,8 @@ public class SwingUI extends JFrame{
         JPanel viewTimingPanel = new JPanel();
         JPanel manualChangePanel = new JPanel();
         JPanel optimizeTimingPanel = new JPanel();
-        JPanel liveViewPanel = new JPanel();
         JPanel panelContainer = new JPanel();
         CardLayout cl = new CardLayout();
-        threewayDefault.startIntersection();
 
         frameSetup(frame);   //setting up the size, close operation, etc... of the frame
 
@@ -43,7 +41,6 @@ public class SwingUI extends JFrame{
         panelContainer.add(viewTimingPanel, "viewTiming");
         panelContainer.add(manualChangePanel, "manualChange");
         panelContainer.add(optimizeTimingPanel, "optimizeTiming");
-        panelContainer.add(liveViewPanel, "liveView");
         cl.show(panelContainer, "login");
         frame.add(panelContainer);
 
@@ -53,7 +50,6 @@ public class SwingUI extends JFrame{
         viewTimingPanelComponents(viewTimingPanel, cl, panelContainer);
         manualChangePanelComponents(manualChangePanel, cl, panelContainer);
         optimizeTimingPanelComponents(optimizeTimingPanel, cl, panelContainer);
-        liveViewPanelComponents(liveViewPanel, cl, panelContainer);
         // below are the Icon of the UI, tbd
         // ImageIcon icon = new ImageIcon("place_holder_icon.png");
 
@@ -125,10 +121,6 @@ public class SwingUI extends JFrame{
         private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
-            JButton liveViewButton = new JButton("Live View");
-            liveViewButton.setBounds(250, 80, 250, 80);
-            panel.add(liveViewButton);
-
             JButton trafficTimingButton = new JButton("View Traffic timings");
             trafficTimingButton.setBounds(250, 200, 250, 80);
             panel.add(trafficTimingButton);
@@ -140,12 +132,6 @@ public class SwingUI extends JFrame{
             JButton createNewButton = new JButton("Optimize Traffic timings");
             createNewButton.setBounds(250, 440, 250, 80);
             panel.add(createNewButton);
-
-            liveViewButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    cl.show(panelContainer, "liveView");
-                }
-            });
 
             trafficTimingButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -216,8 +202,6 @@ public class SwingUI extends JFrame{
             JLabel viewTimingLabel = new JLabel("View Traffic Timings");
             viewTimingLabel.setBounds(300, 100, 200, 25);
             panel.add(viewTimingLabel);
-
-
 
             addBackButton(panel, panelContainer, cl, "admin");
         }
