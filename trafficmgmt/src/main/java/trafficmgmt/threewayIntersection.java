@@ -18,7 +18,6 @@ public class threewayIntersection extends Intersection {
     // Length in seconds that the directionTwo timer starts at once it turns green
     protected int directionTwoLightLength; 
     protected int directionOneLeftLightLength; 
-    protected int directionTwoLeftLightLength; 
 
     protected ArrayList<trafficlight> directionTwoTrafficLights;
 
@@ -36,9 +35,16 @@ public class threewayIntersection extends Intersection {
         this.currentDirection = direction.DIRECTION_ONE;
 
         // Assumes firstDirectionTrafficlight is the road that can turn left
-        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLeftLightLength);
+        if (directionOneLeftLightLength == 0) {
+            trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
+            this.directionOneTrafficLights.add(firstDirectionTrafficlightOne);
+        }
+        else{
+            trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLeftLightLength);
+            this.directionOneTrafficLights.add(firstDirectionTrafficlightOne);
+        }
+
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
-        this.directionOneTrafficLights.add(firstDirectionTrafficlightOne);
         this.directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
         trafficlight directionTwoLight = new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength); // green indicates left turn
@@ -255,13 +261,15 @@ public class threewayIntersection extends Intersection {
     //Functions for accessing/modifying lights and crosswalks
 
     public void changeCrossWalkTiming(direction dir, int newLength) {
-        if (dir == direction.DIRECTION_TWO) {
-            for (crosswalk i : directionTwoCrosswalks) {
+        if (dir == direction.DIRECTION_ONE){
+            for (crosswalk i : directionOneCrosswalks) {
                 i.setCrossWalkTiming(newLength);
             }
         } 
-        else if (dir == direction.DIRECTION_ONE){
-            directionOneCrosswalks.get(0).setCrossWalkTiming(newLength);
+        else if (dir == direction.DIRECTION_TWO) {
+            for (crosswalk i : directionTwoCrosswalks) {
+                i.setCrossWalkTiming(newLength);
+            }
         }
     }
 
@@ -285,7 +293,9 @@ public class threewayIntersection extends Intersection {
             }
         } 
         else if (dir == direction.DIRECTION_TWO){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.GREEN, newLength);
+            for (trafficlight i : directionTwoTrafficLights) {
+                i.setLightLength(lightState.GREEN, newLength);
+            }
         }
     }
     
@@ -302,12 +312,10 @@ public class threewayIntersection extends Intersection {
         }
     }
 
+    //This would not apply to direction 2 as there would never be a left turn lane/signal in that direction
     public void changeLeftTurnTiming(direction dir, int newLength) {
         if (dir == direction.DIRECTION_ONE){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
-        }
-        else if (dir == direction.DIRECTION_TWO){
-            directionTwoTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
+            directionOneTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, newLength);
         }
     }
 
