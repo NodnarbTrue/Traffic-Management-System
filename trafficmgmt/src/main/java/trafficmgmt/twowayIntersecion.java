@@ -198,11 +198,13 @@ public class twowayIntersecion extends Intersection{
      * the current direction
      */
     public void setCurrentDirectionCrossWalkTimer(int currentTimer) { 
-        if (currentDirection == direction.DIRECTION_ONE) { 
+        if (this.currentDirection == direction.DIRECTION_ONE) { 
             for (crosswalk i : directionOneCrosswalks) { 
                 i.setCurrentCrossWalkTiming(currentTimer);
             }
-        } else if (currentDirection == direction.DIRECTION_TWO) { 
+        } 
+        
+        else if (this.currentDirection == direction.DIRECTION_TWO) { 
             for (crosswalk i : directionTwoCrosswalks) {
                 i.setCurrentCrossWalkTiming(currentTimer);
             }

@@ -7,7 +7,7 @@ public class testing {
         //twowayIntersecion twowayTest = new twowayIntersecion("glue street", 10);
         //twowayPedestrianTest2(twowayTest);
 
-        threewayIntersection threewayTest = new threewayIntersection(15, 10, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
         threewayPedestrianTest2(threewayTest);
     }
 
@@ -85,7 +85,7 @@ public class testing {
     public static void threewayPedestrianTest2(threewayIntersection threewayTest) throws InterruptedException { 
         threewayTest.startIntersection();
         // Pedestrian test
-        threewayTest.pedestrianInput(direction.DIRECTION_ONE);
+        //threewayTest.pedestrianInput(direction.DIRECTION_ONE);
         while (true) { 
             Thread.sleep(1000);
             System.out.print("\033[H\033[2J");  
