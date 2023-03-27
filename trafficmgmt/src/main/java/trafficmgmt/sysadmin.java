@@ -49,11 +49,12 @@ public class sysadmin {
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         } else if (intersectionType == THREE_WAY) {
+
             threewayIntersection intersection = new threewayIntersection(roadName, 30);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         } else {
-            fourwayIntersection intersection = new fourwayIntersection(roadName, 30);
+            fourwayIntersection intersection = new fourwayIntersection(fourwayIntersectoin.directionOneLightLength);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         }
