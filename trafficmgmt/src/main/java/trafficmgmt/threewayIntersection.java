@@ -260,8 +260,8 @@ public class threewayIntersection extends Intersection {
                 i.setCrossWalkTiming(newLength);
             }
         } 
-        else if (dir == direction.DIRECTION_TWO){
-            directionTwoCrosswalks.get(0).setCrossWalkTiming(newLength);
+        else if (dir == direction.DIRECTION_ONE){
+            directionOneCrosswalks.get(0).setCrossWalkTiming(newLength);
         }
     }
 
