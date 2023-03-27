@@ -1,6 +1,7 @@
 package trafficmgmt;
 
 import trafficmgmt.utility.intersectionType;
+
 import trafficmgmt.exceptions.NonIntegerException;
 import trafficmgmt.exceptions.OverwriteException;
 
@@ -9,22 +10,35 @@ public class sysadmin {
     // Variables
     protected int ID;
     intersectionType type;
+    Intersection curIntersection;
     Intersection nexIntersection;
 
     // Constructor
     public sysadmin(int ID) {
+        this.curIntersection = new threewayIntersection(15, 10, 10, "North/south", "East/west");
+        this.type = intersectionType.THREE_WAY;
         this.ID = ID;
     }
 
-    public Intersection inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])
+    public Intersection getIntersection() {
+        return curIntersection;
+    }
+
+    public void inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])
             throws NonIntegerException, IllegalArgumentException, OverwriteException {
 
-        if (data.length == 0 || data[0].length == 0) {
-            throw new IllegalArgumentException("Cannot pass an empty matrix");
+        int rowSize = 2;
+        int columnSize = 3;
+
+        if (intersectionTyp == intersectionType.FOUR_WAY) {
+            rowSize = 4;
+        } else if (intersectionTyp == intersectionType.THREE_WAY) {
+            rowSize = 3;
         }
 
-        int rowSize = data.length;
-        int columnSize = data[0].length;
+        if (data.length < rowSize || data[0].length < columnSize) {
+            throw new IllegalArgumentException("Cannot pass an empty matrix");
+        }
 
         Integer[][] convertedData = new Integer[rowSize][columnSize];
 
@@ -45,31 +59,30 @@ public class sysadmin {
         String roadOne = (roadName.length >= 1) ? roadName[0] : "DirectionOne";
         String roadTwo = (roadName.length >= 2) ? roadName[1] : "DirectionTwo";
 
+        type = intersectionTyp;
         if (intersectionTyp == intersectionType.TWO_WAY) {
-            type = intersectionTyp;
             twowayIntersecion intersection = new twowayIntersecion(roadOne, 30);
             intersection.inputOptimization(convertedData);
-            return intersection;
+            nexIntersection = intersection;
         } else if (intersectionTyp == intersectionType.THREE_WAY) {
             threewayIntersection intersection = new threewayIntersection(30, 30, 5, roadOne, roadTwo);
             intersection.inputOptimization(convertedData);
             nexIntersection = intersection;
-            return nexIntersection;
         } else {
             fourwayIntersection intersection = new fourwayIntersection(30, 30, 5, 5, roadOne, roadTwo);
             intersection.inputOptimization(convertedData);
             nexIntersection = intersection;
-            return nexIntersection;
         }
     }
 
     public int applyOptimization() {
+        curIntersection = nexIntersection;
         if (type == intersectionType.TWO_WAY) {
-            return ((twowayIntersecion) nexIntersection).applyOptimization();
+            return ((twowayIntersecion) curIntersection).applyOptimization();
         } else if (type == intersectionType.THREE_WAY) {
-            return ((threewayIntersection) nexIntersection).applyOptimization();
+            return ((threewayIntersection) curIntersection).applyOptimization();
         } else if (type == intersectionType.FOUR_WAY) {
-            return ((fourwayIntersection) nexIntersection).applyOptimization();
+            return ((fourwayIntersection) curIntersection).applyOptimization();
         } else {
             return -1;
         }

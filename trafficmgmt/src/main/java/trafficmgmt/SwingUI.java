@@ -1,5 +1,6 @@
 package trafficmgmt;
 
+import java.awt.ActiveEvent;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -34,12 +35,14 @@ import trafficmgmt.utility.intersectionType;
 
 public class SwingUI extends JFrame {
     private static String[] intersectionOptions = { "Two-Way", "Three-Way", "Four-Way" };
+    private static String ERROR_MESSAGE = "Error: Expected integers in range [0-999]";
     private static String SUCCESS_MESSAGE = "Success! View Optimization Below.";
     private static String ROAD_EXTENSION = " (2)";
     private static Color SUCCESS_COLOUR = new Color(144, 238, 144);
+    private static Color FAILURE_COLOUR = new Color(255, 114, 118);
     private static String EDITOR_RANGE_TEXT = "0";
+    private static sysadmin Admin = new sysadmin(0);
     static intersectionType typ = intersectionType.FOUR_WAY;
-    static threewayIntersection threewayDefault = new threewayIntersection(15, 10, 10, "North/south", "East/west");
 
     public static void main(String[] args) {
 
@@ -53,7 +56,7 @@ public class SwingUI extends JFrame {
         JPanel panelContainer = new JPanel();
         JPanel liveViewPanel = new JPanel();
         CardLayout cl = new CardLayout();
-        threewayDefault.startIntersection();
+        Admin.getIntersection().startIntersection();
 
         frameSetup(frame); // setting up the size, close operation, etc... of the frame
 
@@ -200,11 +203,11 @@ public class SwingUI extends JFrame {
 
         Timer timer = new Timer(700, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int curTrafficLight = threewayDefault.curerntDirectionTiming;
-                trafficlight curTrafficD1 = threewayDefault.directionOneTrafficLights.get(0);
+                int curTrafficLight = Admin.getIntersection().curerntDirectionTiming;
+                trafficlight curTrafficD1 = Admin.getIntersection().directionOneTrafficLights.get(0);
                 String curLightState = "";
                 curLightState += curTrafficD1.getCurrentLightState();
-                String roadName = threewayDefault.intersectionRoadOneName;
+                String roadName = Admin.getIntersection().intersectionRoadOneName;
                 String lightStateString = String.format("Current %S timer: %d", roadName, curTrafficLight);
                 curLightState = String.format("Current %S \nState:%S", roadName, curLightState);
                 timeLabel.setText(lightStateString);
@@ -272,6 +275,7 @@ public class SwingUI extends JFrame {
         JLabel statusLabel = new JLabel(SUCCESS_MESSAGE);
         statusLabel.setFont(new Font("Serif", Font.PLAIN, 24));
         statusLabel.setOpaque(true);
+        statusLabel.setVisible(false);
         statusLabel.setBackground(SUCCESS_COLOUR);
         statusLabel.setForeground(new Color(255, 255, 255));
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -339,12 +343,14 @@ public class SwingUI extends JFrame {
 
         JPanel optimizedViewport = new JPanel();
         optimizedViewport.setBounds(105, 525, 395, 225);
+        optimizedViewport.setVisible(false);
         optimizedViewport.setBackground(Color.WHITE);
 
         JButton applyButton = new JButton("Apply");
         applyButton.setSelected(false);
         applyButton.setFont(new Font("Serif", Font.PLAIN, 18));
         applyButton.setBounds(500, 600, 150, 70);
+        applyButton.setVisible(false);
 
         options.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -398,6 +404,40 @@ public class SwingUI extends JFrame {
         roadThree.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 roadFour.setText(roadThree.getText() + ROAD_EXTENSION);
+            }
+        });
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String roadNames[] = { roadOne.getText(), roadThree.getText() };
+                String data[][] = {
+                        { roadOneLane.getText(), roadOneLeft.getText(), roadOneRight.getText() },
+                        { roadTwoLane.getText(), roadTwoLeft.getText(), roadTwoRight.getText() },
+                        { roadThreeLane.getText(), roadThreeLeft.getText(), roadThreeRight.getText() },
+                        { roadFourLane.getText(), roadFourLeft.getText(), roadFourRight.getText() }
+                };
+
+                try {
+                    Admin.inputData(roadNames, typ, data);
+                    statusLabel.setBackground(SUCCESS_COLOUR);
+                    statusLabel.setText(SUCCESS_MESSAGE);
+                    statusLabel.setVisible(true);
+                    applyButton.setVisible(true);
+                    optimizedViewport.setVisible(true);
+                } catch (Exception except) {
+                    applyButton.setVisible(false);
+                    optimizedViewport.setVisible(false);
+
+                    statusLabel.setBackground(FAILURE_COLOUR);
+                    statusLabel.setText(ERROR_MESSAGE);
+                    statusLabel.setVisible(true);
+                }
+            }
+        });
+
+        applyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Admin.applyOptimization();
             }
         });
 
