@@ -18,32 +18,53 @@ public class SwingUI extends JFrame{
 
     public static void main(String[] args) {
 
-        // below is the main frame and panels of the UI
+        // below is the initialization of frame ,panels, etc... of the UI
         JFrame frame = new JFrame("Traffic Management System");
         JPanel loginPanel = new JPanel();
         JPanel adminPanel = new JPanel();
-        adminPanel.setBackground(Color.red);
+        JPanel viewTimingPanel = new JPanel();
+        JPanel manualChangePanel = new JPanel();
+        JPanel optimizeTimingPanel = new JPanel();
         JPanel panelContainer = new JPanel();
         CardLayout cl = new CardLayout();
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,800);
-        panelContainer.setLayout(cl);
+        frameSetup(frame);   //setting up the size, close operation, etc... of the frame
+
+        //below sets up the panelContainer that will hold all the other panels,
+        //so that we can switch between them
+        panelContainer.setLayout(cl);                  
         panelContainer.add(loginPanel, "login");
         panelContainer.add(adminPanel, "admin");
+        panelContainer.add(viewTimingPanel, "viewTiming");
+        panelContainer.add(manualChangePanel, "manualChange");
+        panelContainer.add(optimizeTimingPanel, "optimizeTiming");
         cl.show(panelContainer, "login");
-
-
-        loginPanelComponents(loginPanel, cl, panelContainer);
-
-        // below are some visual aspects(Icon,background color) of the UI tbd
-
-        // ImageIcon icon = new ImageIcon("place_holder_icon.png");
-        // frame.setIconImage(icon.getImage());
-        // frame.getContentPane().setBackground(new Color(0,0,0));
         frame.add(panelContainer);
+
+        //below are the components of the login panel and admin panel
+        loginPanelComponents(loginPanel, cl, panelContainer);
+        adminPanelComponents(adminPanel, cl, panelContainer);
+        viewTimingPanelComponents(viewTimingPanel, cl, panelContainer);
+        manualChangePanelComponents(manualChangePanel, cl, panelContainer);
+        optimizeTimingPanelComponents(optimizeTimingPanel, cl, panelContainer);
+        // below are the Icon of the UI, tbd
+        // ImageIcon icon = new ImageIcon("place_holder_icon.png");
+
+
         frame.setVisible(true);
         }
+
+
+
+
+        private static void frameSetup(JFrame frame) {
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800,800);
+        }
+
+
+
+
 
         private static void loginPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
@@ -87,6 +108,94 @@ public class SwingUI extends JFrame{
                     }
                 }
             });
+        }
+
+
+
+
+
+
+        private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JButton trafficTimingButton = new JButton("View Traffic timings");
+            trafficTimingButton.setBounds(250, 200, 250, 80);
+            panel.add(trafficTimingButton);
+
+            JButton manualChangeButton = new JButton("Manual Change Traffic timings");
+            manualChangeButton.setBounds(250, 320, 250, 80);
+            panel.add(manualChangeButton);
+
+            JButton createNewButton = new JButton("Optimize Traffic timings");
+            createNewButton.setBounds(250, 440, 250, 80);
+            panel.add(createNewButton);
+
+            trafficTimingButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelContainer, "viewTiming");
+                }
+            });
+           
+            manualChangeButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelContainer, "manualChange");
+                }
+            });
+
+            createNewButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelContainer, "optimizeTiming");
+                }
+            });
+        }
+
+
+
+
+
+        private static void addBackButton(JPanel panel, JPanel panelContainer, CardLayout cl, String panelName) {
+            JButton backButton = new JButton("Back");
+            backButton.setBounds(10, 10, 80, 25);
+            panel.add(backButton);
+
+            backButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelContainer, panelName);
+                }
+            });
+        } 
+
+
+
+
+        private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel viewTimingLabel = new JLabel("View Traffic Timings");
+            viewTimingLabel.setBounds(300, 100, 200, 25);
+            panel.add(viewTimingLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
+
+        private static void manualChangePanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel manualChangeLabel = new JLabel("Manual Change Traffic Timings");
+            manualChangeLabel.setBounds(300, 100, 200, 25);
+            panel.add(manualChangeLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
+
+        private static void optimizeTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel optimizeTimingLabel = new JLabel("Optimize Traffic Timings");
+            optimizeTimingLabel.setBounds(300, 100, 200, 25);
+            panel.add(optimizeTimingLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
         }
 
 }
