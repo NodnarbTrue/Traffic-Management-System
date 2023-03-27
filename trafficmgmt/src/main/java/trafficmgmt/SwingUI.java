@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,6 +31,14 @@ public class SwingUI extends JFrame {
     private static Color FAILURE_COLOUR = new Color(255, 114, 118);
     private static String EDITOR_RANGE_TEXT = "0";
     private static sysadmin Admin = new sysadmin(0);
+
+    // JFrame components
+    private static JLabel intersectionTypeLabel;
+    private static JLabel greenLightLabel;
+    private static JLabel yellowLightLabel;
+    private static JLabel leftLightLabel;
+    private static JLabel crosswalkLightLabel;
+
     static intersectionType typ = intersectionType.FOUR_WAY;
 
     public static void main(String[] args) {
@@ -122,6 +131,10 @@ public class SwingUI extends JFrame {
     }
 
     private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+        panel.removeAll();
+        panel.validate();
+        panel.repaint();
+
         panel.setLayout(null);
         JButton liveViewButton = new JButton("Live View");
         liveViewButton.setBounds(250, 80, 250, 80);
@@ -207,6 +220,18 @@ public class SwingUI extends JFrame {
 
     }
 
+    private static void updateTimingPanelComponents() {
+        intersectionTypeLabel.setText("Type of Intersection: " + typ);
+        greenLightLabel.setText("Intersection Current Green Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
+        yellowLightLabel.setText("Intersection Current Yellow Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
+        leftLightLabel.setText("Intersection Current Left Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
+        crosswalkLightLabel.setText("Crosswalk Countdown Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
+    }
+
     private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
         panel.setLayout(null);
 
@@ -214,23 +239,26 @@ public class SwingUI extends JFrame {
         viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
 
-        JLabel intersectionTypeLabel = new JLabel("Type of Intersection: " + typ);
+        intersectionTypeLabel = new JLabel("Type of Intersection: " + typ);
         intersectionTypeLabel.setBounds(100, 150, 400, 25);
         panel.add(intersectionTypeLabel);
 
-        JLabel greenLightLabel = new JLabel("Intersection Current Green Light Length: " +Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
+        greenLightLabel = new JLabel("Intersection Current Green Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
         greenLightLabel.setBounds(100, 200, 400, 25);
         panel.add(greenLightLabel);
 
-        JLabel yellowLightLabel = new JLabel("Intersection Current Yellow Light Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
+        yellowLightLabel = new JLabel("Intersection Current Yellow Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
         yellowLightLabel.setBounds(100, 250, 400, 25);
         panel.add(yellowLightLabel);
 
-        JLabel leftLightLabel = new JLabel("Intersection Current Left Light Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
+        leftLightLabel = new JLabel("Intersection Current Left Light Length: " + Admin.getIntersection()
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
         leftLightLabel.setBounds(100, 300, 400, 25);
         panel.add(leftLightLabel);
 
-        JLabel crosswalkLightLabel = new JLabel("Crosswalk Countdown Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
+        crosswalkLightLabel = new JLabel();
         crosswalkLightLabel.setBounds(100, 350, 400, 25);
         panel.add(crosswalkLightLabel);
 
@@ -454,6 +482,7 @@ public class SwingUI extends JFrame {
         applyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Admin.applyOptimization();
+                updateTimingPanelComponents();
             }
         });
 
