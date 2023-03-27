@@ -123,6 +123,10 @@ public class SwingUI extends JFrame{
         private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
+            JButton liveViewButton = new JButton("Live View");
+            liveViewButton.setBounds(250, 80, 250, 80);
+            panel.add(liveViewButton);
+
             JButton trafficTimingButton = new JButton("View Traffic timings");
             trafficTimingButton.setBounds(250, 200, 250, 80);
             panel.add(trafficTimingButton);
@@ -134,6 +138,12 @@ public class SwingUI extends JFrame{
             JButton createNewButton = new JButton("Optimize Traffic timings");
             createNewButton.setBounds(250, 440, 250, 80);
             panel.add(createNewButton);
+
+            liveViewButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cl.show(panelContainer, "liveView");
+                }
+            });
 
             trafficTimingButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
