@@ -1,33 +1,26 @@
 package trafficmgmt;
 
-import java.security.Identity;
-import java.util.ArrayList;
-import trafficmgmt.utility.direction;
-import trafficmgmt.utility.lightState;
-import trafficmgmt.utility.crosswalkState;
-import trafficmgmt.utility.timerlengthinformation;
+import trafficmgmt.utility.intersectionType;
+import trafficmgmt.exceptions.NonIntegerException;
 import trafficmgmt.exceptions.OverwriteException;
 
 public class sysadmin {
 
     // Variables
     protected int ID;
+    intersectionType type;
+    Intersection nexIntersection;
 
     // Constructor
     public sysadmin(int ID) {
         this.ID = ID;
     }
 
-    // Methods
-    Intersection nextIntersection;
+    public Intersection inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])
+            throws NonIntegerException, IllegalArgumentException, OverwriteException {
 
-    public Intersection inputData(String roadName, utility.intersectionType intersectionType, String data[][]) {
-
-        Throws NonIntegerException, IllegalArgumentException, OverwriteException;
-        {
-            if (data.length == 0 || data[0].length == 0) {
-                throw new IllegalArguemntException("Cannot pass an empty matrix");
-            }
+        if (data.length == 0 || data[0].length == 0) {
+            throw new IllegalArgumentException("Cannot pass an empty matrix");
         }
 
         int rowSize = data.length;
@@ -37,31 +30,48 @@ public class sysadmin {
 
         for (int i = 0; i < rowSize; i++) {
             for (int j = 0; j < columnSize; j++) {
-                if (data[i][j] == Integer(data[i][j]) && (Integer(data[i][j]) >= 0 && Integer(data[i][j]) <= 999)) {
-                    convertedData[i][j] = Integer(data[i][j]);
-                } else {
-                    throw new NonIntegerException(i, j);
+                try {
+                    int converted = Integer.parseInt(data[i][j]);
+                    if (converted >= 0 && converted <= 999) {
+                        convertedData[i][j] = converted;
+                    }
+                } catch (NumberFormatException e) {
+                    throw new NonIntegerException(i, j, data[i][j]);
                 }
             }
 
         }
-        if (intersectionType == intersectionType.TWO_WAY) {
-            twowayIntersection intersection = new twowayIntersection(roadName, 30);
-            intersection.inputOptimization(convertedData);
-            return this.nextIntersection;
-        } else if (intersectionType == intersectionType.THREE_WAY) {
 
-            threewayIntersection intersection = new threewayIntersection(roadName, 30);
+        String roadOne = (roadName.length >= 1) ? roadName[0] : "DirectionOne";
+        String roadTwo = (roadName.length >= 2) ? roadName[1] : "DirectionTwo";
+
+        if (intersectionTyp == intersectionType.TWO_WAY) {
+            type = intersectionTyp;
+            twowayIntersecion intersection = new twowayIntersecion(roadOne, 30);
             intersection.inputOptimization(convertedData);
-            return this.nextIntersection;
+            return intersection;
+        } else if (intersectionTyp == intersectionType.THREE_WAY) {
+            threewayIntersection intersection = new threewayIntersection(30, 30, 5, roadOne, roadTwo);
+            intersection.inputOptimization(convertedData);
+            nexIntersection = intersection;
+            return nexIntersection;
         } else {
-            fourwayIntersection intersection = new fourwayIntersection(roadName, 30);
+            fourwayIntersection intersection = new fourwayIntersection(30, 30, 5, 5, roadOne, roadTwo);
             intersection.inputOptimization(convertedData);
-            return this.nextIntersection;
+            nexIntersection = intersection;
+            return nexIntersection;
         }
     }
 
     public int applyOptimization() {
-        intersection.applyOptimization();
+        if (type == intersectionType.TWO_WAY) {
+            return ((twowayIntersecion) nexIntersection).applyOptimization();
+        } else if (type == intersectionType.THREE_WAY) {
+            return ((threewayIntersection) nexIntersection).applyOptimization();
+        } else if (type == intersectionType.FOUR_WAY) {
+            return ((fourwayIntersection) nexIntersection).applyOptimization();
+        } else {
+            return -1;
+        }
     }
 }
