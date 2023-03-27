@@ -14,9 +14,10 @@ public class car {
     protected int ID;
     protected String position;
     protected direction directionGoing;
+    protected Intersection assignedIntersection;
 
     // Constructor
-    public car(int ID, String position, direction directionGoing) {
+    public car(int ID, String position, direction directionGoing, Intersection assignedIntersection) {
         this.assignedIntersection = assignedIntersection;
         this.ID = ID;
         this.position = position;
@@ -24,8 +25,9 @@ public class car {
     }
 
     // Methods
-    public void addCarWeightSignal(direction direction, direction crossingDirection, int weight) {
-        intersection.carWeightInput(direction, crossingDirection, weight);
+    public void addCarWeightSignal(direction direction, direction crossingDirection, int weight,
+            Intersection assignedIntersection) {
+        assignedIntersection.carWeightInput(direction, crossingDirection, weight);
     }
 
     // might not be needed
