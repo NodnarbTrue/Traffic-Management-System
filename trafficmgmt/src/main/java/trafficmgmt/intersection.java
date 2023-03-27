@@ -26,9 +26,10 @@ abstract class Intersection {
     // Length in seconds that the directionOne timer starts at
     protected int directionOneLightLength; 
 
-    protected ArrayList<trafficlight> directionOneTrafficLights;
-    protected ArrayList<crosswalk> directionOneCrosswalks;
-    protected ArrayList<crosswalk> directionTwoCrosswalks;
+    public ArrayList<trafficlight> directionOneTrafficLights;
+    public ArrayList<trafficlight> directionTwoTrafficLights;
+    public ArrayList<crosswalk> directionOneCrosswalks;
+    public ArrayList<crosswalk> directionTwoCrosswalks;
     
     
     // CONSTRUCTORS

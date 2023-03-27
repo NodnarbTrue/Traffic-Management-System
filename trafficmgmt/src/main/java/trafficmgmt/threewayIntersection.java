@@ -20,7 +20,7 @@ public class threewayIntersection extends Intersection {
     protected int directionTwoLightLength;
     protected int directionOneLeftLightLength;
 
-    protected ArrayList<trafficlight> directionTwoTrafficLights;
+    //public ArrayList<trafficlight> directionTwoTrafficLights;
 
     private int data[];
 

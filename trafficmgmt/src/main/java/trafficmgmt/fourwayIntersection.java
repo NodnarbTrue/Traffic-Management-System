@@ -24,7 +24,7 @@ public class fourwayIntersection extends Intersection {
     protected int directionTwoLeftLightLength;
 
     // List of trafficlight objects
-    protected ArrayList<trafficlight> directionTwoTrafficLights;
+    //public ArrayList<trafficlight> directionTwoTrafficLights;
     int data[];
 
     /**

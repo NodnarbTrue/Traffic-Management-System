@@ -20,6 +20,7 @@ import javax.swing.Timer;
 
 import javax.swing.SwingConstants;
 import trafficmgmt.utility.intersectionType;
+import trafficmgmt.utility.crosswalkState;
 import trafficmgmt.utility.timerlengthinformation;;
 
 public class SwingUI extends JFrame {
@@ -190,34 +191,129 @@ public class SwingUI extends JFrame {
     }
 
     private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
-        //threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
-        //threewayTest.startIntersection();
+        threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
+        threewayTest.startIntersection();
         
         panel.setLayout(null);
         
-        JLabel timeLabel = new JLabel("Live View");
-        timeLabel.setBounds(300, 100, 200, 25);
-        panel.add(timeLabel);
+        JLabel viewTimingLabel = new JLabel("Live Traffic Timings");
+        viewTimingLabel.setBounds(100, 100, 400, 25);
+        panel.add(viewTimingLabel);
 
-        JLabel lightLabel = new JLabel("Light State");
-        lightLabel.setBounds(300, 200, 300, 200);
-        panel.add(lightLabel);
+        intersectionTypeLabel = new JLabel("Type of Intersection: " + "Three Way Intersection");
+        intersectionTypeLabel.setBounds(100, 150, 400, 25);
+        panel.add(intersectionTypeLabel);
+
+
+
+        String output = "Direction One Light States -> ";
+        int j = 0;
+        for (trafficlight i : threewayTest.directionOneTrafficLights) {
+            j++;
+            output += "#"+ j + " [" + i.getCurrentLightState() + "] ";
+        }
+        JLabel dirOneStates = new JLabel(output);
+        dirOneStates.setBounds(100, 200, 1000, 25);
+        panel.add(dirOneStates);
+
+
+        output = "Direction One Crosswalk States -> ";
+        j = 0;
+        for (crosswalk i : threewayTest.directionOneCrosswalks) {
+            j++;
+            output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+            if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
+            } else { 
+                output += "] ";
+            }
+        }
+        JLabel dirOneCrosswalkStates = new JLabel(output);
+        dirOneCrosswalkStates.setBounds(100, 250, 1000, 25);
+        panel.add(dirOneCrosswalkStates);
+
+
+        output = "Direction Two Light States -> ";
+        j = 0;
+        for (trafficlight i : threewayTest.directionTwoTrafficLights) {
+            j++;
+            output +=  "#"+ j + " [" + i.getCurrentLightState() + "] ";
+        }
+        JLabel dirTwoStates = new JLabel(output);
+        dirTwoStates.setBounds(100, 300, 1000, 25);
+        panel.add(dirTwoStates);
+
+
+        output = "Direction Two Crosswalk States -> ";
+        j = 0;
+        for (crosswalk i : threewayTest.directionTwoCrosswalks) {
+            j++;
+            output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+            if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
+            } else { 
+                output += "] ";
+            }
+        }
+        JLabel dirTwoCrosswalkStates = new JLabel(output);
+        dirTwoCrosswalkStates.setBounds(100, 350, 1000, 25);
+        panel.add(dirTwoCrosswalkStates);
+
+        output = "Direction Total Length Left: ";
+        output += threewayTest.curerntDirectionTiming;
+        JLabel totalLen = new JLabel(output);
+        totalLen.setBounds(100, 450, 1000, 25);
+        panel.add(totalLen);
 
         addBackButton(panel, panelContainer, cl, "admin");
 
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                updateTimingPanelComponents();
-                int curTrafficLight = Admin.getIntersection().curerntDirectionTiming;
-                trafficlight curTrafficD1 = Admin.getIntersection().directionOneTrafficLights.get(0);
-                String curLightState = "";
-                curLightState += curTrafficD1.getCurrentLightState();
-                String roadName = Admin.getIntersection().intersectionRoadOneName;
-                String lightStateString = String.format("Current %S timer: %d", roadName, curTrafficLight);
-                curLightState = String.format("Current %S \nState:%S", roadName, curLightState);
-                timeLabel.setText(lightStateString);
-                lightLabel.setText(curLightState);
-                
+                String output = "Direction One Light States -> ";
+                int j = 0;
+                for (trafficlight i : threewayTest.directionOneTrafficLights) {
+                    j++;
+                    output += "#"+ j + " [" + i.getCurrentLightState() + "] ";
+                }
+                dirOneStates.setText(output);
+
+                output = "Direction Two Light States -> ";
+                j = 0;
+                for (trafficlight i : threewayTest.directionTwoTrafficLights) {
+                    j++;
+                    output +=  "#"+ j + " [" + i.getCurrentLightState() + "] ";
+                }
+                dirTwoStates.setText(output);
+
+                output = "Direction One Crosswalk States -> ";
+                j = 0;
+                for (crosswalk i : threewayTest.directionOneCrosswalks) {
+                    j++;
+                    output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                    if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                        output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
+                    } else { 
+                        output += "] ";
+                    }
+                }
+                dirOneCrosswalkStates.setText(output);
+
+                output = "Direction Two Crosswalk States -> ";
+                j = 0;
+                for (crosswalk i : threewayTest.directionTwoCrosswalks) {
+                    j++;
+                    output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                    if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                        output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
+                    } else { 
+                        output += "] ";
+                    }
+                }
+                dirTwoCrosswalkStates.setText(output);
+
+                output = "Direction Total Length Left: ";
+                output += threewayTest.curerntDirectionTiming;
+                totalLen.setText(output);
             }
             
         };
