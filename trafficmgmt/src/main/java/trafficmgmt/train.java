@@ -19,11 +19,11 @@ public class train {
     }
 
     // Methods
-    public void sendTrainSignal() {
-        twowayIntersecion.sendTraingSignal();
+    public void sendTrainSignal(twowayIntersecion twoway) {
+        twoway.trainIncomingSignal();
     }
 
-    public void clearTrainSignal() {
-        twowayIntersecion.clearTrainSignal();
+    public void clearTrainSignal(twowayIntersecion twoway) {
+        twoway.trainClearSignal();
     }
 }
