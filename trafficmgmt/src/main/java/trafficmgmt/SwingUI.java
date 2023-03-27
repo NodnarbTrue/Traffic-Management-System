@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +19,7 @@ import javax.swing.Timer;
 import trafficmgmt.utility.direction;
 
 public class SwingUI extends JFrame{
-    static threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
+    static threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"North/south","East/west");
 
     public static void main(String[] args) {
 
@@ -193,7 +194,7 @@ public class SwingUI extends JFrame{
             panel.add(timeLabel);
 
             JLabel lightLabel = new JLabel("Light State");
-            lightLabel.setBounds(300, 200, 200, 100);
+            lightLabel.setBounds(300, 200, 300, 200);
             panel.add(lightLabel);
 
             addBackButton(panel, panelContainer, cl, "admin");
@@ -202,10 +203,11 @@ public class SwingUI extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     int curTrafficLight = threewayDefault.curerntDirectionTiming;
                     trafficlight curTrafficD1 = threewayDefault. directionOneTrafficLights.get(0);
-                    String lightStateString = String.format("Current Direction timer: %d", curTrafficLight);
                     String curLightState = "";
                     curLightState += curTrafficD1.getCurrentLightState();
-                    curLightState = String.format("Current Direction State:\n%S", curLightState);
+                    String roadName = threewayDefault.intersectionRoadOneName;
+                    String lightStateString = String.format("Current %S timer: %d",roadName, curTrafficLight);
+                    curLightState = String.format("Current %S \nState:%S",roadName, curLightState);
                     timeLabel.setText(lightStateString);
                     lightLabel.setText(curLightState);
                 }
