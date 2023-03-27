@@ -1,36 +1,23 @@
 package trafficmgmt;
 
-import java.awt.ActiveEvent;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.constant.Constable;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-import trafficmgmt.utility.direction;
 import javax.swing.SwingConstants;
-import javax.swing.text.StyleConstants.FontConstants;
-
-import trafficmgmt.utility.entitytype;
 import trafficmgmt.utility.intersectionType;
 
 public class SwingUI extends JFrame {
@@ -273,7 +260,7 @@ public class SwingUI extends JFrame {
         submitButton.setBounds(500, 400, 125, 25);
 
         JLabel statusLabel = new JLabel(SUCCESS_MESSAGE);
-        statusLabel.setFont(new Font("Serif", Font.PLAIN, 24));
+        statusLabel.setFont(new Font("Serif", Font.PLAIN, 12));
         statusLabel.setOpaque(true);
         statusLabel.setVisible(false);
         statusLabel.setBackground(SUCCESS_COLOUR);
@@ -341,10 +328,12 @@ public class SwingUI extends JFrame {
         editor.add(roadFourLeft);
         editor.add(roadFourRight);
 
-        JPanel optimizedViewport = new JPanel();
+        JLabel optimizedViewport = new JLabel();
+        optimizedViewport.setFont(new Font("Serif", Font.PLAIN, 18));
         optimizedViewport.setBounds(105, 525, 395, 225);
         optimizedViewport.setVisible(false);
         optimizedViewport.setBackground(Color.WHITE);
+        optimizedViewport.setHorizontalAlignment(SwingConstants.CENTER);
 
         JButton applyButton = new JButton("Apply");
         applyButton.setSelected(false);
@@ -418,18 +407,24 @@ public class SwingUI extends JFrame {
                 };
 
                 try {
-                    Admin.inputData(roadNames, typ, data);
+                    String result = Admin.inputData(roadNames, typ, data);
                     statusLabel.setBackground(SUCCESS_COLOUR);
                     statusLabel.setText(SUCCESS_MESSAGE);
                     statusLabel.setVisible(true);
                     applyButton.setVisible(true);
+
+                    optimizedViewport.setText(result);
                     optimizedViewport.setVisible(true);
                 } catch (Exception except) {
                     applyButton.setVisible(false);
                     optimizedViewport.setVisible(false);
 
                     statusLabel.setBackground(FAILURE_COLOUR);
-                    statusLabel.setText(ERROR_MESSAGE);
+                    if (except.getMessage().contains("int")) {
+                        statusLabel.setText("Input is not correct! Please double check them.");
+                    } else {
+                        statusLabel.setText(except.getMessage());
+                    }
                     statusLabel.setVisible(true);
                 }
             }

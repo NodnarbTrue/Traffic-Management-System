@@ -24,7 +24,7 @@ public class sysadmin {
         return curIntersection;
     }
 
-    public void inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])
+    public String inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])
             throws NonIntegerException, IllegalArgumentException, OverwriteException {
 
         int rowSize = 2;
@@ -64,14 +64,17 @@ public class sysadmin {
             twowayIntersecion intersection = new twowayIntersecion(roadOne, 30);
             intersection.inputOptimization(convertedData);
             nexIntersection = intersection;
+            return intersection.viewOptimizationRecommendation();
         } else if (intersectionTyp == intersectionType.THREE_WAY) {
             threewayIntersection intersection = new threewayIntersection(30, 30, 5, roadOne, roadTwo);
             intersection.inputOptimization(convertedData);
             nexIntersection = intersection;
+            return intersection.viewOptimizationRecommendation();
         } else {
             fourwayIntersection intersection = new fourwayIntersection(30, 30, 5, 5, roadOne, roadTwo);
             intersection.inputOptimization(convertedData);
             nexIntersection = intersection;
+            return intersection.viewOptimizationRecommendation();
         }
     }
 

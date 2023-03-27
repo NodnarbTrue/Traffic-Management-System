@@ -25,6 +25,7 @@ public class fourwayIntersection extends Intersection {
 
     // List of trafficlight objects
     protected ArrayList<trafficlight> directionTwoTrafficLights;
+    int data[];
 
     /**
      * Constructor method of the four way intersection class
@@ -442,41 +443,45 @@ public class fourwayIntersection extends Intersection {
      * @return The optimized number of components for each road
      */
     private int optimizer(int L, int U, int R, int D) {
-        return Math.max(Math.max(L, R), Math.max(U, D));
+        return (int) Math.ceil(Math.log10(Math.max(Math.max(Math.max(L, U), Math.max(R, D)), 1)));
     }
 
     /**
      * System admin provides input that specifies the ideal number of components for
      * each direction.
      * 
-     * @param input A 3x3 matrix that specifies the expected # of components (Lane,
+     * @param input A 4x3 matrix that specifies the expected # of components (Lane,
      *              Left, Right) for each direction.
      * @return Whether the optimization algorithm successfully executed, raises
      *         Exception otherwise.
      */
     public int inputOptimization(Integer[][] input) throws IllegalArgumentException, OverwriteException {
         if (input.length != 4 || input[0].length != 3) {
-            throw new IllegalArgumentException("expected 4x3 integer matrix, got non-conforming dimensions");
+            throw new IllegalArgumentException("Expected 4x3 integer matrix, got non-conforming dimensions");
         } else if (!OVERWRITE_EXISTING_OPTIMIZATION) {
-            throw new OverwriteException("illegal operation: attempt to overwrite optimization data");
+            throw new OverwriteException("Illegal operation: attempt to overwrite optimization data");
         }
 
-        int res[] = { 0, 0, 0 };
+        data = new int[3];
 
         for (int i = 0; i < 3; i++) {
-            res[i] = optimizer(input[0][i], input[1][i], input[2][i], input[3][i]);
+            data[i] = optimizer(input[0][i], input[1][i], input[2][i], input[3][i]);
         }
 
         return 1;
     }
 
     public String viewOptimizationRecommendation() {
-
-        return "success";
+        return "<html>Number of Straight Lanes: " + data[0] + "<br/>Number of Left Turn Lanes: " + data[1]
+                + "<br/>Number of Right Turn Lanes:" + data[2] + "<br/>Traffic Light Timing:" + data[0] * 10
+                + "<br/>Left Turn Light Timing: " + data[1] * 10 + "<html/>";
     }
 
     public int applyOptimization() {
-
+        changeTrafficLightTiming(direction.DIRECTION_ONE, data[0] * 3);
+        changeTrafficLightTiming(direction.DIRECTION_TWO, data[0] * 3);
+        changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 3);
+        changeLeftTurnTiming(direction.DIRECTION_TWO, data[1] * 3);
         return 1;
     }
 }
