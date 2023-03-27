@@ -15,10 +15,11 @@ public class sysadmin {
 
     // Constructor
     public sysadmin(int ID) {
-        this.ID = Identity;
+        this.ID = ID;
     }
 
     // Methods
+    Intersection nextIntersection;
 
     public Intersection inputData(String roadName, utility.intersectionType intersectionType, String data[][]) {
 
@@ -44,23 +45,23 @@ public class sysadmin {
             }
 
         }
-        if (intersectionType == TWO_WAY) {
-            twowayIntersection intersection = new twowayIntersection(roadName, 30);
+        if (intersectionType == intersectionType.TWO_WAY) {
+            twowayIntersection intersection = new twowayIntersecion(roadName, 30);
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
-        } else if (intersectionType == THREE_WAY) {
+        } else if (intersectionType == intersectionType.THREE_WAY) {
 
-            threewayIntersection intersection = new threewayIntersection(roadName, 30);
+            threewayIntersection intersection = new threewayIntersection();
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         } else {
-            fourwayIntersection intersection = new fourwayIntersection(fourwayIntersectoin.directionOneLightLength);
+            fourwayIntersection intersection = new fourwayIntersection();
             intersection.inputOptimization(convertedData);
             return this.nextIntersection;
         }
     }
 
-    public int applyOptimization() {
-        intersection.applyOptimization();
+    public void applyOptimization(Intersection assignedIntersection) {
+        assignedIntersection.applyOptimization();
     }
 }
