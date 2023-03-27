@@ -32,6 +32,7 @@ import javax.swing.text.StyleConstants.FontConstants;
 
 import trafficmgmt.utility.entitytype;
 import trafficmgmt.utility.intersectionType;
+import trafficmgmt.utility.timerlengthinformation;;
 
 public class SwingUI extends JFrame {
     private static String[] intersectionOptions = { "Two-Way", "Three-Way", "Four-Way" };
@@ -223,8 +224,28 @@ public class SwingUI extends JFrame {
         panel.setLayout(null);
 
         JLabel viewTimingLabel = new JLabel("View Traffic Timings");
-        viewTimingLabel.setBounds(300, 100, 200, 25);
+        viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
+
+        JLabel intersectionTypeLabel = new JLabel("Type of Intersection: " + typ);
+        intersectionTypeLabel.setBounds(100, 150, 400, 25);
+        panel.add(intersectionTypeLabel);
+
+        JLabel greenLightLabel = new JLabel("Intersection Current Green Light Length: " +Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
+        greenLightLabel.setBounds(100, 200, 400, 25);
+        panel.add(greenLightLabel);
+
+        JLabel yellowLightLabel = new JLabel("Intersection Current Yellow Light Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
+        yellowLightLabel.setBounds(100, 250, 400, 25);
+        panel.add(yellowLightLabel);
+
+        JLabel leftLightLabel = new JLabel("Intersection Current Left Light Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
+        leftLightLabel.setBounds(100, 300, 400, 25);
+        panel.add(leftLightLabel);
+
+        JLabel crosswalkLightLabel = new JLabel("Crosswalk Countdown Length: " + Admin.getIntersection().getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
+        crosswalkLightLabel.setBounds(100, 350, 400, 25);
+        panel.add(crosswalkLightLabel);
 
         addBackButton(panel, panelContainer, cl, "admin");
     }
