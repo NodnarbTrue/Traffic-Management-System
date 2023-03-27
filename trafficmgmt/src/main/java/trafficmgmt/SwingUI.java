@@ -19,7 +19,6 @@ import trafficmgmt.utility.direction;
 
 public class SwingUI extends JFrame{
     static threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
-    static int time = 0;
 
     public static void main(String[] args) {
 
@@ -189,17 +188,26 @@ public class SwingUI extends JFrame{
         private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
-            JLabel liveViewLabel = new JLabel("Live View");
-            liveViewLabel.setBounds(300, 100, 200, 25);
-            panel.add(liveViewLabel);
+            JLabel timeLabel = new JLabel("Live View");
+            timeLabel.setBounds(300, 100, 200, 25);
+            panel.add(timeLabel);
+
+            JLabel lightLabel = new JLabel("Light State");
+            lightLabel.setBounds(300, 200, 200, 100);
+            panel.add(lightLabel);
 
             addBackButton(panel, panelContainer, cl, "admin");
             
             Timer timer = new Timer(700, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     int curTrafficLight = threewayDefault.curerntDirectionTiming;
+                    trafficlight curTrafficD1 = threewayDefault. directionOneTrafficLights.get(0);
                     String lightStateString = String.format("Current Direction timer: %d", curTrafficLight);
-                    liveViewLabel.setText(lightStateString);
+                    String curLightState = "";
+                    curLightState += curTrafficD1.getCurrentLightState();
+                    curLightState = String.format("Current Direction State:\n%S", curLightState);
+                    timeLabel.setText(lightStateString);
+                    lightLabel.setText(curLightState);
                 }
             });
             
