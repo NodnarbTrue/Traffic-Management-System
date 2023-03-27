@@ -36,22 +36,22 @@ public class threewayIntersection extends Intersection {
         this.currentDirection = direction.DIRECTION_ONE;
 
         // Assumes firstDirectionTrafficlight is the road that can turn left
-        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLightLength);
-        trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_TWO, directionOneLightLength);
+        trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength, directionOneLeftLightLength);
+        trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE, directionOneLightLength);
+        this.directionOneTrafficLights.add(firstDirectionTrafficlightOne);
+        this.directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
-        trafficlight directionTwoLight = new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength);
-        directionTwoTrafficLights.add(directionTwoLight);
+        trafficlight directionTwoLight = new trafficlight(direction.DIRECTION_TWO, directionTwoLightLength); // green indicates left turn
+        this.directionTwoTrafficLights.add(directionTwoLight);
 
-        directionOneTrafficLights.add(firstDirectionTrafficlightOne);
-        directionOneTrafficLights.add(firstDirectionTrafficlightTwo);
 
         crosswalk directionOneCrosswalk = new crosswalk(direction.DIRECTION_ONE);
-        directionOneCrosswalks.add(directionOneCrosswalk);
+        this.directionOneCrosswalks.add(directionOneCrosswalk);
 
         crosswalk secondDirectionCrosswalkOne = new crosswalk(direction.DIRECTION_TWO);
         crosswalk secondDirectionCrosswalkTwo = new crosswalk(direction.DIRECTION_TWO);
-        directionTwoCrosswalks.add(secondDirectionCrosswalkOne);
-        directionTwoCrosswalks.add(secondDirectionCrosswalkTwo);
+        this.directionTwoCrosswalks.add(secondDirectionCrosswalkOne);
+        this.directionTwoCrosswalks.add(secondDirectionCrosswalkTwo);
     }
 
     public int startIntersection() {
@@ -85,7 +85,7 @@ public class threewayIntersection extends Intersection {
         }
 
         this.intersectionTimer = new timer(this);
-        this.intersectionTimer.run();
+        this.intersectionTimer.start();
 
         return 1;
     };
@@ -132,7 +132,7 @@ public class threewayIntersection extends Intersection {
                 break;
             
             case CROSSWALK_COUTDOWN_LENGTH:
-                this.getCrossWalkTiming(currentDirection);
+                return this.getCrossWalkTiming(currentDirection);
             
             default:
                 break;
@@ -145,7 +145,7 @@ public class threewayIntersection extends Intersection {
      * count down from.
      */
     public int getTimeToCountDownFrom() { 
-        return this.getTrafficLightTiming(currentDirection);
+        return this.getTrafficLightTiming(this.currentDirection);
     }
 
     public boolean getCurrentDirectionLeftTurnExistance(){
@@ -168,6 +168,8 @@ public class threewayIntersection extends Intersection {
             for (trafficlight i : directionOneTrafficLights) {
                 i.setLightState(newState);
             }
+
+            // Maybe get rid of?
             for (trafficlight i : directionTwoTrafficLights) {
                 i.setLightState(lightState.RED);
             }
@@ -184,11 +186,11 @@ public class threewayIntersection extends Intersection {
      * @param newState: the state to set all the crosswalks in the current direction to
      */
     public void setAllCurrentDirectionCrosswalk(crosswalkState newState) { 
-        if (currentDirection == direction.DIRECTION_ONE) { 
+        if (this.currentDirection == direction.DIRECTION_ONE) { 
             for (crosswalk i : directionOneCrosswalks) { 
                 i.setCrossWalkState(newState);
             }
-        } else if (currentDirection == direction.DIRECTION_TWO) { 
+        } else if (this.currentDirection == direction.DIRECTION_TWO) { 
             for (crosswalk i : directionTwoCrosswalks) {
                 i.setCrossWalkState(newState);
             }
@@ -200,11 +202,13 @@ public class threewayIntersection extends Intersection {
      * the current direction
      */
     public void setCurrentDirectionCrossWalkTimer(int currentTimer) { 
-        if (currentDirection == direction.DIRECTION_ONE) { 
+        if (this.currentDirection == direction.DIRECTION_ONE) { 
             for (crosswalk i : directionOneCrosswalks) { 
                 i.setCurrentCrossWalkTiming(currentTimer);
             }
-        } else if (currentDirection == direction.DIRECTION_TWO) { 
+        } 
+        
+        else if (this.currentDirection == direction.DIRECTION_TWO) { 
             for (crosswalk i : directionTwoCrosswalks) {
                 i.setCurrentCrossWalkTiming(currentTimer);
             }
@@ -256,16 +260,16 @@ public class threewayIntersection extends Intersection {
             }
         } 
         else if (dir == direction.DIRECTION_TWO){
-            directionOneCrosswalks.get(0).setCrossWalkTiming(newLength);
+            directionTwoCrosswalks.get(0).setCrossWalkTiming(newLength);
         }
     }
 
     public int getCrossWalkTiming(direction dir) {
         if (dir == direction.DIRECTION_ONE){
-            return directionOneCrosswalks.get(0).getCrossWalkTiming();
+            return this.directionOneCrosswalks.get(0).getCrossWalkTiming();
         }
         else if (dir == direction.DIRECTION_TWO){
-            return directionTwoCrosswalks.get(0).getCrossWalkTiming();
+            return this.directionTwoCrosswalks.get(0).getCrossWalkTiming();
         }
         else{
             // SYS ADMIN ERROR
@@ -286,10 +290,10 @@ public class threewayIntersection extends Intersection {
     
     public int getTrafficLightTiming(direction dir) {
         if (dir == direction.DIRECTION_ONE){
-            return directionOneTrafficLights.get(0).getLightTiming(lightState.GREEN);
+            return this.directionOneTrafficLights.get(0).getLightTiming(lightState.GREEN);
         }
         else if (dir == direction.DIRECTION_TWO){
-            return directionTwoTrafficLights.get(0).getLightTiming(lightState.GREEN);
+            return this.directionTwoTrafficLights.get(0).getLightTiming(lightState.GREEN);
         }
         else{
             // SYS ADMIN ERROR
@@ -335,12 +339,12 @@ public class threewayIntersection extends Intersection {
 
         output += "\nDirection One Crosswalk States: \n";
         for (crosswalk i : directionOneCrosswalks) { 
-            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+            output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
         }
         
         output += "\n Direction Two Crosswalk States: \n";
         for (crosswalk i : directionTwoCrosswalks) {
-            output += i.getCurrentCrossWalkState() + " " + i.getCurrentCrossWalkTiming() + "\t";
+            output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
         }
 
         System.out.println(output);

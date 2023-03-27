@@ -82,23 +82,37 @@ public class timer extends Thread {
             }
         }
 
+
+        else if ((this.timeToCountDownFrom - this.leftTurnGreenLength) < this.currentTimeInCountDown) {
+            if (this.leftTurnExists == true) { 
+                // no effect needed
+            }
+        }
+
+
         // left turn green period ends
         else if ((this.timeToCountDownFrom - this.leftTurnGreenLength) == this.currentTimeInCountDown) {
             if (this.leftTurnExists == true) { 
                 this.intersection.setAllCurrentDirectionTrafficLights(lightState.GREEN);
-                this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.WALK);
+                if (this.currentTimeInCountDown <= this.crosswalkCountdownLength) { 
+                    this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
+                    this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
+                } else { 
+                    this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.WALK);
+                }
             }
         }
 
         // crosswalk starts to count down
         else if (this.crosswalkCountdownLength == this.currentTimeInCountDown) {
             this.intersection.setAllCurrentDirectionCrosswalk(crosswalkState.COUNTDOWN);
+            this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
         }
 
         // yellow lights start
         else if (this.yellowLightLength == this.currentTimeInCountDown) { 
             this.intersection.setAllCurrentDirectionTrafficLights(lightState.YELLOW);
-            if (this.currentTimeInCountDown < this.crosswalkCountdownLength) { 
+            if (this.currentTimeInCountDown <= this.crosswalkCountdownLength) { 
                 this.intersection.setCurrentDirectionCrossWalkTimer(this.currentTimeInCountDown);
             }
         }
@@ -134,7 +148,7 @@ public class timer extends Thread {
             this.currentTimeInCountDown = i;
             this.intersection.curerntDirectionTiming = i;
             this.changeSystemStatesBasedOnTimer();
-
+            
             try { 
                 if (this.shortenTimer == true) { 
                     /* !Important
@@ -144,7 +158,7 @@ public class timer extends Thread {
                      */
                     this.shortenTimer = false;
                     int tempi = i - this.proposedTimeToShortenBy;
-                    if ((tempi >= this.crosswalkCountdownLength) && (tempi > this.yellowLightLength)) { 
+                    if ((tempi >= this.crosswalkCountdownLength) && (tempi > this.yellowLightLength) && (tempi >= (this.timeToCountDownFrom - this.leftTurnGreenLength))) { 
                         i = tempi;
                         this.currentTimeInCountDown = i;
                         this.changeSystemStatesBasedOnTimer();
@@ -160,7 +174,6 @@ public class timer extends Thread {
         }
 
         this.intersection.switchDirection();
-        this.updateTimerInformation();
     }
 
 

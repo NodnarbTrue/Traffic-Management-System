@@ -6,7 +6,7 @@ public class crosswalk {
     private direction crosswalkDirection; 
     private crosswalkState crosswalkCurrentState;
     private int crosswalkCountDownNumber;
-    private int currentcrosswalkCountDownNumber;
+    public int currentcrosswalkCountDownNumber;
 
     // CONSTRUCTORS
     public crosswalk(direction directionOne) { 
