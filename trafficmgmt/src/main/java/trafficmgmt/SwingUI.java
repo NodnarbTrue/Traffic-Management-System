@@ -44,6 +44,9 @@ public class SwingUI extends JFrame{
         //below are the components of the login panel and admin panel
         loginPanelComponents(loginPanel, cl, panelContainer);
         adminPanelComponents(adminPanel, cl, panelContainer);
+        viewTimingPanelComponents(viewTimingPanel, cl, panelContainer);
+        manualChangePanelComponents(manualChangePanel, cl, panelContainer);
+        optimizeTimingPanelComponents(optimizeTimingPanel, cl, panelContainer);
         // below are the Icon of the UI, tbd
         // ImageIcon icon = new ImageIcon("place_holder_icon.png");
 
@@ -108,6 +111,10 @@ public class SwingUI extends JFrame{
         }
 
 
+
+
+
+
         private static void adminPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
             panel.setLayout(null);
 
@@ -142,6 +149,10 @@ public class SwingUI extends JFrame{
             });
         }
 
+
+
+
+
         private static void addBackButton(JPanel panel, JPanel panelContainer, CardLayout cl, String panelName) {
             JButton backButton = new JButton("Back");
             backButton.setBounds(10, 10, 80, 25);
@@ -152,9 +163,40 @@ public class SwingUI extends JFrame{
                     cl.show(panelContainer, panelName);
                 }
             });
-        
+        } 
 
 
+
+
+        private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel viewTimingLabel = new JLabel("View Traffic Timings");
+            viewTimingLabel.setBounds(300, 100, 200, 25);
+            panel.add(viewTimingLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
+
+        private static void manualChangePanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel manualChangeLabel = new JLabel("Manual Change Traffic Timings");
+            manualChangeLabel.setBounds(300, 100, 200, 25);
+            panel.add(manualChangeLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
+
+        private static void optimizeTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+            panel.setLayout(null);
+
+            JLabel optimizeTimingLabel = new JLabel("Optimize Traffic Timings");
+            optimizeTimingLabel.setBounds(300, 100, 200, 25);
+            panel.add(optimizeTimingLabel);
+
+            addBackButton(panel, panelContainer, cl, "admin");
+        }
 
 }
 
