@@ -15,10 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import trafficmgmt.utility.direction;
+
 public class SwingUI extends JFrame{
     static threewayIntersection threewayDefault = new threewayIntersection(15, 10,10,"red","green");
-    static Boolean ifStillLiveView = true;
     static int time = 0;
+
     public static void main(String[] args) {
 
         // below is the initialization of frame ,panels, etc... of the UI
@@ -31,6 +33,7 @@ public class SwingUI extends JFrame{
         JPanel panelContainer = new JPanel();
         JPanel liveViewPanel = new JPanel();
         CardLayout cl = new CardLayout();
+        threewayDefault.startIntersection();
 
         frameSetup(frame);   //setting up the size, close operation, etc... of the frame
 
@@ -194,8 +197,8 @@ public class SwingUI extends JFrame{
             
             Timer timer = new Timer(700, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    time += 1;
-                    String lightStateString = String.format("current light state: %d", time);
+                    int curTrafficLight = threewayDefault.curerntDirectionTiming;
+                    String lightStateString = String.format("Current Direction timer: %d", curTrafficLight);
                     liveViewLabel.setText(lightStateString);
                 }
             });
