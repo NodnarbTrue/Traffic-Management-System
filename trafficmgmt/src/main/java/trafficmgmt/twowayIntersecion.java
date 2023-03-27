@@ -373,7 +373,7 @@ public class twowayIntersecion extends Intersection {
      * @return The optimized number of components for each road
      */
     private int optimizer(int L, int R) {
-        return (int) Math.ceil(Math.log10(Math.max(Math.max(L, R), 2)));
+        return (int) Math.ceil(Math.log10(Math.max(Math.max(L, R), 1)));
     }
 
     /**
@@ -394,13 +394,15 @@ public class twowayIntersecion extends Intersection {
 
         data = new int[3];
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             data[i] = optimizer(input[0][i], input[1][i]);
         }
 
         if (data[1] > 0 || data[2] > 0) {
             throw new IllegalArgumentException("Two-Way cannot have right/left turn");
         }
+
+        data[0] = Math.max(data[0], 1);
 
         return 1;
     }
