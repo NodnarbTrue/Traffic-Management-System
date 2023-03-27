@@ -165,13 +165,14 @@ public class threewayIntersection extends Intersection {
      */
     public void setAllCurrentDirectionTrafficLights(lightState newState) { 
         if (currentDirection == direction.DIRECTION_ONE) { 
-            for (trafficlight i : directionOneTrafficLights) {
-                i.setLightState(newState);
+            if (newState == lightState.LEFT_TURN){
+                directionOneTrafficLights.get(0).setLightState(newState);
+                directionOneTrafficLights.get(1).setLightState(lightState.RED);
             }
-
-            // Maybe get rid of?
-            for (trafficlight i : directionTwoTrafficLights) {
-                i.setLightState(lightState.RED);
+            else{
+                for (trafficlight i : directionOneTrafficLights) {
+                    i.setLightState(newState);
+                }
             }
             
         } else if (currentDirection == direction.DIRECTION_TWO) { 
