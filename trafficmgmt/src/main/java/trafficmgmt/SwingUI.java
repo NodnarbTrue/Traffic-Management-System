@@ -6,8 +6,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -40,6 +46,11 @@ public class SwingUI extends JFrame {
     private static JLabel leftLightLabel;
     private static JLabel crosswalkLightLabel;
 
+    // Live intersection picker
+    private static DefaultComboBoxModel liveViewIntersectionModel;
+    private static JComboBox liveViewIntersectionOptions;
+    private static Intersection currentlyDisplayingIntersection;
+
     static intersectionType typ = intersectionType.FOUR_WAY;
 
     public static void main(String[] args) {
@@ -55,6 +66,9 @@ public class SwingUI extends JFrame {
         JPanel liveViewPanel = new JPanel();
         CardLayout cl = new CardLayout();
         Admin.getIntersection().startIntersection();
+        initializeLiveViewJComboBox();
+        threewayIntersection dummyIntersection = new threewayIntersection(25, 25, 10, "glue street", "paper street");
+        currentlyDisplayingIntersection = dummyIntersection;
 
         frameSetup(frame); // setting up the size, close operation, etc... of the frame
 
@@ -117,8 +131,10 @@ public class SwingUI extends JFrame {
 
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String ID = IDText.getText();
-                String password = String.valueOf(passwordText.getPassword());
+                //String ID = IDText.getText();
+                String ID = "admin.1";
+                //String password = String.valueOf(passwordText.getPassword());
+                String password = "123456";
                 Boolean admin2 = ID.equals("admin.2") && password.equals("123456");
 
                 if (ID.equals("admin.1") && password.equals("123456") || admin2) {
@@ -145,7 +161,7 @@ public class SwingUI extends JFrame {
         trafficTimingButton.setBounds(250, 200, 250, 80);
         panel.add(trafficTimingButton);
 
-        JButton manualChangeButton = new JButton("Manual Change Traffic timings");
+        JButton manualChangeButton = new JButton("Create and Edit Intersections");
         manualChangeButton.setBounds(250, 320, 250, 80);
         panel.add(manualChangeButton);
 
@@ -190,139 +206,139 @@ public class SwingUI extends JFrame {
         });
     }
 
+    private static void addToLiveViewIntersectionPicker(String name) {
+        liveViewIntersectionModel.addElement(name);
+        liveViewIntersectionOptions.setModel(liveViewIntersectionModel);
+        liveViewIntersectionModel.setSelectedItem(name);
+    }
+
+    private static void initializeLiveViewJComboBox() { 
+        liveViewIntersectionModel = new DefaultComboBoxModel();
+        liveViewIntersectionOptions = new JComboBox<>();        
+    }
+
+
+
+    
     private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
-        threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
-        threewayTest.startIntersection();
         
+        //dummyIntersection.stopIntersection();
+    
         panel.setLayout(null);
         
         JLabel viewTimingLabel = new JLabel("Live Traffic Timings");
         viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
 
-        intersectionTypeLabel = new JLabel("Type of Intersection: " + "Three Way Intersection");
-        intersectionTypeLabel.setBounds(100, 150, 400, 25);
+        JLabel optionsLabel = new JLabel("Intersection to inspect/view: ");
+        optionsLabel.setBounds(100, 150, 400, 25);
+        panel.add(optionsLabel);
+        
+
+
+        liveViewIntersectionOptions.setBounds(325, 150, 150, 25);
+        panel.add(liveViewIntersectionOptions);
+
+
+
+        intersectionTypeLabel = new JLabel("Type of Intersection: " + currentlyDisplayingIntersection.intersectionClassification);
+        intersectionTypeLabel.setBounds(100, 200, 400, 25);
         panel.add(intersectionTypeLabel);
 
-
-
-        String output = "Direction One Light States -> ";
-        int j = 0;
-        for (trafficlight i : threewayTest.directionOneTrafficLights) {
-            j++;
-            output += "#"+ j + " [" + i.getCurrentLightState() + "] ";
-        }
-        JLabel dirOneStates = new JLabel(output);
-        dirOneStates.setBounds(100, 200, 1000, 25);
+        JLabel dirOneStates = new JLabel("");
+        dirOneStates.setBounds(100, 250, 1000, 25);
         panel.add(dirOneStates);
 
-
-        output = "Direction One Crosswalk States -> ";
-        j = 0;
-        for (crosswalk i : threewayTest.directionOneCrosswalks) {
-            j++;
-            output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
-            if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
-                output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
-            } else { 
-                output += "] ";
-            }
-        }
-        JLabel dirOneCrosswalkStates = new JLabel(output);
-        dirOneCrosswalkStates.setBounds(100, 250, 1000, 25);
+        JLabel dirOneCrosswalkStates = new JLabel("");
+        dirOneCrosswalkStates.setBounds(100, 300, 1000, 25);
         panel.add(dirOneCrosswalkStates);
 
-
-        output = "Direction Two Light States -> ";
-        j = 0;
-        for (trafficlight i : threewayTest.directionTwoTrafficLights) {
-            j++;
-            output +=  "#"+ j + " [" + i.getCurrentLightState() + "] ";
-        }
-        JLabel dirTwoStates = new JLabel(output);
-        dirTwoStates.setBounds(100, 300, 1000, 25);
+        JLabel dirTwoStates = new JLabel("");
+        dirTwoStates.setBounds(100, 350, 1000, 25);
         panel.add(dirTwoStates);
 
-
-        output = "Direction Two Crosswalk States -> ";
-        j = 0;
-        for (crosswalk i : threewayTest.directionTwoCrosswalks) {
-            j++;
-            output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
-            if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
-                output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
-            } else { 
-                output += "] ";
-            }
-        }
-        JLabel dirTwoCrosswalkStates = new JLabel(output);
-        dirTwoCrosswalkStates.setBounds(100, 350, 1000, 25);
+        JLabel dirTwoCrosswalkStates = new JLabel("");
+        dirTwoCrosswalkStates.setBounds(100, 400, 1000, 25);
         panel.add(dirTwoCrosswalkStates);
 
-        output = "Direction Total Length Left: ";
-        output += threewayTest.curerntDirectionTiming;
-        JLabel totalLen = new JLabel(output);
-        totalLen.setBounds(100, 450, 1000, 25);
+        JLabel totalLen = new JLabel("");
+        totalLen.setBounds(100, 500, 1000, 25);
         panel.add(totalLen);
 
         addBackButton(panel, panelContainer, cl, "admin");
 
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String output = "Direction One Light States -> ";
-                int j = 0;
-                for (trafficlight i : threewayTest.directionOneTrafficLights) {
-                    j++;
-                    output += "#"+ j + " [" + i.getCurrentLightState() + "] ";
-                }
-                dirOneStates.setText(output);
+                if (currentlyDisplayingIntersection != null) { 
+                    intersectionTypeLabel.setText("Type of Intersection: " + currentlyDisplayingIntersection.intersectionClassification);
 
-                output = "Direction Two Light States -> ";
-                j = 0;
-                for (trafficlight i : threewayTest.directionTwoTrafficLights) {
-                    j++;
-                    output +=  "#"+ j + " [" + i.getCurrentLightState() + "] ";
-                }
-                dirTwoStates.setText(output);
-
-                output = "Direction One Crosswalk States -> ";
-                j = 0;
-                for (crosswalk i : threewayTest.directionOneCrosswalks) {
-                    j++;
-                    output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
-                    if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
-                        output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
-                    } else { 
-                        output += "] ";
+                    String output = "Direction One Light States -> ";
+                    int j = 0;
+                    for (trafficlight i : currentlyDisplayingIntersection.directionOneTrafficLights) {
+                        j++;
+                        output += "#"+ j + " [" + i.getCurrentLightState() + "] ";
                     }
-                }
-                dirOneCrosswalkStates.setText(output);
+                    dirOneStates.setText(output);
 
-                output = "Direction Two Crosswalk States -> ";
-                j = 0;
-                for (crosswalk i : threewayTest.directionTwoCrosswalks) {
-                    j++;
-                    output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
-                    if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
-                        output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
-                    } else { 
-                        output += "] ";
+                    output = "Direction Two Light States -> ";
+                    j = 0;
+                    for (trafficlight i : currentlyDisplayingIntersection.directionTwoTrafficLights) {
+                        j++;
+                        output +=  "#"+ j + " [" + i.getCurrentLightState() + "] ";
                     }
-                }
-                dirTwoCrosswalkStates.setText(output);
+                    dirTwoStates.setText(output);
 
-                output = "Direction Total Length Left: ";
-                output += threewayTest.curerntDirectionTiming;
-                totalLen.setText(output);
+                    output = "Direction One Crosswalk States -> ";
+                    j = 0;
+                    for (crosswalk i : currentlyDisplayingIntersection.directionOneCrosswalks) {
+                        j++;
+                        output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                        if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                            output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
+                        } else { 
+                            output += "] ";
+                        }
+                    }
+                    dirOneCrosswalkStates.setText(output);
+
+                    output = "Direction Two Crosswalk States -> ";
+                    j = 0;
+                    for (crosswalk i : currentlyDisplayingIntersection.directionTwoCrosswalks) {
+                        j++;
+                        output +=  "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                        if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) { 
+                            output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
+                        } else { 
+                            output += "] ";
+                        }
+                    }
+                    dirTwoCrosswalkStates.setText(output);
+
+                    output = "Direction Total Length Left: ";
+                    output += currentlyDisplayingIntersection.curerntDirectionTiming;
+                    totalLen.setText(output);
+                }
             }
             
         };
+
+        liveViewIntersectionOptions.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String option = (String) liveViewIntersectionOptions.getSelectedItem();
+                currentlyDisplayingIntersection = Admin.getHashedIntersection(option);
+                currentlyDisplayingIntersection.startIntersection();
+            }
+        });
 
         Timer timer = new Timer(700, taskPerformer);
         timer.setRepeats(true);
         timer.start();
 
     }
+
+
+
+
 
     private static void updateTimingPanelComponents() {
         intersectionTypeLabel.setText("Type of Intersection: " + typ);
@@ -336,6 +352,11 @@ public class SwingUI extends JFrame {
                 .getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
     }
 
+
+
+
+
+
     private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
         panel.setLayout(null);
 
@@ -343,41 +364,127 @@ public class SwingUI extends JFrame {
         viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
 
-        intersectionTypeLabel = new JLabel("Type of Intersection: " + typ);
-        intersectionTypeLabel.setBounds(100, 150, 400, 25);
-        panel.add(intersectionTypeLabel);
+        JLabel optionsLabel = new JLabel("Intersection to inspect/view: ");
+        optionsLabel.setBounds(100, 150, 400, 25);
+        panel.add(optionsLabel);
 
-        greenLightLabel = new JLabel("Intersection Current Green Light Length: " + Admin.getIntersection()
+        JComboBox localJComboBox = new JComboBox<>();
+        localJComboBox.setModel(liveViewIntersectionModel);
+        localJComboBox.setBounds(325, 150, 150, 25);
+        panel.add(localJComboBox);
+
+        JLabel localIntersectionTypeLabel = new JLabel("Type of Intersection: " + currentlyDisplayingIntersection.intersectionClassification);
+        localIntersectionTypeLabel.setBounds(100, 200, 400, 25);
+        panel.add(localIntersectionTypeLabel);
+
+        greenLightLabel = new JLabel("Intersection Current Green Light Length: " + currentlyDisplayingIntersection
                 .getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
-        greenLightLabel.setBounds(100, 200, 400, 25);
+        greenLightLabel.setBounds(100, 250, 400, 25);
         panel.add(greenLightLabel);
 
-        yellowLightLabel = new JLabel("Intersection Current Yellow Light Length: " + Admin.getIntersection()
+        yellowLightLabel = new JLabel("Intersection Current Yellow Light Length: " + currentlyDisplayingIntersection
                 .getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
-        yellowLightLabel.setBounds(100, 250, 400, 25);
+        yellowLightLabel.setBounds(100, 300, 400, 25);
         panel.add(yellowLightLabel);
 
-        leftLightLabel = new JLabel("Intersection Current Left Light Length: " + Admin.getIntersection()
+        leftLightLabel = new JLabel("Intersection Current Left Light Length: " + currentlyDisplayingIntersection
                 .getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
-        leftLightLabel.setBounds(100, 300, 400, 25);
+        leftLightLabel.setBounds(100, 350, 400, 25);
         panel.add(leftLightLabel);
 
-        crosswalkLightLabel = new JLabel();
-        crosswalkLightLabel.setBounds(100, 350, 400, 25);
+        crosswalkLightLabel = new JLabel("Crosswalk Light Length: " + currentlyDisplayingIntersection
+                .getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
+        crosswalkLightLabel.setBounds(100, 400, 400, 25);
         panel.add(crosswalkLightLabel);
 
         addBackButton(panel, panelContainer, cl, "admin");
+
+        localJComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String option = (String) liveViewIntersectionOptions.getSelectedItem();
+                currentlyDisplayingIntersection = Admin.getHashedIntersection(option);
+                if (currentlyDisplayingIntersection != null) { 
+                    localIntersectionTypeLabel.setText("Type of Intersection: " + currentlyDisplayingIntersection.intersectionClassification);
+                    greenLightLabel.setText("Intersection Current Green Light Length: " + currentlyDisplayingIntersection
+                            .getLengthInformationFromCurrentDirection(timerlengthinformation.Direction_LENGTH));
+                    yellowLightLabel.setText("Intersection Current Yellow Light Length: " + currentlyDisplayingIntersection
+                            .getLengthInformationFromCurrentDirection(timerlengthinformation.YELLOW_LIGHT_LENGTH));
+                    leftLightLabel.setText("Intersection Current Left Light Length: " + currentlyDisplayingIntersection
+                            .getLengthInformationFromCurrentDirection(timerlengthinformation.LEFT_TURN_LENGTH));
+                    crosswalkLightLabel.setText("Crosswalk Countdown Length: " + currentlyDisplayingIntersection
+                            .getLengthInformationFromCurrentDirection(timerlengthinformation.CROSSWALK_COUTDOWN_LENGTH));
+                }
+            }
+        });
+
     }
+
+
+
+
 
     private static void manualChangePanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
         panel.setLayout(null);
 
-        JLabel manualChangeLabel = new JLabel("Manual Change Traffic Timings");
-        manualChangeLabel.setBounds(300, 100, 200, 25);
-        panel.add(manualChangeLabel);
+        // Create intersection header
+        JLabel createLabel = new JLabel("[Create An Intersection]");
+        createLabel.setBounds(75, 100, 200, 25);
+        panel.add(createLabel);
+        
+
+        // Set intersection Name label and text area
+        JLabel intersectionName = new JLabel("Intersection Name/ID:");
+        intersectionName.setBounds(225, 100, 150, 25);
+        panel.add(intersectionName);
+        
+        JTextField IDText = new JTextField(20);
+        IDText.setBounds(425, 100, 150, 25);
+        panel.add(IDText);
+
+
+        // pick intersection type label and options
+        JLabel intersectionType = new JLabel("Intersection Type:");
+        intersectionType.setBounds(225, 150, 150, 25);
+        panel.add(intersectionType);
+
+        JComboBox options = new JComboBox<>(intersectionOptions);
+        options.setSelectedItem("Four-Way");
+        options.setBounds(425, 150, 150, 25);
+        panel.add(options);
+        
+
+        // submit intersection
+        JButton submitButton = new JButton("Create New Intersection");
+        submitButton.setSelected(false);
+        submitButton.setBounds(225, 200, 200, 25);
+        panel.add(submitButton);
 
         addBackButton(panel, panelContainer, cl, "admin");
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Admin.addNewIntersection(IDText.getText(), String.valueOf(options.getSelectedItem()));
+                addToLiveViewIntersectionPicker(String.valueOf(IDText.getText()));
+                //updateLiveViewPicker();
+                //updatePickerInThisPageForUpdatingValues();
+                updateTimingPanelComponents();
+            }
+        });
+
+
+        // update intersection
+        JLabel manualChangeLabel = new JLabel("[Change/Edit An Intersection]");
+        manualChangeLabel.setBounds(75, 300, 200, 25);
+        panel.add(manualChangeLabel);
+
     }
+
+
+
+
+
+
+
 
     private static JLabel newLabel(String message) {
         JLabel field = new JLabel(message);

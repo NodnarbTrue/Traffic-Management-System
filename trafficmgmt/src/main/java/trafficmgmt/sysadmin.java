@@ -2,6 +2,7 @@ package trafficmgmt;
 
 import trafficmgmt.utility.intersectionType;
 
+import java.util.HashMap;
 import trafficmgmt.exceptions.NonIntegerException;
 import trafficmgmt.exceptions.OverwriteException;
 
@@ -12,16 +13,41 @@ public class sysadmin {
     intersectionType type;
     Intersection curIntersection;
     Intersection nexIntersection;
+    HashMap<String, Intersection> intersectionsManaged = new HashMap<String, Intersection>();
 
     // Constructor
     public sysadmin(int ID) {
+        this.ID = ID;
         this.curIntersection = new threewayIntersection(15, 10, 10, "North/south", "East/west");
         this.type = intersectionType.THREE_WAY;
-        this.ID = ID;
     }
 
     public Intersection getIntersection() {
         return curIntersection;
+    }
+
+    public Intersection getHashedIntersection(String strKey) { 
+        return this.intersectionsManaged.get(strKey);
+    }
+
+    public void addNewIntersection(String idNameOfIntersection, String newIntersectionToMake) { 
+        if (newIntersectionToMake == "Two-Way") { 
+
+            twowayIntersecion newIntersection = new twowayIntersecion("defult", 30, 50);
+            this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
+
+        } else if (newIntersectionToMake == "Three-Way") { 
+
+            threewayIntersection newIntersection = new threewayIntersection(25, 25, 10, "defult", "defult");
+            this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
+
+        } else if (newIntersectionToMake == "Four-Way") { 
+
+            fourwayIntersection newIntersection = new fourwayIntersection(40, 40, 5, 0, "defult", "defult");
+            this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
+
+        }
+        System.out.println(this.intersectionsManaged);
     }
 
     public String inputData(String roadName[], utility.intersectionType intersectionTyp, String data[][])

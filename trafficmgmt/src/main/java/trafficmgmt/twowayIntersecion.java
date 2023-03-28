@@ -2,6 +2,7 @@ package trafficmgmt;
 
 import java.util.ArrayList;
 import trafficmgmt.utility.entitytype;
+import trafficmgmt.utility.intersectionType;
 import trafficmgmt.utility.direction;
 import trafficmgmt.utility.lightState;
 import trafficmgmt.exceptions.OverwriteException;
@@ -27,6 +28,7 @@ public class twowayIntersecion extends Intersection {
     public twowayIntersecion(String intersectionRoadOneName, int inputCountDownLength) {
         super(intersectionRoadOneName);
         this.inputCountDownLength = inputCountDownLength;
+        this.intersectionClassification = intersectionType.TWO_WAY;
 
         trafficlight firstDirectionTrafficlightOne = new trafficlight(direction.DIRECTION_ONE);
         trafficlight firstDirectionTrafficlightTwo = new trafficlight(direction.DIRECTION_ONE);
@@ -44,7 +46,7 @@ public class twowayIntersecion extends Intersection {
         directionTwoCrosswalks.add(secondDirectionCrosswalkTwo);
 
         // The defulat length of the direction with just crosswalks
-        this.crosswalkFullLength = 50;
+        this.crosswalkFullLength = 50; // for direction two when they are stopping traffic to cross
         this.trainWait = false;
     }
 
@@ -358,6 +360,11 @@ public class twowayIntersecion extends Intersection {
         }
 
         System.out.println(output);
+    }
+
+
+    public String getIntersectionType() { 
+        return "Two Way Intersection";
     }
 
     /**

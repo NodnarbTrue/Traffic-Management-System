@@ -2,6 +2,7 @@ package trafficmgmt;
 
 import java.util.ArrayList;
 import trafficmgmt.utility.direction;
+import trafficmgmt.utility.intersectionType;
 import trafficmgmt.utility.lightState;
 import trafficmgmt.utility.crosswalkState;
 import trafficmgmt.utility.timerlengthinformation;
@@ -48,6 +49,7 @@ public class fourwayIntersection extends Intersection {
         this.intersectionRoadTwoName = intersectionRoadTwoName;
         this.directionOneLeftLightLength = directionOneLeftLightLength;
         this.directionTwoLeftLightLength = directionTwoLeftLightLength;
+        this.intersectionClassification = intersectionType.FOUR_WAY;
 
         // Assumes that intersection always starts with Direction_One being green
         this.currentDirection = direction.DIRECTION_ONE;
@@ -425,6 +427,10 @@ public class fourwayIntersection extends Intersection {
         }
 
         System.out.println(output);
+    }
+
+    public String getIntersectionType() { 
+        return "Four Way Intersection";
     }
 
     /**

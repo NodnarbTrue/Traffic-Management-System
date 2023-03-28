@@ -7,7 +7,8 @@ import trafficmgmt.utility.*;
 abstract class Intersection {
     static final Boolean OVERWRITE_EXISTING_OPTIMIZATION = true;
 
-    protected String intersectionID;
+    public String intersectionID;
+    public intersectionType intersectionClassification;
     protected String intersectionRoadOneName;
     protected timer intersectionTimer;
 
@@ -22,10 +23,10 @@ abstract class Intersection {
 
     // Seconds left until the current green light turns red
     protected int currentCrosswalkLightTimer; 
-
+    
     // Length in seconds that the directionOne timer starts at
     protected int directionOneLightLength; 
-
+    
     public ArrayList<trafficlight> directionOneTrafficLights;
     public ArrayList<trafficlight> directionTwoTrafficLights;
     public ArrayList<crosswalk> directionOneCrosswalks;
@@ -39,6 +40,7 @@ abstract class Intersection {
         this.directionOneLightLength = 100; //Defult value
         this.curerntDirectionTiming = 100;
         this.directionOneTrafficLights = new ArrayList<trafficlight>();
+        this.directionTwoTrafficLights = new ArrayList<trafficlight>();
         this.directionOneCrosswalks = new ArrayList<crosswalk>();
         this.directionTwoCrosswalks = new ArrayList<crosswalk>();
     }
@@ -49,6 +51,7 @@ abstract class Intersection {
         this.intersectionRoadOneName = intersectionRoadOneName;
         this.curerntDirectionTiming = directionOneLightLength;
         this.directionOneTrafficLights = new ArrayList<trafficlight>();
+        this.directionTwoTrafficLights = new ArrayList<trafficlight>();
         this.directionOneCrosswalks = new ArrayList<crosswalk>();
         this.directionTwoCrosswalks = new ArrayList<crosswalk>();
     }

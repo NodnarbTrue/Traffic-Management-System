@@ -2,6 +2,7 @@ package trafficmgmt;
 
 import java.util.ArrayList;
 import trafficmgmt.utility.direction;
+import trafficmgmt.utility.intersectionType;
 import trafficmgmt.utility.lightState;
 import trafficmgmt.exceptions.OverwriteException;
 import trafficmgmt.utility.crosswalkState;
@@ -33,6 +34,7 @@ public class threewayIntersection extends Intersection {
         this.directionTwoLightLength = directionTwoLightLength;
         this.intersectionRoadTwoName = intersectionRoadTwoName;
         this.directionOneLeftLightLength = directionOneLeftLightLength;
+        this.intersectionClassification = intersectionType.THREE_WAY;
 
         // Assumes that intersection always starts with Direction_One being green
         this.currentDirection = direction.DIRECTION_ONE;
@@ -357,6 +359,10 @@ public class threewayIntersection extends Intersection {
         }
 
         System.out.println(output);
+    }
+
+    public String getIntersectionType() { 
+        return "Three Way Intersection";
     }
 
 
