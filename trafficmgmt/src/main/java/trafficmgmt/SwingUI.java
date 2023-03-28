@@ -326,7 +326,6 @@ public class SwingUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String option = (String) liveViewIntersectionOptions.getSelectedItem();
                 currentlyDisplayingIntersection = Admin.getHashedIntersection(option);
-                currentlyDisplayingIntersection.startIntersection();
             }
         });
 

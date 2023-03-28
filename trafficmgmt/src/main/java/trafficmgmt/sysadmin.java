@@ -35,18 +35,22 @@ public class sysadmin {
 
             twowayIntersecion newIntersection = new twowayIntersecion("defult", 30, 50);
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
-
+            newIntersection.startIntersection();
+            
         } else if (newIntersectionToMake == "Three-Way") { 
 
             threewayIntersection newIntersection = new threewayIntersection(25, 25, 10, "defult", "defult");
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
+            newIntersection.startIntersection();
 
         } else if (newIntersectionToMake == "Four-Way") { 
 
             fourwayIntersection newIntersection = new fourwayIntersection(40, 40, 5, 0, "defult", "defult");
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
+            newIntersection.startIntersection();
 
         }
+        
         System.out.println(this.intersectionsManaged);
     }
 
