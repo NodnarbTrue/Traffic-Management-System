@@ -472,10 +472,96 @@ public class SwingUI extends JFrame {
 
 
         // update intersection
-        JLabel manualChangeLabel = new JLabel("[Change/Edit An Intersection]");
+        JLabel manualChangeLabel = new JLabel("[Edit An Intersection]");
         manualChangeLabel.setBounds(75, 300, 200, 25);
         panel.add(manualChangeLabel);
 
+        // Set intersection Name label and text area
+        JLabel intersectionNameLabel = new JLabel("Intersection Name/ID:");
+        intersectionNameLabel.setBounds(225, 300, 150, 25);
+        panel.add(intersectionNameLabel);
+
+        // Dropdown list of current intersections
+        JComboBox intersectionNameDropdown = new JComboBox<>();
+        intersectionNameDropdown.setModel(liveViewIntersectionModel);
+        intersectionNameDropdown.setBounds(425, 300, 150, 25);
+        panel.add(intersectionNameDropdown);
+
+        // Change timings for directionOne traffic light
+        JLabel changeGreenLightOneLabel = new JLabel("direction One Green Traffic Light Length:");
+        changeGreenLightOneLabel.setBounds(225, 350, 250, 25);
+        panel.add(changeGreenLightOneLabel);
+        
+        // Area to type new directionOne timings
+        JTextField changeGreenLightOneText = new JTextField(20);
+        changeGreenLightOneText.setBounds(525, 350, 50, 25);
+        panel.add(changeGreenLightOneText);
+
+        // Change timings for directionOne yellow light
+        JLabel changeYellowLightOneLabel = new JLabel("direction One Yellow Traffic Light Length:");
+        changeYellowLightOneLabel.setBounds(225, 375, 250, 25);
+        panel.add(changeYellowLightOneLabel);
+        
+        // Area to type new directionOne yellow timings
+        JTextField changeYellowLightOneText = new JTextField(20);
+        changeYellowLightOneText.setBounds(525, 375, 50, 25);
+        panel.add(changeYellowLightOneText);
+
+        // Change timings for directionOne left light
+        JLabel changeLeftLightOneLabel = new JLabel("direction One Left Traffic Light Length:");
+        changeLeftLightOneLabel.setBounds(225, 400, 250, 25);
+        panel.add(changeLeftLightOneLabel);
+        
+        // Area to type new directionOne left timings
+        JTextField changeLeftLightOneText = new JTextField(20);
+        changeLeftLightOneText.setBounds(525, 400, 50, 25);
+        panel.add(changeLeftLightOneText);
+
+        // Change timings for directionOne traffic light
+        JLabel changeGreenLightTwoLabel = new JLabel("direction Two Green Traffic Light Length:");
+        changeGreenLightTwoLabel.setBounds(225, 450, 250, 25);
+        panel.add(changeGreenLightTwoLabel);
+        
+        // Area to type new directionOne timings
+        JTextField changeGreenLightTwoText = new JTextField(20);
+        changeGreenLightTwoText.setBounds(525, 450, 50, 25);
+        panel.add(changeGreenLightTwoText);
+
+        // Change timings for directionOne yellow light
+        JLabel changeYellowLightTwoLabel = new JLabel("direction Twp Yellow Traffic Light Length:");
+        changeYellowLightTwoLabel.setBounds(225, 475, 250, 25);
+        panel.add(changeYellowLightTwoLabel);
+        
+        // Area to type new directionOne yellow timings
+        JTextField changeYellowLightTwoText = new JTextField(20);
+        changeYellowLightTwoText.setBounds(525, 475, 50, 25);
+        panel.add(changeYellowLightTwoText);
+
+        // Change timings for directionOne left light
+        JLabel changeLeftLightTwoLabel = new JLabel("direction Two Left Traffic Light Length:");
+        changeLeftLightTwoLabel.setBounds(225, 500, 250, 25);
+        panel.add(changeLeftLightTwoLabel);
+        
+        // Area to type new directionOne left timings
+        JTextField changeLeftLightTwoText = new JTextField(20);
+        changeLeftLightTwoText.setBounds(525, 500, 50, 25);
+        panel.add(changeLeftLightTwoText);
+
+        // Change timings for directionOne left light
+        JLabel changeCrosswalkCountdownLabel = new JLabel("Crosswalk Countdown Length:");
+        changeCrosswalkCountdownLabel.setBounds(225, 550, 250, 25);
+        panel.add(changeCrosswalkCountdownLabel);
+        
+        // Area to type new directionOne left timings
+        JTextField changeCrosswalkCountdownText = new JTextField(20);
+        changeCrosswalkCountdownText.setBounds(525, 550, 50, 25);
+        panel.add(changeCrosswalkCountdownText);
+
+        // Apply changes to intersection
+        JButton applyChangesButton = new JButton("Apply Changes (DOES NOTHING RIGHT NOW)");
+        applyChangesButton.setSelected(false);
+        applyChangesButton.setBounds(225, 600, 200, 25);
+        panel.add(applyChangesButton);
     }
 
 
