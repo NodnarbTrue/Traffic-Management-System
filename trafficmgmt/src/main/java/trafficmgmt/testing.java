@@ -12,7 +12,7 @@ public class testing {
 
         //fourwayIntersection fourwayTest = new fourwayIntersection(40, 40, 5, 0, "glue street", "paper street");
         //fourwayCarTest1(fourwayTest);
-        testThreewayPedestrianInput();
+        testFourwayPedestrianInput();
 
     }
 
@@ -178,6 +178,29 @@ public class testing {
             System.out.println(x);
             System.out.println("Pedestrian Input method failed the test for three way intersection.");
             threewayTest.stopIntersection();
+        }
+    }
+
+    public static void testFourwayPedestrianInput() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        
+        fourwayTest.startIntersection();
+        int y = fourwayTest.curerntDirectionTiming;
+        fourwayTest.pedestrianInput(direction.DIRECTION_TWO);
+        Thread.sleep(1005); 
+        //Timer shouldn't shorten because it is less than the length of countdown timer
+        int expected = 54; 
+
+        int x = fourwayTest.curerntDirectionTiming;
+        if (x == expected){
+            System.out.println("Pedestrian Input method passed the test for four way intersection.");
+            fourwayTest.stopIntersection();
+        }
+        else{
+            System.out.println(y);
+            System.out.println(x);
+            System.out.println("Pedestrian Input method failed the test for four way intersection.");
+            fourwayTest.stopIntersection();
         }
     }
 }
