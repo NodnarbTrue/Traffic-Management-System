@@ -10,8 +10,10 @@ public class testing {
         //threewayIntersection threewayTest = new threewayIntersection(25, 25, 10, "glue street", "paper street");
         //threewayPedestrianTest1(threewayTest);
 
-        fourwayIntersection fourwayTest = new fourwayIntersection(40, 40, 5, 0, "glue street", "paper street");
-        fourwayCarTest1(fourwayTest);
+        //fourwayIntersection fourwayTest = new fourwayIntersection(40, 40, 5, 0, "glue street", "paper street");
+        //fourwayCarTest1(fourwayTest);
+        testThreewayPedestrianInput();
+
     }
 
     // Pedestrian causes traffic light to count down then the other direction's
@@ -142,5 +144,40 @@ public class testing {
             System.out.println(fourwayTest.curerntDirectionTiming);
             fourwayTest.printAllStates();
         } 
+    }
+
+    public static void testTwowayPedestrianInput(){
+        twowayIntersecion twowayTest = new twowayIntersecion("glue street", 10);
+        twowayTest.pedestrianInput(direction.DIRECTION_TWO);
+        int expected = 10;
+        int x = twowayTest.intersectionTimer.currentTimeInCountDown;
+        if (x == expected){
+            System.out.println("Pedestrian Input method passed the test for two way intersection.");
+        }
+        else{
+            System.out.println("Pedestrian Input method failed the test for two way intersection.");
+        }
+    }
+
+    public static void testThreewayPedestrianInput(){
+        threewayIntersection threewayTest = new threewayIntersection(60, 25, 10, "glue street", "paper street");
+        
+        threewayTest.startIntersection();
+        int y = threewayTest.curerntDirectionTiming;
+        threewayTest.pedestrianInput(direction.DIRECTION_TWO);
+        //Timer shouldn't shorten because it is less than the length of countdown timer
+        int expected = 55; 
+
+        int x = threewayTest.curerntDirectionTiming;
+        if (x == expected){
+            System.out.println("Pedestrian Input method passed the test for three way intersection.");
+            threewayTest.stopIntersection();
+        }
+        else{
+            System.out.println(y);
+            System.out.println(x);
+            System.out.println("Pedestrian Input method failed the test for three way intersection.");
+            threewayTest.stopIntersection();
+        }
     }
 }
