@@ -25,7 +25,7 @@ public class fourwayIntersection extends Intersection {
     protected int directionTwoLeftLightLength;
 
     // List of trafficlight objects
-    //public ArrayList<trafficlight> directionTwoTrafficLights;
+    // public ArrayList<trafficlight> directionTwoTrafficLights;
     int data[];
 
     /**
@@ -234,6 +234,14 @@ public class fourwayIntersection extends Intersection {
         }
     }
 
+    public void setRoadOneName(String name) {
+        this.intersectionRoadOneName = name;
+    }
+
+    public void setRoadTwoName(String name) {
+        this.intersectionRoadTwoName = name;
+    }
+
     /**
      * Method for switching the direction of the current instance
      * of the intersection class
@@ -429,7 +437,7 @@ public class fourwayIntersection extends Intersection {
         System.out.println(output);
     }
 
-    public String getIntersectionType() { 
+    public String getIntersectionType() {
         return "Four Way Intersection";
     }
 
@@ -484,10 +492,11 @@ public class fourwayIntersection extends Intersection {
     }
 
     public int applyOptimization() {
-        changeTrafficLightTiming(direction.DIRECTION_ONE, data[0] * 3);
-        changeTrafficLightTiming(direction.DIRECTION_TWO, data[0] * 3);
-        changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 3);
-        changeLeftTurnTiming(direction.DIRECTION_TWO, data[1] * 3);
+        changeTrafficLightTiming(direction.DIRECTION_ONE, data[0] * 10);
+        changeTrafficLightTiming(direction.DIRECTION_TWO, data[0] * 10);
+        changeCrossWalkTiming(direction.DIRECTION_ONE, data[0] * 10);
+        changeCrossWalkTiming(direction.DIRECTION_TWO, data[0] * 10);
+        changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 5);
         return 1;
     }
 }

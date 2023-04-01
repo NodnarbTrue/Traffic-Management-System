@@ -217,6 +217,14 @@ public class twowayIntersecion extends Intersection {
         }
     }
 
+    public void setRoadOneName(String name) {
+        this.intersectionRoadOneName = name;
+    }
+
+    // Do nothing
+    public void setRoadTwoName(String name) {
+    }
+
     /**
      * Method for switching the direction of the current instance
      * of the intersection class.
@@ -362,8 +370,7 @@ public class twowayIntersecion extends Intersection {
         System.out.println(output);
     }
 
-
-    public String getIntersectionType() { 
+    public String getIntersectionType() {
         return "Two Way Intersection";
     }
 
@@ -421,6 +428,9 @@ public class twowayIntersecion extends Intersection {
     }
 
     public int applyOptimization() {
+        this.inputCountDownLength = data[0] * 10;
+        changeCrossWalkTiming(direction.DIRECTION_ONE, data[0] * 10);
+        changeCrossWalkTiming(direction.DIRECTION_TWO, data[0] * 10);
         return 1;
     }
 }

@@ -13,31 +13,30 @@ abstract class Intersection {
     protected timer intersectionTimer;
 
     // The direction that the intersection traffic is currently flowing through
-    protected direction currentDirection; 
+    protected direction currentDirection;
 
     // The current time in the timer. For debugging perposes
     public int curerntDirectionTiming;
-    
-    // Seconds left until the current green light turns red 
+
+    // Seconds left until the current green light turns red
     protected int currentGreenLightTimer;
 
     // Seconds left until the current green light turns red
-    protected int currentCrosswalkLightTimer; 
-    
+    protected int currentCrosswalkLightTimer;
+
     // Length in seconds that the directionOne timer starts at
-    protected int directionOneLightLength; 
-    
+    protected int directionOneLightLength;
+
     public ArrayList<trafficlight> directionOneTrafficLights;
     public ArrayList<trafficlight> directionTwoTrafficLights;
     public ArrayList<crosswalk> directionOneCrosswalks;
     public ArrayList<crosswalk> directionTwoCrosswalks;
-    
-    
+
     // CONSTRUCTORS
     public Intersection(String intersectionRoadOneName) {
         this.intersectionID = generateID();
         this.intersectionRoadOneName = intersectionRoadOneName;
-        this.directionOneLightLength = 100; //Defult value
+        this.directionOneLightLength = 100; // Defult value
         this.curerntDirectionTiming = 100;
         this.directionOneTrafficLights = new ArrayList<trafficlight>();
         this.directionTwoTrafficLights = new ArrayList<trafficlight>();
@@ -56,42 +55,54 @@ abstract class Intersection {
         this.directionTwoCrosswalks = new ArrayList<crosswalk>();
     }
 
-
     // Method for generating a random ID
     private String generateID() {
         return UUID.randomUUID().toString();
     }
 
     // Start the intersection (start counting down current full direction length)
-    public abstract int startIntersection(); 
-    // Stop the countdown of intersection lights, leave at current state
-    public abstract int stopIntersection(); 
+    public abstract int startIntersection();
 
+    // Stop the countdown of intersection lights, leave at current state
+    public abstract int stopIntersection();
 
     // Methods required for the intersection to be used by the timer class
     public abstract boolean getCurrentDirectionLeftTurnExistance();
+
     public abstract Integer getLengthInformationFromCurrentDirection(timerlengthinformation infoToReturn);
+
     public abstract void setAllCurrentDirectionTrafficLights(lightState newState);
+
     public abstract void setAllCurrentDirectionCrosswalk(crosswalkState newState);
+
     public abstract void setCurrentDirectionCrossWalkTimer(int currentTimer);
+
     public abstract void switchDirection();
 
-
     // Get and set methods common to all types of intersections
-    // Note that ones for traffic lights and left turns are needed for 3 and 4 way intersections
+    // Note that ones for traffic lights and left turns are needed for 3 and 4 way
+    // intersections
     public abstract int getCrossWalkTiming(direction dir);
+
     public abstract void changeCrossWalkTiming(direction dir, int newLength);
 
+    public abstract void setRoadOneName(String name);
+
+    public abstract void setRoadTwoName(String name);
 
     // Input related functions
     public abstract void pedestrianInput(direction requestedCrossingDirection);
-    public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight);
-    public abstract void shortenDirectionDuration(int timeToShortenBy);
 
+    public abstract void carWeightInput(direction startDirection, direction crossingDirection, int weight);
+
+    public abstract void shortenDirectionDuration(int timeToShortenBy);
 
     // Optimization functions
     public abstract int inputOptimization(Integer[][] input);
+
     public abstract String viewOptimizationRecommendation();
+
     public abstract int applyOptimization();
+
     public abstract int getTimeToCountDownFrom();
 }

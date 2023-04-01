@@ -21,7 +21,7 @@ public class threewayIntersection extends Intersection {
     protected int directionTwoLightLength;
     protected int directionOneLeftLightLength;
 
-    //public ArrayList<trafficlight> directionTwoTrafficLights;
+    // public ArrayList<trafficlight> directionTwoTrafficLights;
 
     private int data[];
 
@@ -314,6 +314,14 @@ public class threewayIntersection extends Intersection {
         }
     }
 
+    public void setRoadOneName(String name) {
+        this.intersectionRoadOneName = name;
+    }
+
+    public void setRoadTwoName(String name) {
+        this.intersectionRoadTwoName = name;
+    }
+
     // This would not apply to direction 2 as there would never be a left turn
     // lane/signal in that direction
     public void changeLeftTurnTiming(direction dir, int newLength) {
@@ -333,11 +341,10 @@ public class threewayIntersection extends Intersection {
         }
     }
 
-
     // Debugging Method
-    public void printAllStates() { 
+    public void printAllStates() {
         String output = new String("");
-        
+
         output += "Direction One Light States: \n";
         for (trafficlight i : directionOneTrafficLights) {
             output += i.getCurrentLightState() + "\t";
@@ -349,10 +356,10 @@ public class threewayIntersection extends Intersection {
         }
 
         output += "\nDirection One Crosswalk States: \n";
-        for (crosswalk i : directionOneCrosswalks) { 
+        for (crosswalk i : directionOneCrosswalks) {
             output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
         }
-        
+
         output += "\n Direction Two Crosswalk States: \n";
         for (crosswalk i : directionTwoCrosswalks) {
             output += i.getCurrentCrossWalkState() + " " + i.currentcrosswalkCountDownNumber + "\t";
@@ -361,10 +368,9 @@ public class threewayIntersection extends Intersection {
         System.out.println(output);
     }
 
-    public String getIntersectionType() { 
+    public String getIntersectionType() {
         return "Three Way Intersection";
     }
-
 
     /**
      * This function accepts 4 integers and return the optimal number of components
@@ -419,9 +425,11 @@ public class threewayIntersection extends Intersection {
     }
 
     public int applyOptimization() {
-        changeTrafficLightTiming(direction.DIRECTION_ONE, data[0] * 3);
-        changeTrafficLightTiming(direction.DIRECTION_TWO, data[0] * 3);
-        changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 3);
+        changeTrafficLightTiming(direction.DIRECTION_ONE, data[0] * 10);
+        changeTrafficLightTiming(direction.DIRECTION_TWO, data[0] * 10);
+        changeCrossWalkTiming(direction.DIRECTION_ONE, data[0] * 10);
+        changeCrossWalkTiming(direction.DIRECTION_TWO, data[0] * 10);
+        changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 5);
         return 1;
     }
 }
