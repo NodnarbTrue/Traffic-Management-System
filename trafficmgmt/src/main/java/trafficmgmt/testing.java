@@ -12,7 +12,7 @@ public class testing {
 
         //fourwayIntersection fourwayTest = new fourwayIntersection(40, 40, 5, 0, "glue street", "paper street");
         //fourwayCarTest1(fourwayTest);
-        testFourwayPedestrianInput();
+        testTwowayPedestrianInput();
 
     }
 
@@ -146,16 +146,28 @@ public class testing {
         } 
     }
 
-    public static void testTwowayPedestrianInput(){
-        twowayIntersecion twowayTest = new twowayIntersecion("glue street", 10);
-        twowayTest.pedestrianInput(direction.DIRECTION_TWO);
-        int expected = 10;
-        int x = twowayTest.intersectionTimer.currentTimeInCountDown;
+    public static void testTwowayPedestrianInput() throws InterruptedException{
+        twowayIntersecion twowayTest = new twowayIntersecion("glue street", 20);
+        twowayTest.startIntersection();
+        twowayTest.switchDirection();
+        twowayTest.carWeightInput(direction.DIRECTION_ONE, direction.DIRECTION_TWO, 200);
+        Thread.sleep(1005); 
+        int expected = 44;
+        int x = twowayTest.curerntDirectionTiming;
+        Thread.sleep(1005); 
+        int y = twowayTest.curerntDirectionTiming;
+        Thread.sleep(1005); 
+        int z = twowayTest.curerntDirectionTiming;
         if (x == expected){
             System.out.println("Pedestrian Input method passed the test for two way intersection.");
+            twowayTest.stopIntersection();
         }
         else{
+            System.out.println(x);
+            System.out.println(y);
+            System.out.println(z);
             System.out.println("Pedestrian Input method failed the test for two way intersection.");
+            twowayTest.stopIntersection();
         }
     }
 

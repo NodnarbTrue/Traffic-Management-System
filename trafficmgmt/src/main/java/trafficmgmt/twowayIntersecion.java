@@ -291,12 +291,7 @@ public class twowayIntersecion extends Intersection {
      * is the direction in which pedestrians are crossing
      */
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-        if ((((startDirection == direction.DIRECTION_ONE) && (crossingDirection == direction.DIRECTION_TWO)) ||
-                ((startDirection == direction.NORTH) && (crossingDirection == direction.SOUTH)) ||
-                ((startDirection == direction.SOUTH) && (crossingDirection == direction.NORTH)) ||
-                ((startDirection == direction.EAST) && (crossingDirection == direction.WEST)) ||
-                ((startDirection == direction.WEST) && (crossingDirection == direction.EAST))) &&
-                this.currentDirection == direction.DIRECTION_TWO) {
+        if ((startDirection == direction.DIRECTION_ONE) && this.currentDirection == direction.DIRECTION_TWO)  {
             // attepts to shorten the timer by 5 seconds
             shortenDirectionDuration(5);
         }
