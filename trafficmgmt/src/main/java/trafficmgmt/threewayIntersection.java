@@ -257,7 +257,7 @@ public class threewayIntersection extends Intersection {
     }
 
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-        if (crossingDirection != currentDirection) {
+        if (startDirection != currentDirection) {
             this.shortenDirectionDuration(5);
         }
     }

@@ -284,7 +284,7 @@ public class fourwayIntersection extends Intersection {
      * @param weight:            how much the car affects the time
      */
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-        if (crossingDirection != currentDirection) {
+        if (startDirection != currentDirection) {
             this.shortenDirectionDuration(5);
         }
     }

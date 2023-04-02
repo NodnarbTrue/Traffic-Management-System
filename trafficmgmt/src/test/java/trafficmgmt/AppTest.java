@@ -154,7 +154,7 @@ public class AppTest {
     @Test
     public void threewayPedestrianCrossRequest() throws InterruptedException {
         int expected = 54;
-        threewayIntersection threewayTest = new threewayIntersection(60, 25, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(60, 25, 0, "glue street", "paper street");
         threewayTest.startIntersection();
         threewayTest.pedestrianInput(direction.DIRECTION_TWO);
         Thread.sleep(1005); 
@@ -167,7 +167,7 @@ public class AppTest {
     public void threewayPedestrianCrossRequest2() throws InterruptedException {
         //Timer shouldn't shorten because it is less than the length of countdown timer
         int expected = 33;
-        threewayIntersection threewayTest = new threewayIntersection(34, 25, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(34, 25, 0, "glue street", "paper street");
         threewayTest.startIntersection();
         threewayTest.pedestrianInput(direction.DIRECTION_TWO);
         Thread.sleep(1005); 
@@ -178,7 +178,7 @@ public class AppTest {
     //timer - 5 > countdown
     @Test
     public void fourwayPedestrianCrossRequest() throws InterruptedException {
-        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 0, 0, "glue street", "paper street");
         int expected = 54; 
         fourwayTest.startIntersection();
         fourwayTest.pedestrianInput(direction.DIRECTION_TWO);
@@ -190,7 +190,7 @@ public class AppTest {
     //timer - 5 < countdown
     @Test
     public void fourwayPedestrianCrossRequest2() throws InterruptedException {
-        fourwayIntersection fourwayTest = new fourwayIntersection(34, 25, 10, 10, "glue street", "paper street");
+        fourwayIntersection fourwayTest = new fourwayIntersection(34, 25, 0, 0, "glue street", "paper street");
         int expected = 33; 
         fourwayTest.startIntersection();
         fourwayTest.pedestrianInput(direction.DIRECTION_TWO);
@@ -214,13 +214,12 @@ public class AppTest {
     //timer - 5 > countdown
     @Test
     public void twowayCarCrossRequest() throws InterruptedException {
-        int expected = 43;
+        int expected = 44;
         twowayIntersecion twowayTest = new twowayIntersecion("glue street", 15);
         twowayTest.startIntersection();
         //Car input only has an effect if pedestrian is crossing
         twowayTest.switchDirection();
-        Thread.sleep(1005); 
-        twowayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_TWO, 200);
+        twowayTest.carWeightInput(direction.DIRECTION_ONE, direction.DIRECTION_TWO, 200);
         Thread.sleep(1005); 
         int result = twowayTest.curerntDirectionTiming;
         assertTrue(expected == result);
@@ -229,9 +228,9 @@ public class AppTest {
     @Test
     public void threewayCarCrossRequest() throws InterruptedException {
         int expected = 54;
-        threewayIntersection threewayTest = new threewayIntersection(60, 25, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(60, 25, 0, "glue street", "paper street");
         threewayTest.startIntersection();
-        threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_TWO, 200);
+        threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200); 
         Thread.sleep(1005); 
         int result = threewayTest.curerntDirectionTiming;
         assertTrue(expected == result);
@@ -242,9 +241,9 @@ public class AppTest {
     public void threewayCarCrossRequest2() throws InterruptedException {
         //Timer shouldn't shorten because it is less than the length of countdown timer
         int expected = 33;
-        threewayIntersection threewayTest = new threewayIntersection(34, 25, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(34, 25, 0, "glue street", "paper street");
         threewayTest.startIntersection();
-        threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_TWO, 200);
+        threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
         Thread.sleep(1005); 
         int result = threewayTest.curerntDirectionTiming;
         assertTrue(expected == result);
@@ -253,10 +252,10 @@ public class AppTest {
     //timer - 5 > countdown
     @Test
     public void fourwayCarCrossRequest() throws InterruptedException {
-        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 0, 0, "glue street", "paper street");
         int expected = 54; 
         fourwayTest.startIntersection();
-        fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_TWO, 200);
+        fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
         Thread.sleep(1005); 
         int result = fourwayTest.curerntDirectionTiming;
         assertTrue(expected == result);
@@ -265,10 +264,129 @@ public class AppTest {
     //timer - 5 < countdown
     @Test
     public void fourwayCarCrossRequest2() throws InterruptedException {
-        fourwayIntersection fourwayTest = new fourwayIntersection(34, 25, 10, 10, "glue street", "paper street");
+        fourwayIntersection fourwayTest = new fourwayIntersection(34, 25, 0, 0, "glue street", "paper street");
         int expected = 33; 
         fourwayTest.startIntersection();
-        fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_TWO, 200);
+        fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+        Thread.sleep(1005); 
+        int result = fourwayTest.curerntDirectionTiming;
+        assertTrue(expected == result);
+    }
+
+    //Use Case 4: Left turn light state
+
+    @Test
+    public void testThreewayLeftTurnState() throws InterruptedException {
+        //Timer shouldn't shorten because it is less than the length of countdown timer
+        lightState expected = lightState.LEFT_TURN; 
+        threewayIntersection threewayTest = new threewayIntersection(34, 25, 10, "glue street", "paper street");
+        threewayTest.startIntersection();
+        Thread.sleep(1005); 
+        lightState result = threewayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void testFourwayLeftTurnState() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        lightState expected = lightState.LEFT_TURN; 
+        fourwayTest.startIntersection();
+        Thread.sleep(1005); 
+        lightState result = fourwayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void testFourwayLeftTurnState2() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        lightState expected = lightState.LEFT_TURN; 
+        fourwayTest.startIntersection();
+        fourwayTest.switchDirection();
+        Thread.sleep(1005); 
+        lightState result = fourwayTest.directionTwoTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    //Use Case 5: Switch direction
+    @Test
+    public void threewaySwitchDirection() throws InterruptedException {
+        //Timer shouldn't shorten because it is less than the length of countdown timer
+        lightState expected = lightState.GREEN; 
+        threewayIntersection threewayTest = new threewayIntersection(1, 25, 0, "glue street", "paper street");
+        threewayTest.startIntersection();
+        Thread.sleep(2005); 
+        lightState result = threewayTest.directionTwoTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void fourwaySwitchDirection() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(1, 25, 0, 0, "glue street", "paper street");
+        lightState expected = lightState.GREEN; 
+        fourwayTest.startIntersection();
+        Thread.sleep(2005); 
+        lightState result = fourwayTest.directionTwoTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    //Use Case 6(8): Heavy traffic in opposite direction (heavy traffic will be considered 5 to lower testing time)
+
+    @Test
+    public void threewayTraffic() throws InterruptedException {
+        //Should be equal to the countdown length because inputs can't shorten more than this
+        int expected = 29;
+        threewayIntersection threewayTest = new threewayIntersection(50, 25, 0, "glue street", "paper street");
+        threewayTest.startIntersection();
+        for (int i = 0; i < 5; i++){
+            threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
+        //Needs this sleep to process the final input, don't know why it isn't done in the loop?
+        Thread.sleep(1005); 
+        int result = threewayTest.curerntDirectionTiming;
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void threewayTraffic2() throws InterruptedException {
+        // 100 - 4 inputs (20s) - 5 waits (5s) - final input (5s) - 1s wait
+        int expected = 69;
+        threewayIntersection threewayTest = new threewayIntersection(100, 25, 0, "glue street", "paper street");
+        threewayTest.startIntersection();
+        for (int i = 0; i < 5; i++){
+            threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
+        Thread.sleep(1005); 
+        int result = threewayTest.curerntDirectionTiming;
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void fourwayTraffic() throws InterruptedException {
+        //Should be equal to the countdown length because inputs can't shorten more than this
+        int expected = 29;
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 0, 0, "glue street", "paper street");
+        fourwayTest.startIntersection();
+        for (int i = 0; i < 5; i++){
+            fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
+        Thread.sleep(1005); 
+        int result = fourwayTest.curerntDirectionTiming;
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void fourwayTraffic2() throws InterruptedException {
+        // 100 - 4 inputs (20s) - 5 waits (5s) - final input (5s) - 1s wait
+        int expected = 69;
+        fourwayIntersection fourwayTest = new fourwayIntersection(100, 25, 0, 0, "glue street", "paper street");
+        fourwayTest.startIntersection();
+        for (int i = 0; i < 5; i++){
+            fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
         Thread.sleep(1005); 
         int result = fourwayTest.curerntDirectionTiming;
         assertTrue(expected == result);

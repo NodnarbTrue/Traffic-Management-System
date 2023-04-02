@@ -148,35 +148,33 @@ public class testing {
 
     public static void testTwowayPedestrianInput() throws InterruptedException{
         twowayIntersecion twowayTest = new twowayIntersecion("glue street", 20);
+        int expected = 44;
         twowayTest.startIntersection();
         twowayTest.switchDirection();
         twowayTest.carWeightInput(direction.DIRECTION_ONE, direction.DIRECTION_TWO, 200);
         Thread.sleep(1005); 
-        int expected = 44;
         int x = twowayTest.curerntDirectionTiming;
-        Thread.sleep(1005); 
-        int y = twowayTest.curerntDirectionTiming;
-        Thread.sleep(1005); 
-        int z = twowayTest.curerntDirectionTiming;
         if (x == expected){
             System.out.println("Pedestrian Input method passed the test for two way intersection.");
             twowayTest.stopIntersection();
         }
         else{
             System.out.println(x);
-            System.out.println(y);
-            System.out.println(z);
             System.out.println("Pedestrian Input method failed the test for two way intersection.");
             twowayTest.stopIntersection();
         }
     }
 
-    public static void testThreewayPedestrianInput(){
-        threewayIntersection threewayTest = new threewayIntersection(60, 25, 10, "glue street", "paper street");
+    public static void testThreewayPedestrianInput() throws InterruptedException{
+        threewayIntersection threewayTest = new threewayIntersection(60, 25, 0, "glue street", "paper street");
         
         threewayTest.startIntersection();
         int y = threewayTest.curerntDirectionTiming;
-        threewayTest.pedestrianInput(direction.DIRECTION_TWO);
+        for (int i = 0; i < 5; i++){
+            threewayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
+        Thread.sleep(1005); 
         //Timer shouldn't shorten because it is less than the length of countdown timer
         int expected = 55; 
 
@@ -194,17 +192,22 @@ public class testing {
     }
 
     public static void testFourwayPedestrianInput() throws InterruptedException {
-        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 0, 0, "glue street", "paper street");
         
         fourwayTest.startIntersection();
         int y = fourwayTest.curerntDirectionTiming;
-        fourwayTest.pedestrianInput(direction.DIRECTION_TWO);
+        for (int i = 0; i < 5; i++){
+            fourwayTest.carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 200);
+            Thread.sleep(1005); 
+        }
         Thread.sleep(1005); 
         //Timer shouldn't shorten because it is less than the length of countdown timer
         int expected = 54; 
 
         int x = fourwayTest.curerntDirectionTiming;
         if (x == expected){
+            System.out.println(y);
+            System.out.println(x);
             System.out.println("Pedestrian Input method passed the test for four way intersection.");
             fourwayTest.stopIntersection();
         }

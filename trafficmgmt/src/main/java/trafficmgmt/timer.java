@@ -158,7 +158,7 @@ public class timer extends Thread {
                      */
                     this.shortenTimer = false;
                     int tempi = i - this.proposedTimeToShortenBy;
-                    if ((tempi >= this.crosswalkCountdownLength) && (tempi > this.yellowLightLength) && (tempi >= (this.timeToCountDownFrom - this.leftTurnGreenLength))) { 
+                    if ((tempi >= this.crosswalkCountdownLength) && (tempi > this.yellowLightLength) && (tempi <= (this.timeToCountDownFrom - this.leftTurnGreenLength))) { 
                         i = tempi;
                         this.currentTimeInCountDown = i;
                         this.changeSystemStatesBasedOnTimer();
