@@ -37,7 +37,7 @@ public class sysadmin {
 
         } else if (newIntersectionToMake == "Four-Way") {
 
-            fourwayIntersection newIntersection = new fourwayIntersection(40, 40, 5, 0, "default", "default");
+            fourwayIntersection newIntersection = new fourwayIntersection(40, 40, 5, 5, "default", "default");
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
             newIntersection.startIntersection();
 

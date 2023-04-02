@@ -477,7 +477,7 @@ public class SwingUI extends JFrame {
         panel.add(intersectionNameDropdown);
 
         // Change timings for directionOne traffic light
-        JLabel greenLightOneLabel = new JLabel("direction One Green Traffic Light Length:");
+        JLabel greenLightOneLabel = new JLabel("Direction One Green Traffic Light Length:");
         greenLightOneLabel.setBounds(225, 350, 250, 25);
         panel.add(greenLightOneLabel);
 
@@ -487,7 +487,7 @@ public class SwingUI extends JFrame {
         panel.add(greenLightOneText);
 
         // Change timings for directionOne left light
-        JLabel leftLightOneLabel = new JLabel("direction One Left Traffic Light Length:");
+        JLabel leftLightOneLabel = new JLabel("Direction One Left Traffic Light Length:");
         leftLightOneLabel.setBounds(225, 375, 250, 25);
         panel.add(leftLightOneLabel);
 
@@ -496,46 +496,71 @@ public class SwingUI extends JFrame {
         leftLightOneText.setBounds(525, 375, 50, 25);
         panel.add(leftLightOneText);
 
+        // Change timings for directionOne crosswalk countdown
+        JLabel crosswalkCountdownOneLabel = new JLabel("Direction One Crosswalk Countdown Length:");
+        crosswalkCountdownOneLabel.setBounds(225, 400, 300, 25);
+        panel.add(crosswalkCountdownOneLabel);
+
+        // Area to type new directionOne crosswalk countdown
+        JTextField crosswalkCountdownOneText = new JTextField(20);
+        crosswalkCountdownOneText.setBounds(525, 400, 50, 25);
+        panel.add(crosswalkCountdownOneText);
+
         // Change timings for directionTwo traffic light
-        JLabel greenLightTwoLabel = new JLabel("direction Two Green Traffic Light Length:");
-        greenLightTwoLabel.setBounds(225, 425, 250, 25);
+        JLabel greenLightTwoLabel = new JLabel("Direction Two Green Traffic Light Length:");
+        greenLightTwoLabel.setBounds(225, 450, 250, 25);
         panel.add(greenLightTwoLabel);
 
         // Area to type new directionTwo timings
         JTextField greenLightTwoText = new JTextField(20);
-        greenLightTwoText.setBounds(525, 425, 50, 25);
+        greenLightTwoText.setBounds(525, 450, 50, 25);
         panel.add(greenLightTwoText);
 
         // Change timings for directionTwo left light
-        JLabel leftLightTwoLabel = new JLabel("direction Two Left Traffic Light Length:");
-        leftLightTwoLabel.setBounds(225, 450, 250, 25);
+        JLabel leftLightTwoLabel = new JLabel("Direction Two Left Traffic Light Length:");
+        leftLightTwoLabel.setBounds(225, 475, 250, 25);
         panel.add(leftLightTwoLabel);
 
         // Area to type new directionTwo left timings
         JTextField leftLightTwoText = new JTextField(20);
-        leftLightTwoText.setBounds(525, 450, 50, 25);
+        leftLightTwoText.setBounds(525, 475, 50, 25);
         panel.add(leftLightTwoText);
 
-        // Change timings for crosswalk countdown
-        JLabel crosswalkCountdownLabel = new JLabel("Crosswalk Countdown Length:");
-        crosswalkCountdownLabel.setBounds(225, 500, 250, 25);
-        panel.add(crosswalkCountdownLabel);
+        // Change timings for directionTwo crosswalk countdown
+        JLabel crosswalkCountdownTwoLabel = new JLabel("Direction Two Crosswalk Countdown Length:");
+        crosswalkCountdownTwoLabel.setBounds(225, 500, 300, 25);
+        panel.add(crosswalkCountdownTwoLabel);
 
-        // Area to type new crosswalk countdown
-        JTextField crosswalkCountdownText = new JTextField(20);
-        crosswalkCountdownText.setBounds(525, 500, 50, 25);
-        panel.add(crosswalkCountdownText);
+        // Area to type new directionTwo crosswalk countdown
+        JTextField crosswalkCountdownTwoText = new JTextField(20);
+        crosswalkCountdownTwoText.setBounds(525, 500, 50, 25);
+        panel.add(crosswalkCountdownTwoText);
 
         // Apply changes to intersection
-        JButton applyChangesButton = new JButton("Apply Changes (DOES NOTHING RIGHT NOW)");
+        JButton applyChangesButton = new JButton("Apply Changes");
         applyChangesButton.setSelected(false);
         applyChangesButton.setBounds(225, 550, 200, 25);
         panel.add(applyChangesButton);
         applyChangesButton.setVisible(false); // Not visible until intersection is selected
 
+        // Success message if user gives valid input
+        JLabel successMsg = new JLabel("Changes have been applied");
+        successMsg.setBounds(225, 575, 400, 50);
+        panel.add(successMsg);
+        successMsg.setVisible(false);
+
+        // Error message if user gives invalid input
+        JLabel errorMsg = new JLabel("<html>PLEASE INPUT INTEGER VALUES FOR TIMINGS<br>Left light length MUST be shorter than its green light length</html>");
+        errorMsg.setBounds(225, 575, 400, 50);
+        panel.add(errorMsg);
+        errorMsg.setVisible(false);
+
         // Make the current selected intersection the one to edit values for
         intersectionNameDropdown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                successMsg.setVisible(false);
+                errorMsg.setVisible(false);
                 String option = (String) intersectionNameDropdown.getSelectedItem();
                 currentIntersection = Admin.getHashedIntersection(option);
                 typ = currentIntersection.intersectionClassification;
@@ -543,55 +568,92 @@ public class SwingUI extends JFrame {
                 if (typ == intersectionType.TWO_WAY) {
                     greenLightOneText.setVisible(true);
                     leftLightOneText.setVisible(false);
+                    crosswalkCountdownOneText.setVisible(true);
+               
                     greenLightTwoText.setVisible(false);
                     leftLightTwoText.setVisible(false);
-                    crosswalkCountdownText.setVisible(true);
+                    crosswalkCountdownTwoText.setVisible(true);
+
                     applyChangesButton.setVisible(true); }
                 
                 else if (typ == intersectionType.THREE_WAY) {
                     greenLightOneText.setVisible(true);
                     leftLightOneText.setVisible(true);
+                    crosswalkCountdownOneText.setVisible(true);
+
                     greenLightTwoText.setVisible(true);
                     leftLightTwoText.setVisible(false);
-                    crosswalkCountdownText.setVisible(true);
+                    crosswalkCountdownTwoText.setVisible(true);
+
                     applyChangesButton.setVisible(true); }
                 
                 else if (typ == intersectionType.FOUR_WAY) {
                     greenLightOneText.setVisible(true);
                     leftLightOneText.setVisible(true);
+                    crosswalkCountdownOneText.setVisible(true);
+
                     greenLightTwoText.setVisible(true);
                     leftLightTwoText.setVisible(true);
-                    crosswalkCountdownText.setVisible(true);
+                    crosswalkCountdownTwoText.setVisible(true);
+
                     applyChangesButton.setVisible(true); }
             }
         });
 
-        try {
-            applyChangesButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+        // Applies the changes to the current intersection, if valid
+        applyChangesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
-                    //int green1 = Integer.parseInt(greenLightOneLabel.getText());
-                    //int left1 = Integer.parseInt(leftLightOneLabel.getText());
-                    //int green2 = Integer.parseInt(greenLightTwoLabel.getText());
-                    //int left2 = Integer.parseInt(leftLightTwoLabel.getText());
+                try {
+                    String option = (String) intersectionNameDropdown.getSelectedItem();
+                    currentIntersection = Admin.getHashedIntersection(option);
+                    typ = currentIntersection.intersectionClassification;
+                    successMsg.setVisible(false);
+                    errorMsg.setVisible(false);
 
-                    if (typ == intersectionType.TWO_WAY) {
-                        int green1 = Integer.parseInt(greenLightOneLabel.getText());
-                        for (trafficlight i : currentIntersection.directionOneTrafficLights) {
-                            i.setLightLength(lightState.GREEN, green1); } }
+                    int green1 = Integer.parseInt(greenLightOneText.getText());
+                    int cross1 = Integer.parseInt(crosswalkCountdownOneText.getText());
+                    int cross2 = Integer.parseInt(crosswalkCountdownTwoText.getText());
+
+                    if (typ == intersectionType.TWO_WAY) { }
 
                     else if (typ == intersectionType.THREE_WAY) {
-                        int green1 = Integer.parseInt(greenLightOneLabel.getText());
-                        for (trafficlight i : currentIntersection.directionOneTrafficLights) {
-                            i.setLightLength(lightState.GREEN, green1); } }
+                        int left1 = Integer.parseInt(leftLightOneText.getText());
+                        int green2 = Integer.parseInt(greenLightTwoText.getText());
 
+                        if (left1 >= green1) { throw new NumberFormatException(); }
+
+                        currentIntersection.directionOneTrafficLights.get(0).setLightLength(lightState.LEFT_TURN, left1);
+                        currentIntersection.directionTwoTrafficLights.get(0).setLightLength(lightState.GREEN, green2); }
+                    
+                    else if (typ == intersectionType.FOUR_WAY) {
+                        int left1 = Integer.parseInt(leftLightOneText.getText());
+                        int green2 = Integer.parseInt(greenLightTwoText.getText());
+                        int left2 = Integer.parseInt(leftLightTwoText.getText());
+
+                        if (left1 >= green1 || left2 >= green2) { throw new NumberFormatException(); }
+
+                        for (trafficlight i : currentIntersection.directionOneTrafficLights) {
+                            i.setLightLength(lightState.LEFT_TURN, left1); }
+                        for (trafficlight i : currentIntersection.directionTwoTrafficLights) {
+                            i.setLightLength(lightState.GREEN, green2); }
+                        for (trafficlight i : currentIntersection.directionTwoTrafficLights) {
+                            i.setLightLength(lightState.LEFT_TURN, left2); } }
+
+                    for (trafficlight i : currentIntersection.directionOneTrafficLights) {
+                        i.setLightLength(lightState.GREEN, green1); }
+                    for (crosswalk i : currentIntersection.directionOneCrosswalks) {
+                        i.setCrossWalkTiming(cross1); }
+                    for (crosswalk i : currentIntersection.directionTwoCrosswalks) {
+                        i.setCrossWalkTiming(cross2); }
+
+                    successMsg.setVisible(true);
+
+                } catch (NumberFormatException n) {
+                    errorMsg.setVisible(true);
                 }
-            });
-        } catch (NumberFormatException e) {
-            JLabel errorMsg = new JLabel("PLEASE INPUT INTEGER VALUES FOR TIMINGS");
-            errorMsg.setBounds(225, 575, 200, 25);
-            panel.add(errorMsg);
-        }
+            }
+        });
     }
 
     private static JLabel newLabel(String message) {
