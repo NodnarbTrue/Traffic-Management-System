@@ -83,9 +83,9 @@ public class sysadmin {
         String roadOne = (roadName.length >= 1) ? roadName[0] : "DirectionOne";
         String roadTwo = (roadName.length >= 2) ? roadName[1] : "DirectionTwo";
 
+        intersection.inputOptimization(convertedData);
         intersection.setRoadOneName(roadOne);
         intersection.setRoadTwoName(roadTwo);
-        intersection.inputOptimization(convertedData);
         return intersection.viewOptimizationRecommendation();
     }
 

@@ -411,8 +411,8 @@ public class threewayIntersection extends Intersection {
             data[i] = optimizer(input[0][i], input[1][i], input[2][i]);
         }
 
-        if (input[0][1] > 0 || input[1][1] > 0) {
-            throw new IllegalArgumentException("Long road cannot have left turns.");
+        if (input[0][1] > 0) {
+            throw new IllegalArgumentException("Long road (DIRECTION_ONE) cannot have left turns.");
         }
 
         return 1;

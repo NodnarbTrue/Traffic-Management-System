@@ -291,7 +291,7 @@ public class twowayIntersecion extends Intersection {
      * is the direction in which pedestrians are crossing
      */
     public void carWeightInput(direction startDirection, direction crossingDirection, int weight) {
-        if ((startDirection == direction.DIRECTION_ONE) && this.currentDirection == direction.DIRECTION_TWO)  {
+        if ((startDirection == direction.DIRECTION_ONE) && this.currentDirection == direction.DIRECTION_TWO) {
             // attepts to shorten the timer by 5 seconds
             shortenDirectionDuration(5);
         }
@@ -382,7 +382,7 @@ public class twowayIntersecion extends Intersection {
      * @return The optimized number of components for each road
      */
     private int optimizer(int L, int R) {
-        return (int) Math.ceil(Math.log10(Math.max(Math.max(L, R), 1)));
+        return (int) Math.ceil(Math.log10(Math.max(Math.max(L, R) + 1, 1)));
     }
 
     /**
@@ -403,7 +403,7 @@ public class twowayIntersecion extends Intersection {
 
         data = new int[3];
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             data[i] = optimizer(input[0][i], input[1][i]);
         }
 

@@ -457,7 +457,7 @@ public class fourwayIntersection extends Intersection {
      * @return The optimized number of components for each road
      */
     private int optimizer(int L, int U, int R, int D) {
-        return (int) Math.ceil(Math.log10(Math.max(Math.max(Math.max(L, U), Math.max(R, D)), 1)));
+        return (int) Math.max(Math.ceil(Math.log10(Math.max(Math.max(Math.max(L, U), Math.max(R, D)), 1))), 1);
     }
 
     /**
@@ -497,6 +497,7 @@ public class fourwayIntersection extends Intersection {
         changeCrossWalkTiming(direction.DIRECTION_ONE, data[0] * 10);
         changeCrossWalkTiming(direction.DIRECTION_TWO, data[0] * 10);
         changeLeftTurnTiming(direction.DIRECTION_ONE, data[1] * 5);
+        changeLeftTurnTiming(direction.DIRECTION_TWO, data[1] * 5);
         return 1;
     }
 }
