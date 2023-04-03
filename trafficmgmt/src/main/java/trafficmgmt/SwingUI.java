@@ -24,6 +24,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import java.awt.Graphics;
+
 import javax.swing.SwingConstants;
 import trafficmgmt.utility.intersectionType;
 import trafficmgmt.utility.lightState;
@@ -218,113 +220,327 @@ public class SwingUI extends JFrame {
         intersectionListOptions = new JComboBox<>();
     }
 
+    private static void trafficlightShapeChange(JLabel shape, trafficlight light) {
+        lightState text = light.getCurrentLightState();
+        if (text == lightState.LEFT_TURN || text == lightState.GREEN) { shape.setBackground(new Color(0, 255, 0)); }
+        else if (text == lightState.YELLOW) { shape.setBackground(new Color(255, 255, 0)); }
+        else if (text == lightState.RED) { shape.setBackground(new Color(255, 0, 0)); }
+        shape.setText("" + text);
+    }
+
+    private static void crosswalkShapeChange(JLabel shape1, JLabel shape2, crosswalk light) {
+        crosswalkState text = light.getCurrentCrossWalkState();
+        if (text == crosswalkState.WALK) { 
+            shape1.setBackground(new Color(255, 255, 255)); shape2.setBackground(new Color(255, 255, 255)); 
+            shape1.setText("" + text); shape2.setText("" + text); }
+        else if (text == crosswalkState.STOP) { 
+            shape1.setBackground(new Color(255, 0, 0)); shape2.setBackground(new Color(255, 0, 0)); 
+            shape1.setText("" + text); shape2.setText("" + text); }
+        else if (text == crosswalkState.COUNTDOWN) { 
+            shape1.setBackground(new Color(255, 100, 100)); shape2.setBackground(new Color(255, 100, 100));
+            shape1.setText(Integer.toString(light.currentcrosswalkCountDownNumber)); shape2.setText(Integer.toString(light.currentcrosswalkCountDownNumber)); }
+    }
+
     private static void liveViewPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
 
         // dummyIntersection.stopIntersection();
-
         panel.setLayout(null);
 
-        JLabel viewTimingLabel = new JLabel("Live Traffic Timings");
+        // Back button
+        addBackButton(panel, panelContainer, cl, "admin");
+
+        // Label
+        JLabel viewTimingLabel = new JLabel("[Live Traffic Timings]");
         viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
 
+        // Label for choosing which intersection to display
         JLabel optionsLabel = new JLabel("Intersection to inspect/view: ");
-        optionsLabel.setBounds(100, 150, 400, 25);
+        optionsLabel.setBounds(375, 100, 400, 25);
         panel.add(optionsLabel);
 
-        intersectionListOptions.setBounds(325, 150, 150, 25);
+        // Dropdown box to list intersection options
+        intersectionListOptions.setBounds(550, 100, 150, 25);
         panel.add(intersectionListOptions);
 
-        intersectionTypeLabel = new JLabel(
-                "Type of Intersection: " + currentIntersection.intersectionClassification);
-        intersectionTypeLabel.setBounds(100, 200, 400, 25);
+        // Label of timer to show the time left for the current direction
+        JLabel totalLenLabel = new JLabel("");
+        totalLenLabel.setBounds(100, 125, 200, 25);
+        panel.add(totalLenLabel);
+
+        // Label to show the type of intersection
+        intersectionTypeLabel = new JLabel("Type of Intersection: " + currentIntersection.intersectionClassification);
+        intersectionTypeLabel.setBounds(375, 125, 400, 25);
         panel.add(intersectionTypeLabel);
 
         JLabel dirOneStates = new JLabel("");
-        dirOneStates.setBounds(100, 250, 1000, 25);
+        dirOneStates.setBounds(100, 150, 1000, 25);
         panel.add(dirOneStates);
 
         JLabel dirOneCrosswalkStates = new JLabel("");
-        dirOneCrosswalkStates.setBounds(100, 300, 1000, 25);
+        dirOneCrosswalkStates.setBounds(100, 175, 1000, 25);
         panel.add(dirOneCrosswalkStates);
 
         JLabel dirTwoStates = new JLabel("");
-        dirTwoStates.setBounds(100, 350, 1000, 25);
+        dirTwoStates.setBounds(100, 200, 1000, 25);
         panel.add(dirTwoStates);
 
         JLabel dirTwoCrosswalkStates = new JLabel("");
-        dirTwoCrosswalkStates.setBounds(100, 400, 1000, 25);
+        dirTwoCrosswalkStates.setBounds(100, 225, 1000, 25);
         panel.add(dirTwoCrosswalkStates);
 
-        JLabel totalLen = new JLabel("");
-        totalLen.setBounds(100, 500, 1000, 25);
-        panel.add(totalLen);
 
-        addBackButton(panel, panelContainer, cl, "admin");
+        // INTERSECTION SHAPES
+        JLabel roadOneLight1Shape = new JLabel("");
+        roadOneLight1Shape.setBounds(100, 425, 100, 50);
+        roadOneLight1Shape.setBackground(new Color(0, 255, 0));
+        roadOneLight1Shape.setOpaque(true); 
+        panel.add(roadOneLight1Shape);
+        roadOneLight1Shape.setVisible(false);
+        
+        JLabel roadOneLight2Shape = new JLabel("");
+        roadOneLight2Shape.setBounds(600, 425, 100, 50);
+        roadOneLight2Shape.setBackground(new Color(0, 255, 0));
+        roadOneLight2Shape.setOpaque(true); 
+        panel.add(roadOneLight2Shape);
+        roadOneLight2Shape.setVisible(false);
+
+        JLabel roadTwoLight1Shape = new JLabel("");
+        roadTwoLight1Shape.setBounds(350, 675, 100, 50);
+        roadTwoLight1Shape.setBackground(new Color(255, 0, 0));
+        roadTwoLight1Shape.setOpaque(true); 
+        panel.add(roadTwoLight1Shape);
+        roadTwoLight1Shape.setVisible(false);
+
+        JLabel roadTwoLight2Shape = new JLabel("");
+        roadTwoLight2Shape.setBounds(350, 175, 100, 50);
+        roadTwoLight2Shape.setBackground(new Color(255, 0, 0));
+        roadTwoLight2Shape.setOpaque(true); 
+        panel.add(roadTwoLight2Shape);
+        roadTwoLight2Shape.setVisible(false);
+
+
+        // Crosswalk DirOne Bottom Left
+        JLabel dirOneCrossBotLShape = new JLabel("");
+        dirOneCrossBotLShape.setBounds(325, 550, 50, 50);
+        dirOneCrossBotLShape.setBackground(new Color(255, 0, 0));
+        dirOneCrossBotLShape.setOpaque(true); 
+        panel.add(dirOneCrossBotLShape);
+        dirOneCrossBotLShape.setVisible(false);
+
+        // Crosswalk DirOne Bottom Right
+        JLabel dirOneCrossBotRShape = new JLabel("");
+        dirOneCrossBotRShape.setBounds(425, 550, 50, 50);
+        dirOneCrossBotRShape.setBackground(new Color(255, 0, 0));
+        dirOneCrossBotRShape.setOpaque(true); 
+        panel.add(dirOneCrossBotRShape);
+        dirOneCrossBotRShape.setVisible(false);
+
+        // Crosswalk DirOne Top Left
+        JLabel dirOneCrossTopLShape = new JLabel("");
+        dirOneCrossTopLShape.setBounds(325, 300, 50, 50);
+        dirOneCrossTopLShape.setBackground(new Color(255, 0, 0));
+        dirOneCrossTopLShape.setOpaque(true); 
+        panel.add(dirOneCrossTopLShape);
+        dirOneCrossTopLShape.setVisible(false);
+
+        // Crosswalk DirOne Top Right
+        JLabel dirOneCrossTopRShape = new JLabel("");
+        dirOneCrossTopRShape.setBounds(425, 300, 50, 50);
+        dirOneCrossTopRShape.setBackground(new Color(255, 0, 0));
+        dirOneCrossTopRShape.setOpaque(true); 
+        panel.add(dirOneCrossTopRShape);
+        dirOneCrossTopRShape.setVisible(false);
+
+        // Crosswalk DirTwo Bottom Left
+        JLabel dirTwoCrossBotLShape = new JLabel("");
+        dirTwoCrossBotLShape.setBounds(250, 475, 50, 50);
+        dirTwoCrossBotLShape.setBackground(new Color(255, 0, 0));
+        dirTwoCrossBotLShape.setOpaque(true); 
+        panel.add(dirTwoCrossBotLShape);
+        dirTwoCrossBotLShape.setVisible(false);
+
+        // Crosswalk DirTwo Bottom Right
+        JLabel dirTwoCrossBotRShape = new JLabel("");
+        dirTwoCrossBotRShape.setBounds(500, 475, 50, 50);
+        dirTwoCrossBotRShape.setBackground(new Color(255, 0, 0));
+        dirTwoCrossBotRShape.setOpaque(true); 
+        panel.add(dirTwoCrossBotRShape);
+        dirTwoCrossBotRShape.setVisible(false);
+
+        // Crosswalk DirTwo Top Left
+        JLabel dirTwoCrossTopLShape = new JLabel("");
+        dirTwoCrossTopLShape.setBounds(250, 375, 50, 50);
+        dirTwoCrossTopLShape.setBackground(new Color(255, 0, 0));
+        dirTwoCrossTopLShape.setOpaque(true); 
+        panel.add(dirTwoCrossTopLShape);
+        dirTwoCrossTopLShape.setVisible(false);
+
+        // Crosswalk DirTwo Top Right
+        JLabel dirTwoCrossTopRShape = new JLabel("");
+        dirTwoCrossTopRShape.setBounds(500, 375, 50, 50);
+        dirTwoCrossTopRShape.setBackground(new Color(255, 0, 0));
+        dirTwoCrossTopRShape.setOpaque(true); 
+        panel.add(dirTwoCrossTopRShape);
+        dirTwoCrossTopRShape.setVisible(false);
+
+        // RoadOne
+        JLabel roadOneShape = new JLabel("");
+        roadOneShape.setBounds(200, 400, 400, 100);
+        roadOneShape.setBackground(new Color(100, 100, 100));
+        roadOneShape.setOpaque(true);
+        panel.add(roadOneShape);
+        roadOneShape.setVisible(false);
+
+        // RoadTwo Bottom
+        JLabel roadTwo1Shape = new JLabel("");
+        roadTwo1Shape.setBounds(350, 450, 100, 200);
+        roadTwo1Shape.setBackground(new Color(100, 100, 100));
+        roadTwo1Shape.setOpaque(true); 
+        panel.add(roadTwo1Shape);
+        roadTwo1Shape.setVisible(false);
+
+        // RoadTwo Top
+        JLabel roadTwo2Shape = new JLabel("");
+        roadTwo2Shape.setBounds(350, 250, 100, 200);
+        roadTwo2Shape.setBackground(new Color(100, 100, 100));
+        roadTwo2Shape.setOpaque(true); 
+        panel.add(roadTwo2Shape);
+        roadTwo2Shape.setVisible(false);
+
+        // Create background
+        JLabel backgound1Shape = new JLabel("");
+        backgound1Shape.setBounds(75, 75, 650, 675);
+        backgound1Shape.setBackground(new Color(200, 200, 200));
+        backgound1Shape.setOpaque(true); 
+        panel.add(backgound1Shape);
+
+        // Change intersection display
+        intersectionListOptions.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                String option = (String) intersectionListOptions.getSelectedItem();
+                currentIntersection = Admin.getHashedIntersection(option);
+                typ = currentIntersection.intersectionClassification;
+
+                if (typ == intersectionType.TWO_WAY) {
+                    roadOneLight1Shape.setVisible(true);
+                    roadOneLight2Shape.setVisible(true);
+                    roadTwoLight1Shape.setVisible(false);
+                    roadTwoLight2Shape.setVisible(false);
+                    dirOneCrossBotLShape.setVisible(true);
+                    dirOneCrossBotRShape.setVisible(true);
+                    dirOneCrossTopLShape.setVisible(true);
+                    dirOneCrossTopRShape.setVisible(true);
+                    dirTwoCrossBotLShape.setVisible(true);
+                    dirTwoCrossBotRShape.setVisible(true);
+                    dirTwoCrossTopLShape.setVisible(true);
+                    dirTwoCrossTopRShape.setVisible(true);
+                    roadOneShape.setVisible(true);
+                    roadTwo1Shape.setVisible(false);
+                    roadTwo2Shape.setVisible(false); }
+                
+                else if (typ == intersectionType.THREE_WAY) {
+                    roadOneLight1Shape.setVisible(true);
+                    roadOneLight2Shape.setVisible(true);
+                    roadTwoLight1Shape.setVisible(true);
+                    roadTwoLight2Shape.setVisible(false);
+                    dirOneCrossBotLShape.setVisible(true);
+                    dirOneCrossBotRShape.setVisible(true);
+                    dirOneCrossTopLShape.setVisible(false);
+                    dirOneCrossTopRShape.setVisible(false);
+                    dirTwoCrossBotLShape.setVisible(true);
+                    dirTwoCrossBotRShape.setVisible(true);
+                    dirTwoCrossTopLShape.setVisible(true);
+                    dirTwoCrossTopRShape.setVisible(true);
+                    roadOneShape.setVisible(true);
+                    roadTwo1Shape.setVisible(true);
+                    roadTwo2Shape.setVisible(false); }
+                
+                else if (typ == intersectionType.FOUR_WAY) {
+                    roadOneLight1Shape.setVisible(true);
+                    roadOneLight2Shape.setVisible(true);
+                    roadTwoLight1Shape.setVisible(true);
+                    roadTwoLight2Shape.setVisible(true);
+                    dirOneCrossBotLShape.setVisible(true);
+                    dirOneCrossBotRShape.setVisible(true);
+                    dirOneCrossTopLShape.setVisible(true);
+                    dirOneCrossTopRShape.setVisible(true);
+                    dirTwoCrossBotLShape.setVisible(true);
+                    dirTwoCrossBotRShape.setVisible(true);
+                    dirTwoCrossTopLShape.setVisible(true);
+                    dirTwoCrossTopRShape.setVisible(true);
+                    roadOneShape.setVisible(true);
+                    roadTwo1Shape.setVisible(true);
+                    roadTwo2Shape.setVisible(true); }
+            }
+        });
 
         // Updates the values in live view
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (currentIntersection != null) {
-                    intersectionTypeLabel.setText(
-                            "Type of Intersection: " + currentIntersection.intersectionClassification);
+                    intersectionTypeLabel.setText("Type of Intersection: " + currentIntersection.intersectionClassification);
+                    typ = currentIntersection.intersectionClassification;
 
-                    String output = "Direction One Light States -> ";
-                    int j = 0;
+                    // Set roadOneLight1 and roadOneLight2 colours
+                    trafficlightShapeChange(roadOneLight1Shape, currentIntersection.directionOneTrafficLights.get(0));
+                    trafficlightShapeChange(roadOneLight2Shape, currentIntersection.directionOneTrafficLights.get(1)); 
+                    
+                    // Set dirOne1, dirTwo1, and dirTwo2 crosswalks
+                    crosswalkShapeChange(dirOneCrossBotLShape, dirOneCrossBotRShape, currentIntersection.directionOneCrosswalks.get(0));
+                    crosswalkShapeChange(dirTwoCrossBotLShape, dirTwoCrossTopLShape, currentIntersection.directionTwoCrosswalks.get(0));
+                    crosswalkShapeChange(dirTwoCrossBotRShape, dirTwoCrossTopRShape, currentIntersection.directionTwoCrosswalks.get(1));
+
+                    if (typ == intersectionType.TWO_WAY) {
+                        crosswalkShapeChange(dirOneCrossTopLShape, dirOneCrossTopRShape, currentIntersection.directionOneCrosswalks.get(1)); }
+
+                    else if (typ == intersectionType.THREE_WAY) {
+                        trafficlightShapeChange(roadTwoLight1Shape, currentIntersection.directionTwoTrafficLights.get(0)); }
+
+                    else if (typ == intersectionType.FOUR_WAY) { 
+                        crosswalkShapeChange(dirOneCrossTopLShape, dirOneCrossTopRShape, currentIntersection.directionOneCrosswalks.get(1));
+                        trafficlightShapeChange(roadTwoLight1Shape, currentIntersection.directionTwoTrafficLights.get(0));
+                        trafficlightShapeChange(roadTwoLight2Shape, currentIntersection.directionTwoTrafficLights.get(1)); }
+                    
+                    totalLenLabel.setText("Direction Total Length Left: " + currentIntersection.curerntDirectionTiming);
+                    
+
+
+                    /*String output = "Direction One Light States -> "; int j = 0;
                     for (trafficlight i : currentIntersection.directionOneTrafficLights) {
-                        j++;
-                        output += "#" + j + " [" + i.getCurrentLightState() + "] ";
-                    }
+                        j++; output += "#" + j + " [" + i.getCurrentLightState() + "] "; }
                     dirOneStates.setText(output);
 
-                    output = "Direction Two Light States -> ";
-                    j = 0;
+                    output = "Direction Two Light States -> "; j = 0;
                     for (trafficlight i : currentIntersection.directionTwoTrafficLights) {
-                        j++;
-                        output += "#" + j + " [" + i.getCurrentLightState() + "] ";
-                    }
+                        j++; output += "#" + j + " [" + i.getCurrentLightState() + "] "; }
                     dirTwoStates.setText(output);
 
-                    output = "Direction One Crosswalk States -> ";
-                    j = 0;
+                    output = "Direction One Crosswalk States -> "; j = 0;
                     for (crosswalk i : currentIntersection.directionOneCrosswalks) {
-                        j++;
-                        output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                        j++; output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
                         if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) {
-                            output += " timer: " + i.currentcrosswalkCountDownNumber + "] ";
-                        } else {
-                            output += "] ";
-                        }
-                    }
+                            output += " timer: " + i.currentcrosswalkCountDownNumber + "] "; } 
+                        else { output += "] "; } }
                     dirOneCrosswalkStates.setText(output);
 
-                    output = "Direction Two Crosswalk States -> ";
-                    j = 0;
+                    output = "Direction Two Crosswalk States -> "; j = 0;
                     for (crosswalk i : currentIntersection.directionTwoCrosswalks) {
-                        j++;
-                        output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
+                        j++; output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
                         if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) {
-                            output += " timer: " + i.currentcrosswalkCountDownNumber + "]  ";
-                        } else {
-                            output += "] ";
-                        }
-                    }
+                            output += " timer: " + i.currentcrosswalkCountDownNumber + "]  "; } 
+                        else { output += "] "; } }
                     dirTwoCrosswalkStates.setText(output);
 
                     output = "Direction Total Length Left: ";
                     output += currentIntersection.curerntDirectionTiming;
-                    totalLen.setText(output);
+                    totalLenLabel.setText(output);
+                    */
                 }
             }
 
         };
-
-        intersectionListOptions.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String option = (String) intersectionListOptions.getSelectedItem();
-                currentIntersection = Admin.getHashedIntersection(option);
-            }
-        });
 
         Timer timer = new Timer(1000, taskPerformer);
         timer.setRepeats(true);
@@ -348,16 +564,24 @@ public class SwingUI extends JFrame {
     }
 
     private static void viewTimingPanelComponents(JPanel panel, CardLayout cl, JPanel panelContainer) {
+
+        // Set layout
         panel.setLayout(null);
 
+        // Back button
+        addBackButton(panel, panelContainer, cl, "admin");
+
+        // Label to show traffic timings
         JLabel viewTimingLabel = new JLabel("View Traffic Timings");
         viewTimingLabel.setBounds(100, 100, 400, 25);
         panel.add(viewTimingLabel);
 
+        // Label to choose which intersection to view
         JLabel optionsLabel = new JLabel("Intersection to inspect/view: ");
         optionsLabel.setBounds(100, 150, 400, 25);
         panel.add(optionsLabel);
 
+        // Dropdown to choose the intersection
         JComboBox localJComboBox = new JComboBox<>();
         localJComboBox.setModel(intersectionListModel);
         localJComboBox.setBounds(325, 150, 150, 25);
@@ -388,7 +612,12 @@ public class SwingUI extends JFrame {
         crosswalkLightLabel.setBounds(100, 400, 400, 25);
         panel.add(crosswalkLightLabel);
 
-        addBackButton(panel, panelContainer, cl, "admin");
+        // Create background
+        JLabel backgound1Shape = new JLabel("");
+        backgound1Shape.setBounds(75, 75, 625, 375);
+        backgound1Shape.setBackground(new Color(255, 255, 255));
+        backgound1Shape.setOpaque(true); 
+        panel.add(backgound1Shape);
 
         localJComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -420,32 +649,32 @@ public class SwingUI extends JFrame {
 
         // Create intersection header
         JLabel createLabel = new JLabel("[Create An Intersection]");
-        createLabel.setBounds(75, 100, 200, 25);
+        createLabel.setBounds(100, 100, 200, 25);
         panel.add(createLabel);
 
         // Set intersection Name label and text area
         JLabel intersectionName = new JLabel("Intersection Name/ID:");
-        intersectionName.setBounds(225, 100, 150, 25);
+        intersectionName.setBounds(250, 100, 150, 25);
         panel.add(intersectionName);
 
         JTextField IDText = new JTextField(20);
-        IDText.setBounds(425, 100, 150, 25);
+        IDText.setBounds(450, 100, 150, 25);
         panel.add(IDText);
 
         // pick intersection type label and options
         JLabel typeOfIntersection = new JLabel("Intersection Type:");
-        typeOfIntersection.setBounds(225, 150, 150, 25);
+        typeOfIntersection.setBounds(250, 150, 150, 25);
         panel.add(typeOfIntersection);
 
         JComboBox options = new JComboBox<>(intersectionOptions);
         options.setSelectedItem("Four-Way");
-        options.setBounds(425, 150, 150, 25);
+        options.setBounds(450, 150, 150, 25);
         panel.add(options);
 
         // submit intersection
         JButton submitButton = new JButton("Create New Intersection");
         submitButton.setSelected(false);
-        submitButton.setBounds(225, 200, 200, 25);
+        submitButton.setBounds(250, 200, 200, 25);
         panel.add(submitButton);
 
         addBackButton(panel, panelContainer, cl, "admin");
@@ -462,98 +691,112 @@ public class SwingUI extends JFrame {
 
         // update intersection
         JLabel manualChangeLabel = new JLabel("[Edit An Intersection]");
-        manualChangeLabel.setBounds(75, 300, 200, 25);
+        manualChangeLabel.setBounds(100, 300, 200, 25);
         panel.add(manualChangeLabel);
 
         // Set intersection Name label and text area
         JLabel intersectionNameLabel = new JLabel("Intersection Name/ID:");
-        intersectionNameLabel.setBounds(225, 300, 150, 25);
+        intersectionNameLabel.setBounds(250, 300, 150, 25);
         panel.add(intersectionNameLabel);
 
         // Dropdown list of current intersections
         JComboBox intersectionNameDropdown = new JComboBox<>();
         intersectionNameDropdown.setModel(intersectionListModel);
-        intersectionNameDropdown.setBounds(425, 300, 150, 25);
+        intersectionNameDropdown.setBounds(450, 300, 150, 25);
         panel.add(intersectionNameDropdown);
 
         // Change timings for directionOne traffic light
         JLabel greenLightOneLabel = new JLabel("Direction One Green Traffic Light Length:");
-        greenLightOneLabel.setBounds(225, 350, 250, 25);
+        greenLightOneLabel.setBounds(250, 350, 250, 25);
         panel.add(greenLightOneLabel);
 
         // Area to type new directionOne timings
         JTextField greenLightOneText = new JTextField(20);
-        greenLightOneText.setBounds(525, 350, 50, 25);
+        greenLightOneText.setBounds(550, 350, 50, 25);
         panel.add(greenLightOneText);
 
         // Change timings for directionOne left light
         JLabel leftLightOneLabel = new JLabel("Direction One Left Traffic Light Length:");
-        leftLightOneLabel.setBounds(225, 375, 250, 25);
+        leftLightOneLabel.setBounds(250, 375, 250, 25);
         panel.add(leftLightOneLabel);
 
         // Area to type new directionOne left timings
         JTextField leftLightOneText = new JTextField(20);
-        leftLightOneText.setBounds(525, 375, 50, 25);
+        leftLightOneText.setBounds(550, 375, 50, 25);
         panel.add(leftLightOneText);
 
         // Change timings for directionOne crosswalk countdown
         JLabel crosswalkCountdownOneLabel = new JLabel("Direction One Crosswalk Countdown Length:");
-        crosswalkCountdownOneLabel.setBounds(225, 400, 300, 25);
+        crosswalkCountdownOneLabel.setBounds(250, 400, 300, 25);
         panel.add(crosswalkCountdownOneLabel);
 
         // Area to type new directionOne crosswalk countdown
         JTextField crosswalkCountdownOneText = new JTextField(20);
-        crosswalkCountdownOneText.setBounds(525, 400, 50, 25);
+        crosswalkCountdownOneText.setBounds(550, 400, 50, 25);
         panel.add(crosswalkCountdownOneText);
 
         // Change timings for directionTwo traffic light
         JLabel greenLightTwoLabel = new JLabel("Direction Two Green Traffic Light Length:");
-        greenLightTwoLabel.setBounds(225, 450, 250, 25);
+        greenLightTwoLabel.setBounds(250, 450, 250, 25);
         panel.add(greenLightTwoLabel);
 
         // Area to type new directionTwo timings
         JTextField greenLightTwoText = new JTextField(20);
-        greenLightTwoText.setBounds(525, 450, 50, 25);
+        greenLightTwoText.setBounds(550, 450, 50, 25);
         panel.add(greenLightTwoText);
 
         // Change timings for directionTwo left light
         JLabel leftLightTwoLabel = new JLabel("Direction Two Left Traffic Light Length:");
-        leftLightTwoLabel.setBounds(225, 475, 250, 25);
+        leftLightTwoLabel.setBounds(250, 475, 250, 25);
         panel.add(leftLightTwoLabel);
 
         // Area to type new directionTwo left timings
         JTextField leftLightTwoText = new JTextField(20);
-        leftLightTwoText.setBounds(525, 475, 50, 25);
+        leftLightTwoText.setBounds(550, 475, 50, 25);
         panel.add(leftLightTwoText);
 
         // Change timings for directionTwo crosswalk countdown
         JLabel crosswalkCountdownTwoLabel = new JLabel("Direction Two Crosswalk Countdown Length:");
-        crosswalkCountdownTwoLabel.setBounds(225, 500, 300, 25);
+        crosswalkCountdownTwoLabel.setBounds(250, 500, 300, 25);
         panel.add(crosswalkCountdownTwoLabel);
 
         // Area to type new directionTwo crosswalk countdown
         JTextField crosswalkCountdownTwoText = new JTextField(20);
-        crosswalkCountdownTwoText.setBounds(525, 500, 50, 25);
+        crosswalkCountdownTwoText.setBounds(550, 500, 50, 25);
         panel.add(crosswalkCountdownTwoText);
 
         // Apply changes to intersection
         JButton applyChangesButton = new JButton("Apply Changes");
         applyChangesButton.setSelected(false);
-        applyChangesButton.setBounds(225, 550, 200, 25);
+        applyChangesButton.setBounds(250, 550, 200, 25);
         panel.add(applyChangesButton);
         applyChangesButton.setVisible(false); // Not visible until intersection is selected
 
         // Success message if user gives valid input
         JLabel successMsg = new JLabel("Changes have been applied");
-        successMsg.setBounds(225, 575, 400, 50);
+        successMsg.setBounds(250, 575, 400, 50);
         panel.add(successMsg);
         successMsg.setVisible(false);
 
         // Error message if user gives invalid input
         JLabel errorMsg = new JLabel("<html>PLEASE INPUT INTEGER VALUES FOR TIMINGS<br>Left light length MUST be shorter than its green light length</html>");
-        errorMsg.setBounds(225, 575, 400, 50);
+        errorMsg.setBounds(250, 575, 400, 50);
         panel.add(errorMsg);
         errorMsg.setVisible(false);
+
+        // Create background
+        JLabel backgound1Shape = new JLabel("");
+        backgound1Shape.setBounds(75, 75, 625, 175);
+        backgound1Shape.setBackground(new Color(255, 255, 255));
+        backgound1Shape.setOpaque(true); 
+        panel.add(backgound1Shape);
+
+        // Create background
+        JLabel backgound2Shape = new JLabel("");
+        backgound2Shape.setBounds(75, 275, 625, 375);
+        backgound2Shape.setBackground(new Color(255, 255, 255));
+        backgound2Shape.setOpaque(true); 
+        panel.add(backgound2Shape);
 
         // Make the current selected intersection the one to edit values for
         intersectionNameDropdown.addActionListener(new ActionListener() {
