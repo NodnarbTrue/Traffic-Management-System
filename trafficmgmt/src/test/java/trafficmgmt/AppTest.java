@@ -17,18 +17,6 @@ public class AppTest {
      * Rigorous Test :-)
      */
 
-    @Test
-    public void threewaySignalsCountdown() throws InterruptedException {
-        crosswalkState expected = crosswalkState.COUNTDOWN;
-        threewayIntersection threewayTest = new threewayIntersection(25, 25, 0, "glue street", "paper street");
-        threewayTest.startIntersection();
-        // 2 second wait because crosswalk is started as walk even if light length is
-        // shorter than countdown
-        Thread.sleep(2005);
-        crosswalkState result = threewayTest.directionOneCrosswalks.get(0).getCurrentCrossWalkState();
-        assertTrue(expected == result);
-    }
-
     // USE CASE 1: PEDESTRIAN REQUESTS TO CROSS INTERSECTION
 
     @Test
@@ -94,12 +82,36 @@ public class AppTest {
 
     // USE CASE 2: TRAIN APPROACHING INTERSECTION
     @Test
-    public void twowayTrainApproaching() throws InterruptedException {
+    public void twowayTrainApproachingCountDown() throws InterruptedException {
         int expected = 14;
         twowayIntersecion twowayTest = new twowayIntersecion("glue street", 15);
+        twowayTest.startIntersection();
         twowayTest.trainIncomingSignal();
         Thread.sleep(1005);
         int result = twowayTest.curerntDirectionTiming;
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void twowayTrainApproachingTurnRed() throws InterruptedException {
+        lightState expected = lightState.RED;
+        twowayIntersecion twowayTest = new twowayIntersecion("glue street", 1);
+        twowayTest.startIntersection();
+        twowayTest.trainIncomingSignal();
+        Thread.sleep(2005);
+        lightState result = twowayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void twowayTrainApproachingCleared() throws InterruptedException {
+        lightState expected = lightState.GREEN;
+        twowayIntersecion twowayTest = new twowayIntersecion("glue street", 1);
+        twowayTest.startIntersection();
+        twowayTest.trainIncomingSignal();
+        Thread.sleep(2005);
+        twowayTest.trainClearSignal();
+        lightState result = twowayTest.directionOneTrafficLights.get(0).getCurrentLightState();
         assertTrue(expected == result);
     }
 
@@ -171,10 +183,20 @@ public class AppTest {
     @Test
     public void testThreewayLeftTurnState() throws InterruptedException {
         lightState expected = lightState.LEFT_TURN;
-        threewayIntersection threewayTest = new threewayIntersection(34, 25, 10, "glue street", "paper street");
+        threewayIntersection threewayTest = new threewayIntersection(35, 25, 10, "glue street", "paper street");
         threewayTest.startIntersection();
         Thread.sleep(1005);
         lightState result = threewayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void testThreewayLeftTurnCrossWalkState() throws InterruptedException {
+        crosswalkState expected = crosswalkState.STOP;
+        threewayIntersection threewayTest = new threewayIntersection(35, 25, 10, "glue street", "paper street");
+        threewayTest.startIntersection();
+        Thread.sleep(1005);
+        crosswalkState result = threewayTest.directionOneCrosswalks.get(0).getCurrentCrossWalkState();
         assertTrue(expected == result);
     }
 
@@ -185,6 +207,16 @@ public class AppTest {
         fourwayTest.startIntersection();
         Thread.sleep(1005);
         lightState result = fourwayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void testFourwayLeftTurnCrossWalkState() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(60, 25, 10, 10, "glue street", "paper street");
+        crosswalkState expected = crosswalkState.STOP;
+        fourwayTest.startIntersection();
+        Thread.sleep(1005);
+        crosswalkState result = fourwayTest.directionOneCrosswalks.get(0).getCurrentCrossWalkState();
         assertTrue(expected == result);
     }
 
@@ -241,6 +273,28 @@ public class AppTest {
     }
 
     @Test
+    public void threewaySwitchDirectionLeftTurn() throws InterruptedException {
+        lightState expected = lightState.LEFT_TURN;
+        threewayIntersection threewayTest = new threewayIntersection(5, 1, 2, "glue street", "paper street");
+        threewayTest.currentDirection = direction.DIRECTION_TWO;
+        threewayTest.startIntersection();
+        Thread.sleep(2005);
+        lightState result = threewayTest.directionOneTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void threewaySwitchDirectionSignalsStop2() throws InterruptedException {
+        crosswalkState expected = crosswalkState.STOP;
+        threewayIntersection threewayTest = new threewayIntersection(5, 1, 2, "glue street", "paper street");
+        threewayTest.currentDirection = direction.DIRECTION_TWO;
+        threewayTest.startIntersection();
+        Thread.sleep(2005);
+        crosswalkState result = threewayTest.directionOneCrosswalks.get(0).getCurrentCrossWalkState();
+        assertTrue(expected == result);
+    }
+
+    @Test
     public void fourwaySwitchDirectionTurnsGreen() throws InterruptedException {
         fourwayIntersection fourwayTest = new fourwayIntersection(1, 25, 0, 0, "glue street", "paper street");
         lightState expected = lightState.GREEN;
@@ -277,6 +331,25 @@ public class AppTest {
         fourwayTest.startIntersection();
         Thread.sleep(2005);
         crosswalkState result = fourwayTest.directionOneCrosswalks.get(0).getCurrentCrossWalkState();
+        assertTrue(expected == result);
+    }
+
+    @Test
+    public void fourwaySwitchDirectionLeftTurn() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(1, 25, 0, 10, "glue street", "paper street");
+        lightState expected = lightState.LEFT_TURN;
+        fourwayTest.startIntersection();
+        Thread.sleep(2005);
+        lightState result = fourwayTest.directionTwoTrafficLights.get(0).getCurrentLightState();
+        assertTrue(expected == result);
+    }
+    @Test
+    public void fourwaySwitchDirectionSignalsStop2() throws InterruptedException {
+        fourwayIntersection fourwayTest = new fourwayIntersection(1, 25, 0, 10, "glue street", "paper street");
+        crosswalkState expected = crosswalkState.STOP;
+        fourwayTest.startIntersection();
+        Thread.sleep(2005);
+        crosswalkState result = fourwayTest.directionTwoCrosswalks.get(0).getCurrentCrossWalkState();
         assertTrue(expected == result);
     }
 
