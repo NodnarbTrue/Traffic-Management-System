@@ -137,6 +137,9 @@ public class twowayIntersecion extends Intersection {
      * count down from.
      */
     public int getTimeToCountDownFrom() {
+        if (this.trainWait == true) { 
+            return 10;
+        }
         if (this.currentDirection == direction.DIRECTION_ONE) {
             return this.inputCountDownLength;
         } else if (this.currentDirection == direction.DIRECTION_TWO) {

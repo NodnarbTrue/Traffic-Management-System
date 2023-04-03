@@ -105,4 +105,12 @@ abstract class Intersection {
     public abstract int applyOptimization();
 
     public abstract int getTimeToCountDownFrom();
+
+    public void trainIncomingSignal() {
+        return;
+    }
+
+    public void trainClearSignal() {
+        return;
+    }
 }

@@ -289,6 +289,63 @@ public class SwingUI extends JFrame {
         dirTwoCrosswalkStates.setBounds(100, 225, 1000, 25);
         panel.add(dirTwoCrosswalkStates);
 
+        // pedestrian and car input in opposite direction
+        JButton pedestrianInput = new JButton("pedestrian input");
+        pedestrianInput.setSelected(false);
+        pedestrianInput.setBounds(375, 155, 150, 25);
+        panel.add(pedestrianInput);
+
+        pedestrianInput.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).currentDirection == direction.DIRECTION_ONE) { 
+                    Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).pedestrianInput(direction.DIRECTION_TWO);
+                } else { 
+                    Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).pedestrianInput(direction.DIRECTION_ONE);
+                }
+            }
+        });
+
+        JButton carInput = new JButton("car input");
+        carInput.setSelected(false);
+        carInput.setBounds(525, 155, 150, 25);
+        panel.add(carInput);
+        carInput.setVisible(false);
+
+        carInput.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).currentDirection == direction.DIRECTION_ONE) { 
+                    Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).carWeightInput(direction.DIRECTION_TWO, direction.DIRECTION_ONE, 100);
+                } else { 
+                    Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).carWeightInput(direction.DIRECTION_ONE, direction.DIRECTION_TWO, 100);
+                }
+            }
+        });
+
+        JButton trainInput = new JButton("Train Signal");
+        trainInput.setSelected(false);
+        trainInput.setBounds(525, 155, 150, 25);
+        panel.add(trainInput);
+        trainInput.setVisible(false);
+
+        trainInput.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).trainIncomingSignal();
+            }
+        });
+
+        JButton trainClear = new JButton("Train Clear");
+        trainClear.setSelected(false);
+        trainClear.setBounds(525, 190, 150, 25);
+        panel.add(trainClear);
+        trainClear.setVisible(false);
+
+        trainClear.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Admin.getHashedIntersection((String) intersectionListOptions.getSelectedItem()).trainClearSignal();
+            }
+        });
+
+
 
         // INTERSECTION SHAPES
         JLabel roadOneLight1Shape = new JLabel("");
@@ -430,10 +487,10 @@ public class SwingUI extends JFrame {
         // Change intersection display
         intersectionListOptions.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
                 String option = (String) intersectionListOptions.getSelectedItem();
                 currentIntersection = Admin.getHashedIntersection(option);
                 typ = currentIntersection.intersectionClassification;
+                
 
                 if (typ == intersectionType.TWO_WAY) {
                     roadOneLight1Shape.setVisible(true);
@@ -450,7 +507,11 @@ public class SwingUI extends JFrame {
                     dirTwoCrossTopRShape.setVisible(true);
                     roadOneShape.setVisible(true);
                     roadTwo1Shape.setVisible(false);
-                    roadTwo2Shape.setVisible(false); }
+                    roadTwo2Shape.setVisible(false); 
+                    trainInput.setVisible(true);
+                    trainClear.setVisible(true);
+                    carInput.setVisible(false);
+                }
                 
                 else if (typ == intersectionType.THREE_WAY) {
                     roadOneLight1Shape.setVisible(true);
@@ -467,7 +528,10 @@ public class SwingUI extends JFrame {
                     dirTwoCrossTopRShape.setVisible(true);
                     roadOneShape.setVisible(true);
                     roadTwo1Shape.setVisible(true);
-                    roadTwo2Shape.setVisible(false); }
+                    roadTwo2Shape.setVisible(false); 
+                    trainInput.setVisible(false);
+                    trainClear.setVisible(false);
+                    carInput.setVisible(true);}
                 
                 else if (typ == intersectionType.FOUR_WAY) {
                     roadOneLight1Shape.setVisible(true);
@@ -484,7 +548,11 @@ public class SwingUI extends JFrame {
                     dirTwoCrossTopRShape.setVisible(true);
                     roadOneShape.setVisible(true);
                     roadTwo1Shape.setVisible(true);
-                    roadTwo2Shape.setVisible(true); }
+                    roadTwo2Shape.setVisible(true); 
+                    trainInput.setVisible(false);
+                    trainClear.setVisible(false);
+                    carInput.setVisible(true);
+                }
             }
         });
 
