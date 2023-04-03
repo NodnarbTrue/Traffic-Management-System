@@ -134,10 +134,10 @@ public class SwingUI extends JFrame {
 
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // String ID = IDText.getText();
-                String ID = "admin.1";
-                // String password = String.valueOf(passwordText.getPassword());
-                String password = "123456";
+                String ID = IDText.getText();
+                //String ID = "admin.1";
+                String password = String.valueOf(passwordText.getPassword());
+                //String password = "123456";
                 Boolean admin2 = ID.equals("admin.2") && password.equals("123456");
 
                 if (ID.equals("admin.1") && password.equals("123456") || admin2) {
@@ -295,6 +295,7 @@ public class SwingUI extends JFrame {
         roadOneLight1Shape.setBounds(100, 425, 100, 50);
         roadOneLight1Shape.setBackground(new Color(0, 255, 0));
         roadOneLight1Shape.setOpaque(true); 
+        roadOneLight1Shape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(roadOneLight1Shape);
         roadOneLight1Shape.setVisible(false);
         
@@ -302,6 +303,7 @@ public class SwingUI extends JFrame {
         roadOneLight2Shape.setBounds(600, 425, 100, 50);
         roadOneLight2Shape.setBackground(new Color(0, 255, 0));
         roadOneLight2Shape.setOpaque(true); 
+        roadOneLight2Shape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(roadOneLight2Shape);
         roadOneLight2Shape.setVisible(false);
 
@@ -309,6 +311,7 @@ public class SwingUI extends JFrame {
         roadTwoLight1Shape.setBounds(350, 675, 100, 50);
         roadTwoLight1Shape.setBackground(new Color(255, 0, 0));
         roadTwoLight1Shape.setOpaque(true); 
+        roadTwoLight1Shape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(roadTwoLight1Shape);
         roadTwoLight1Shape.setVisible(false);
 
@@ -316,6 +319,7 @@ public class SwingUI extends JFrame {
         roadTwoLight2Shape.setBounds(350, 175, 100, 50);
         roadTwoLight2Shape.setBackground(new Color(255, 0, 0));
         roadTwoLight2Shape.setOpaque(true); 
+        roadTwoLight2Shape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(roadTwoLight2Shape);
         roadTwoLight2Shape.setVisible(false);
 
@@ -325,6 +329,7 @@ public class SwingUI extends JFrame {
         dirOneCrossBotLShape.setBounds(325, 550, 50, 50);
         dirOneCrossBotLShape.setBackground(new Color(255, 0, 0));
         dirOneCrossBotLShape.setOpaque(true); 
+        dirOneCrossBotLShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirOneCrossBotLShape);
         dirOneCrossBotLShape.setVisible(false);
 
@@ -333,6 +338,7 @@ public class SwingUI extends JFrame {
         dirOneCrossBotRShape.setBounds(425, 550, 50, 50);
         dirOneCrossBotRShape.setBackground(new Color(255, 0, 0));
         dirOneCrossBotRShape.setOpaque(true); 
+        dirOneCrossBotRShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirOneCrossBotRShape);
         dirOneCrossBotRShape.setVisible(false);
 
@@ -341,6 +347,7 @@ public class SwingUI extends JFrame {
         dirOneCrossTopLShape.setBounds(325, 300, 50, 50);
         dirOneCrossTopLShape.setBackground(new Color(255, 0, 0));
         dirOneCrossTopLShape.setOpaque(true); 
+        dirOneCrossTopLShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirOneCrossTopLShape);
         dirOneCrossTopLShape.setVisible(false);
 
@@ -349,6 +356,7 @@ public class SwingUI extends JFrame {
         dirOneCrossTopRShape.setBounds(425, 300, 50, 50);
         dirOneCrossTopRShape.setBackground(new Color(255, 0, 0));
         dirOneCrossTopRShape.setOpaque(true); 
+        dirOneCrossTopRShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirOneCrossTopRShape);
         dirOneCrossTopRShape.setVisible(false);
 
@@ -357,6 +365,7 @@ public class SwingUI extends JFrame {
         dirTwoCrossBotLShape.setBounds(250, 475, 50, 50);
         dirTwoCrossBotLShape.setBackground(new Color(255, 0, 0));
         dirTwoCrossBotLShape.setOpaque(true); 
+        dirTwoCrossBotLShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirTwoCrossBotLShape);
         dirTwoCrossBotLShape.setVisible(false);
 
@@ -365,6 +374,7 @@ public class SwingUI extends JFrame {
         dirTwoCrossBotRShape.setBounds(500, 475, 50, 50);
         dirTwoCrossBotRShape.setBackground(new Color(255, 0, 0));
         dirTwoCrossBotRShape.setOpaque(true); 
+        dirTwoCrossBotRShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirTwoCrossBotRShape);
         dirTwoCrossBotRShape.setVisible(false);
 
@@ -373,6 +383,7 @@ public class SwingUI extends JFrame {
         dirTwoCrossTopLShape.setBounds(250, 375, 50, 50);
         dirTwoCrossTopLShape.setBackground(new Color(255, 0, 0));
         dirTwoCrossTopLShape.setOpaque(true); 
+        dirTwoCrossTopLShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirTwoCrossTopLShape);
         dirTwoCrossTopLShape.setVisible(false);
 
@@ -381,6 +392,7 @@ public class SwingUI extends JFrame {
         dirTwoCrossTopRShape.setBounds(500, 375, 50, 50);
         dirTwoCrossTopRShape.setBackground(new Color(255, 0, 0));
         dirTwoCrossTopRShape.setOpaque(true); 
+        dirTwoCrossTopRShape.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(dirTwoCrossTopRShape);
         dirTwoCrossTopRShape.setVisible(false);
 

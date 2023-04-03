@@ -31,13 +31,13 @@ public class sysadmin {
 
         } else if (newIntersectionToMake == "Three-Way") {
 
-            threewayIntersection newIntersection = new threewayIntersection(25, 25, 10, "default", "default");
+            threewayIntersection newIntersection = new threewayIntersection(15, 15, 5, "default", "default");
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
             newIntersection.startIntersection();
 
         } else if (newIntersectionToMake == "Four-Way") {
 
-            fourwayIntersection newIntersection = new fourwayIntersection(40, 40, 5, 5, "default", "default");
+            fourwayIntersection newIntersection = new fourwayIntersection(15, 15, 5, 5, "default", "default");
             this.intersectionsManaged.put(idNameOfIntersection, newIntersection);
             newIntersection.startIntersection();
 
