@@ -516,39 +516,6 @@ public class SwingUI extends JFrame {
                         trafficlightShapeChange(roadTwoLight2Shape, currentIntersection.directionTwoTrafficLights.get(1)); }
                     
                     totalLenLabel.setText("Direction Total Length Left: " + currentIntersection.curerntDirectionTiming);
-                    
-
-
-                    /*String output = "Direction One Light States -> "; int j = 0;
-                    for (trafficlight i : currentIntersection.directionOneTrafficLights) {
-                        j++; output += "#" + j + " [" + i.getCurrentLightState() + "] "; }
-                    dirOneStates.setText(output);
-
-                    output = "Direction Two Light States -> "; j = 0;
-                    for (trafficlight i : currentIntersection.directionTwoTrafficLights) {
-                        j++; output += "#" + j + " [" + i.getCurrentLightState() + "] "; }
-                    dirTwoStates.setText(output);
-
-                    output = "Direction One Crosswalk States -> "; j = 0;
-                    for (crosswalk i : currentIntersection.directionOneCrosswalks) {
-                        j++; output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
-                        if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) {
-                            output += " timer: " + i.currentcrosswalkCountDownNumber + "] "; } 
-                        else { output += "] "; } }
-                    dirOneCrosswalkStates.setText(output);
-
-                    output = "Direction Two Crosswalk States -> "; j = 0;
-                    for (crosswalk i : currentIntersection.directionTwoCrosswalks) {
-                        j++; output += "#" + j + " [State: " + i.getCurrentCrossWalkState();
-                        if (i.getCurrentCrossWalkState() == crosswalkState.COUNTDOWN) {
-                            output += " timer: " + i.currentcrosswalkCountDownNumber + "]  "; } 
-                        else { output += "] "; } }
-                    dirTwoCrosswalkStates.setText(output);
-
-                    output = "Direction Total Length Left: ";
-                    output += currentIntersection.curerntDirectionTiming;
-                    totalLenLabel.setText(output);
-                    */
                 }
             }
 
