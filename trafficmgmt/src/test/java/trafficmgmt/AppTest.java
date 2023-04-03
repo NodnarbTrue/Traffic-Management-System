@@ -15,6 +15,8 @@ import trafficmgmt.utility.lightState;
 public class AppTest {
     /**
      * Rigorous Test :-)
+     * Because our code uses threads test cases may occasionaly fail due to race conditions 
+     * if this happens run the test again and usually it'll get the right result this time
      */
 
     // USE CASE 1: PEDESTRIAN REQUESTS TO CROSS INTERSECTION
